@@ -126,7 +126,7 @@
             text-align: center;
             list-style-type: none;
             position: relative;
-            padding: 20px 5px 0 5px;
+            padding: 20px 12px 0 12px;
             transition: all 0.5s;
         }
 
@@ -156,9 +156,12 @@
         }
 
         .node-container {
-            display: inline-block;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
             position: relative;
             z-index: 2;
+            min-width: max-content;
         }
 
         .member-circle {
@@ -179,6 +182,7 @@
             transition: all 0.3s;
         }
         .member-circle:hover { background-color: #e8f4ff; }
+        .person-circle { -webkit-tap-highlight-color: transparent; }
 
         .member-name {
             margin-top: 15px;
@@ -188,28 +192,51 @@
             background: rgba(255,255,255,0.9);
             padding: 2px 5px;
             border-radius: 4px;
-            min-width: 120px;
+            min-width: 96px;
+            max-width: 120px;
             white-space: normal;
             line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            display: block;
+            max-height: calc(1.2em * 2);
             overflow: hidden;
         }
 
-        .spouse-name {
-            display: inline-block;
-            font-size: 11px;
+        .couple-row {
+            display: inline-flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            position: relative;
+        }
+
+        .couple-row.has-partner::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            right: 40px;
+            border-top: 2px solid #d7c1ad;
+            z-index: 0;
+        }
+
+        .person-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            min-width: 96px;
+        }
+
+        .person-block .member-name {
+            margin-top: 8px;
+        }
+
+        .spouse-circle {
+            border-color: #e67e22;
             color: #a84600;
-            margin-top: 5px;
-            font-weight: 700;
-            white-space: normal;
-            line-height: 1.1;
-            background: #fff3e6;
-            border: 1px solid #ffd4ad;
-            border-radius: 999px;
-            padding: 3px 8px;
-            max-width: 170px;
+            background: #fff8f0;
         }
 
         .circle-wrapper { position: relative; display: inline-block; }
@@ -272,6 +299,10 @@
             background: #fff8e8;
         }
 
+        .tree li.selected > .node-container {
+            z-index: 5;
+        }
+
         .profile-card {
             position: fixed;
             z-index: 2000;
@@ -306,12 +337,13 @@
             .search-box, #searchInput { width: 100% !important; }
             .tree-wrapper { padding-top: 150px; }
             .tree { padding: 16px 8px; }
-            .tree li { padding: 10px 3px 0 3px; }
+            .tree li { padding: 10px 8px 0 8px; }
             .tree ul { padding-top: 14px; }
             .member-circle { width: 42px; height: 42px; font-size: 14px; border-width: 2px; }
             .member-name { margin-top: 8px; min-width: 82px; max-width: 94px; font-size: 11px; line-height: 1.15; }
-            .spouse-name { font-size: 10px; max-width: 120px; padding: 2px 6px; }
-            .breadcrumbs { font-size: 11px; }
+            .couple-row { gap: 6px; }
+            .couple-row.has-partner::before { top: 21px; left: 28px; right: 28px; }
+            .person-block { min-width: 82px; }
             h1 { margin-right: 0; margin-bottom: 10px; }
             #uploadSection { margin-bottom: 10px; }
         }
@@ -329,7 +361,6 @@
             <div id="searchDropdown" class="search-dropdown"></div>
             <button class="search-btn" onclick="searchNode(document.getElementById('searchInput').value)">Search</button>
         </div>
-        <div id="breadcrumbBar" class="breadcrumbs">Path: Home</div>
     </div>
 
     <div class="tree-wrapper" id="mainWrapper">
@@ -349,7 +380,6 @@
         let dataMap = {};
         let activeFocusId = null;
         const profileCard = document.getElementById('profileCard');
-        const breadcrumbBar = document.getElementById('breadcrumbBar');
 
         window.addEventListener('DOMContentLoaded', () => {
             fetch('family_data.csv')
@@ -421,11 +451,11 @@
                 searchDropdown.style.display = 'none';
             }
 
-            if (!e.target.closest('.member-circle') && !e.target.closest('#profileCard')) {
+            if (!e.target.closest('.person-circle') && !e.target.closest('#profileCard')) {
                 hideProfileCard();
             }
         });
-i
+
         document.getElementById('mainWrapper').addEventListener('scroll', hideProfileCard);
 
         function parseCSV(text) {
@@ -554,33 +584,61 @@ i
             const childrenClass = hasChildren ? 'has-children' : '';
             const initial = node.name ? node.name.charAt(0).toUpperCase() : '?';
 
-            let spouseHtml = '';
+            let leftPartnerHtml = '';
+            let rightPartnerHtml = '';
             if (node.pids && node.pids.length > 0) {
-                const spouseNames = node.pids.map(pid => {
+                const spouseItems = node.pids.map(pid => {
                     const spouseNode = dataMap[pid];
-                    return spouseNode ? formatName(spouseNode.name) : '';
+                    if (!spouseNode) return null;
+                    return {
+                        id: spouseNode.id,
+                        initial: spouseNode.name ? spouseNode.name.charAt(0).toUpperCase() : '?',
+                        fullName: spouseNode.name || ''
+                    };
                 }).filter(Boolean);
 
-                if (spouseNames.length > 0) {
-                    spouseHtml = `<div class="spouse-name">(${spouseNames.join(', ')})</div>`;
+                if (spouseItems.length > 0) {
+                    const renderPartner = (s) => `
+                        <div class="person-block">
+                            <div class="member-circle person-circle spouse-circle"
+                                 data-node-id="${s.id}"
+                                 title="${s.fullName}">
+                                ${s.initial}
+                            </div>
+                            <div class="member-name">${formatName(s.fullName)}</div>
+                        </div>
+                    `;
+
+                    if (spouseItems.length === 2) {
+                        leftPartnerHtml = renderPartner(spouseItems[0]);
+                        rightPartnerHtml = renderPartner(spouseItems[1]);
+                    } else if (spouseItems.length === 1) {
+                        rightPartnerHtml = renderPartner(spouseItems[0]);
+                    } else {
+                        leftPartnerHtml = renderPartner(spouseItems[0]);
+                        rightPartnerHtml = spouseItems.slice(1).map(renderPartner).join('');
+                    }
                 }
             }
 
             let html = `<li class="${collapsedClass} ${childrenClass}" id="node-${node.id}">
                 <div class="node-container">
-                    <div class="circle-wrapper">
-                        <div class="member-circle"
-                             onclick="toggleNode('${node.id}')"
-                             onmouseenter="showProfileCard('${node.id}', event)"
-                             onmouseleave="hideProfileCard()"
-                             ontouchstart="showProfileCard('${node.id}', event)"
-                             title="${node.name || ''}">
-                            ${initial}
+                    <div class="couple-row ${(leftPartnerHtml || rightPartnerHtml) ? 'has-partner' : ''}">
+                        ${leftPartnerHtml}
+                        <div class="person-block">
+                            <div class="circle-wrapper">
+                                <div class="member-circle person-circle primary-person"
+                                     onclick="toggleNode('${node.id}')"
+                                     data-node-id="${node.id}"
+                                     title="${node.name || ''}">
+                                    ${initial}
+                                </div>
+                                <div class="toggle-btn" onmousedown="event.stopPropagation()" onclick="event.stopPropagation(); toggleNode('${node.id}')"></div>
+                            </div>
+                            <div class="member-name">${formatName(node.name)}</div>
                         </div>
-                        <div class="toggle-btn" onmousedown="event.stopPropagation()" onclick="event.stopPropagation(); toggleNode('${node.id}')"></div>
+                        ${rightPartnerHtml}
                     </div>
-                    <div class="member-name">${formatName(node.name)}</div>
-                    ${spouseHtml}
                 </div>`;
 
             if (hasChildren) {
@@ -664,16 +722,6 @@ i
             return path.reverse();
         }
 
-        function updateBreadcrumb(focusId) {
-            if (!focusId || !dataMap[focusId]) {
-                breadcrumbBar.textContent = 'Path: Home';
-                return;
-            }
-
-            const pathNames = getFocusPath(dataMap[focusId]).map(n => n.name || n.id);
-            breadcrumbBar.textContent = `Path: ${pathNames.join(' > ')}`;
-        }
-
         function getDisplayNames(ids) {
             if (!ids || ids.length === 0) return 'N/A';
             const names = ids.map(id => dataMap[id]?.name).filter(Boolean);
@@ -723,10 +771,7 @@ i
             container.querySelectorAll('li.lineage').forEach(el => el.classList.remove('lineage'));
             container.querySelectorAll('li.selected').forEach(el => el.classList.remove('selected'));
 
-            if (!focusId || !dataMap[focusId]) {
-                updateBreadcrumb(null);
-                return;
-            }
+            if (!focusId || !dataMap[focusId]) return;
             const lineageIds = getLineageIds(dataMap[focusId]);
 
             lineageIds.forEach(id => {
@@ -736,7 +781,6 @@ i
 
             const selected = document.getElementById(`node-${focusId}`);
             if (selected) selected.classList.add('selected');
-            updateBreadcrumb(focusId);
         }
 
         function focusNode(foundId) {
@@ -790,6 +834,10 @@ i
         let startY = 0;
         let scrollLeft = 0;
         let scrollTop = 0;
+        let suppressToggleOnce = false;
+        let longPressTimer = null;
+        let longPressActive = false;
+        const LONG_PRESS_MS = 550;
 
         slider.addEventListener('pointerdown', (e) => {
             if (e.button !== 0 && e.pointerType === 'mouse') return;
@@ -828,6 +876,90 @@ i
 
         slider.addEventListener('pointerup', endDrag);
         slider.addEventListener('pointercancel', endDrag);
+
+        // Touch fallback for browsers where Pointer Events drag is unreliable.
+        let touchDragging = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchScrollLeft = 0;
+        let touchScrollTop = 0;
+
+        slider.addEventListener('touchstart', (e) => {
+            if (e.touches.length !== 1) return;
+            if (e.target.closest('.toggle-btn') || e.target.closest('.search-box')) return;
+
+            touchDragging = true;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchScrollLeft = slider.scrollLeft;
+            touchScrollTop = slider.scrollTop;
+        }, { passive: true });
+
+        slider.addEventListener('touchmove', (e) => {
+            if (!touchDragging || e.touches.length !== 1) return;
+
+            const walkX = e.touches[0].clientX - touchStartX;
+            const walkY = e.touches[0].clientY - touchStartY;
+            slider.scrollLeft = touchScrollLeft - walkX;
+            slider.scrollTop = touchScrollTop - walkY;
+            e.preventDefault();
+        }, { passive: false });
+
+        slider.addEventListener('touchend', () => {
+            touchDragging = false;
+        });
+
+        slider.addEventListener('touchcancel', () => {
+            touchDragging = false;
+        });
+
+        function startLongPress(target, clientX, clientY) {
+            clearTimeout(longPressTimer);
+            longPressActive = false;
+            longPressTimer = setTimeout(() => {
+                const nodeId = target.dataset.nodeId;
+                if (!nodeId) return;
+                longPressActive = true;
+                suppressToggleOnce = target.classList.contains('primary-person');
+                showProfileCard(nodeId, { clientX, clientY });
+            }, LONG_PRESS_MS);
+        }
+
+        function cancelLongPress() {
+            clearTimeout(longPressTimer);
+        }
+
+        document.addEventListener('touchstart', (e) => {
+            const circle = e.target.closest('.person-circle');
+            if (!circle) return;
+            if (!e.touches || e.touches.length !== 1) return;
+            startLongPress(circle, e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        document.addEventListener('touchmove', cancelLongPress, { passive: true });
+        document.addEventListener('touchend', cancelLongPress);
+        document.addEventListener('touchcancel', cancelLongPress);
+
+        document.addEventListener('mousedown', (e) => {
+            const circle = e.target.closest('.person-circle');
+            if (!circle || e.button !== 0) return;
+            startLongPress(circle, e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mouseup', cancelLongPress);
+        document.addEventListener('mouseleave', cancelLongPress);
+
+        const originalToggleNode = toggleNode;
+        toggleNode = function(id) {
+            if (suppressToggleOnce) {
+                suppressToggleOnce = false;
+                if (longPressActive) {
+                    longPressActive = false;
+                    return;
+                }
+            }
+            originalToggleNode(id);
+        };
     </script>
 </body>
 </html>
