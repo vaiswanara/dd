@@ -180,9 +180,27 @@
             font-size: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .member-circle:hover { background-color: #e8f4ff; }
         .person-circle { -webkit-tap-highlight-color: transparent; }
+
+        .member-initial {
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            transform: scale(0.75);
+            transform-origin: center;
+        }
 
         .member-name {
             margin-top: 15px;
@@ -378,13 +396,28 @@
         let allData = [];
         let rootNodes = [];
         let dataMap = {};
+        let photoMap = {};
         let activeFocusId = null;
         const profileCard = document.getElementById('profileCard');
 
+        async function loadPhotoMap() {
+            try {
+                const response = await fetch('photo.json');
+                if (!response.ok) throw new Error(`photo.json ${response.status}`);
+                const map = await response.json();
+                photoMap = map && typeof map === 'object' ? map : {};
+            } catch (error) {
+                console.log('photo.json load failed. Using initials only.', error);
+                photoMap = {};
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            fetch('family_data.csv')
-                .then(r => r.text())
-                .then(text => {
+            Promise.all([
+                fetch('family_data.csv').then(r => r.text()),
+                loadPhotoMap()
+            ])
+                .then(([text]) => {
                     allData = parseCSV(text);
                     rootNodes = buildHierarchy(allData);
                     renderTree(rootNodes);
@@ -578,11 +611,22 @@
             return name;
         }
 
+        function getCircleContent(id, name) {
+            const initial = name ? name.charAt(0).toUpperCase() : '?';
+            const photoSrc = photoMap[id];
+            const safeTitle = name || '';
+
+            if (!photoSrc) {
+                return `<span class="member-initial">${initial}</span>`;
+            }
+
+            return `<span class="member-initial">${initial}</span><img class="member-photo" src="${photoSrc}" alt="${safeTitle}" loading="lazy" onerror="this.remove()">`;
+        }
+
         function createTreeHTML(node) {
             const hasChildren = node.children && node.children.length > 0;
             const collapsedClass = node.collapsed ? 'collapsed' : 'expanded';
             const childrenClass = hasChildren ? 'has-children' : '';
-            const initial = node.name ? node.name.charAt(0).toUpperCase() : '?';
 
             let leftPartnerHtml = '';
             let rightPartnerHtml = '';
@@ -592,7 +636,6 @@
                     if (!spouseNode) return null;
                     return {
                         id: spouseNode.id,
-                        initial: spouseNode.name ? spouseNode.name.charAt(0).toUpperCase() : '?',
                         fullName: spouseNode.name || ''
                     };
                 }).filter(Boolean);
@@ -603,7 +646,7 @@
                             <div class="member-circle person-circle spouse-circle"
                                  data-node-id="${s.id}"
                                  title="${s.fullName}">
-                                ${s.initial}
+                                ${getCircleContent(s.id, s.fullName)}
                             </div>
                             <div class="member-name">${formatName(s.fullName)}</div>
                         </div>
@@ -631,7 +674,7 @@
                                      onclick="toggleNode('${node.id}')"
                                      data-node-id="${node.id}"
                                      title="${node.name || ''}">
-                                    ${initial}
+                                    ${getCircleContent(node.id, node.name)}
                                 </div>
                                 <div class="toggle-btn" onmousedown="event.stopPropagation()" onclick="event.stopPropagation(); toggleNode('${node.id}')"></div>
                             </div>

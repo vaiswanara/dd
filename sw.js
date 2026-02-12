@@ -1,8 +1,9 @@
-const CACHE_NAME = 'family-tree-v13';
+const CACHE_NAME = 'family-tree-v14';
 const urlsToCache = [
   './index.html',
   './manifest.json',
-  './family_data.csv'
+  './family_data.csv',
+  './photo.json'
 ];
 
 self.addEventListener('install', event => {
@@ -31,9 +32,23 @@ self.addEventListener('fetch', event => {
 
   const requestUrl = new URL(event.request.url);
   const isFamilyCsv = requestUrl.pathname.endsWith('/family_data.csv') || requestUrl.pathname.endsWith('family_data.csv');
+  const isPhotoAsset = requestUrl.pathname.includes('/photos/');
 
   if (isFamilyCsv) {
     // Keep genealogy data fresh when online, but still work offline.
+    event.respondWith(
+      fetch(event.request)
+        .then(networkResponse => {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  if (isPhotoAsset) {
     event.respondWith(
       fetch(event.request)
         .then(networkResponse => {
