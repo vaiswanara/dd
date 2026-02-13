@@ -277,6 +277,11 @@ input[type="file"] {
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 .member-circle:hover { background-color: #e8f4ff; }
 .person-circle { -webkit-tap-highlight-color: transparent; }

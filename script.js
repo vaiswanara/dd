@@ -621,6 +621,7 @@ function startLongPress(target, clientX, clientY) {
         if (!nodeId) return;
         longPressActive = true;
         suppressToggleOnce = true;
+        if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback
         renderProfileModal(nodeId);
     }, LONG_PRESS_MS);
 }
@@ -648,6 +649,12 @@ document.addEventListener('mousedown', (e) => {
 
 document.addEventListener('mouseup', cancelLongPress);
 document.addEventListener('mouseleave', cancelLongPress);
+
+document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.person-circle')) {
+        e.preventDefault();
+    }
+});
 
 function openCurrentProfile() {
     toggleSidebar(); // Close sidebar first
@@ -703,6 +710,19 @@ function shareProfile(id) {
             showToast('Profile details copied to clipboard!');
         });
     }
+}
+
+function shareApp() {
+    if (navigator.share) {
+        navigator.share({
+            title: document.title,
+            text: 'Check out our Family Tree!',
+            url: window.location.href
+        }).catch(console.error);
+    } else {
+        navigator.clipboard.writeText(window.location.href).then(() => showToast('App link copied!'));
+    }
+    toggleSidebar();
 }
 
 async function installPWA() {
