@@ -1,83 +1,202 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5">
-    <title>DHARMAVARAM DYNASTY(Family Tree PWA)</title>
-
-    <meta name="theme-color" content="#3498db">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFWA - Dharmavaram Dynasty</title>
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4A90E2">
     <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root { --sidebar-width: 260px; --header-height: 60px; --primary-color: #4A90E2; --text-dark: #333; --bg-light: #f4f7f6; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; display: flex; height: 100vh; height: 100dvh; background: var(--bg-light); }
+        * { box-sizing: border-box; }
 
-    <link rel="stylesheet" href="style.css">
+        /* --- Sidebar (Slide Bar) --- */
+        #sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; z-index: 1000; transition: transform 0.3s ease; flex-shrink: 0; }
+        .brand { padding: 25px 20px; text-align: center; border-bottom: 1px solid #eee; }
+        .brand img { width: 80px; height: auto; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto; }
+        .brand h1 { margin: 0; font-size: 22px; color: var(--text-dark); letter-spacing: 1px; }
+        .brand h2 { margin: 8px 0 0; font-size: 13px; color: #777; font-weight: normal; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .menu { list-style: none; padding: 20px 0; margin: 0; flex: 1; overflow-y: auto; }
+        .menu li a { display: block; padding: 15px 25px; color: #555; text-decoration: none; font-weight: 500; transition: all 0.2s; border-left: 4px solid transparent; }
+        .menu li a:hover, .menu li a.active { background: #eef5fc; color: var(--primary-color); border-left-color: var(--primary-color); }
+        
+        /* --- Main Content Area --- */
+        #main { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; overflow: hidden; }
+        
+        /* Header */
+        header { height: var(--header-height); background: #fff; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; padding: 0 20px; justify-content: space-between; flex-shrink: 0; }
+        .toggle-btn { font-size: 24px; cursor: pointer; display: none; margin-right: 15px; color: #555; }
+        
+        /* Search Bar */
+        .search-wrapper { flex: 1; max-width: 500px; display: flex; align-items: center; position: relative; }
+        #search-input { width: 100%; padding: 10px 20px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 16px; transition: border 0.3s; background: #f9f9f9; }
+        #search-input:focus { border-color: var(--primary-color); background: #fff; }
+        #search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; max-height: 300px; overflow-y: auto; z-index: 2000; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 5px; }
+        .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .suggestion-item:hover { background-color: #f5f5f5; color: var(--primary-color); }
+
+        /* Tree Container */
+        #tree { flex: 1; width: 100%; height: 100%; background-color: #fff; position: relative; touch-action: none; }
+
+        /* --- Modal Styles --- */
+        #person-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
+        #person-modal-overlay.show { display: flex; }
+        #person-modal { background: #fff; width: 95%; max-width: 480px; max-height: 90vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .modal-header h3 { margin: 0; font-size: 18px; color: var(--text-dark); }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+        
+        .modal-scroll-content { overflow-y: auto; flex: 1; padding: 0; }
+        .avatar-section { padding: 20px; text-align: center; background: linear-gradient(to bottom, #f9f9f9, #fff); }
+        #person-modal-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none; margin: 0 auto; }
+        #person-modal-avatar-fallback { width: 100px; height: 100px; border-radius: 50%; background: #e0e0e0; color: #757575; font-size: 36px; display: flex; justify-content: center; align-items: center; margin: 0 auto; font-weight: bold; }
+        #person-modal-id { margin-top: 10px; font-size: 12px; color: #888; font-family: monospace; }
+        
+        .details-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+        .details-table tr { border-bottom: 1px solid #f5f5f5; }
+        .details-table th, .details-table td { padding: 12px 20px; font-size: 14px; }
+        
+        .modal-footer { padding: 15px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; background: #f9f9f9; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-outline { background: transparent; border: 1px solid #ccc; color: #555; }
+
+        /* --- Install Toast (Android/PWA) --- */
+        .install-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 15px; z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; width: 90%; max-width: 400px; }
+        .install-toast.show { opacity: 1; pointer-events: all; }
+        .install-toast .toast-content { flex: 1; display: flex; flex-direction: column; }
+        .install-toast button { background: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .install-toast .close-toast { background: transparent; color: #aaa; font-size: 20px; padding: 0 5px; margin-left: 5px; }
+
+        /* --- Install Page (Separate Page View) --- */
+        #install-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .install-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; }
+        .install-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .install-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .step { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
+        .step-num { width: 30px; height: 30px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; flex-shrink: 0; margin-top: 2px; }
+        .step-text { font-size: 16px; line-height: 1.5; color: #333; flex: 1; }
+        .install-action-btn { width: 100%; padding: 15px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3); }
+        .share-icon { display: inline-block; width: 20px; height: 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007AFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8'/%3E%3Cpolyline points='16 6 12 2 8 6'/%3E%3Cline x1='12' y1='2' x2='12' y2='15'/%3E%3C/svg%3E") no-repeat center center; vertical-align: text-bottom; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive Logic --- */
+        @media (max-width: 768px) {
+            #sidebar { position: fixed; height: 100%; transform: translateX(-100%); box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+            #sidebar.open { transform: translateX(0); }
+            .toggle-btn { display: block; }
+            #main { width: 100%; }
+            header { padding: 0 10px; }
+        }
+    </style>
 </head>
 <body>
-
-    <div class="header">
-        <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
-        
-        <div class="header-center">
-            <img src="logo.png" alt="Logo" class="header-logo">
-            <h1 class="header-title">Family Tree</h1>
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar">
+        <div class="brand">
+            <img src="logo.png" alt="DFWA Logo">
+            <h1>DFWA</h1>
+            <h2>Dharmavaram Dynasty</h2>
         </div>
-
-        <button class="search-toggle-btn" onclick="toggleSearch()">&#128269;</button>
-    </div>
-
-    <div id="welcomeBanner" class="welcome-banner">Loading updates...</div>
-
-    <div id="searchContainer" class="search-container">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search name..." autocomplete="off">
-            <div id="searchDropdown" class="search-dropdown"></div>
-            <button class="search-btn" onclick="searchNode(document.getElementById('searchInput').value)">Search</button>
-        </div>
-    </div>
-
-    <div id="uploadSection" style="display:none;">
-        <input type="file" id="csvFileInput" accept=".csv">
-    </div>
-
-    <div id="toast" class="toast"></div>
-
-    <div class="tree-wrapper" id="mainWrapper">
-        <div class="tree" id="treeContainer"></div>
-    </div>
-
-    <!-- Full Profile Modal -->
-    <div id="profileModal" class="modal-overlay" onclick="closeProfileModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeProfileModal()">&times;</span>
-            <div id="profileContent"></div>
-        </div>
-    </div>
-
-    <!-- Sidebar & Overlay -->
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-brand">
-            <img src="logo.png" alt="Logo" class="sidebar-logo">
-            <h2>FAMILY TREE</h2>
-            <p>Dharmavaram Dynasty</p>
-        </div>
-        <div class="sidebar-menu-label">MENU</div>
-        <ul class="menu-list">
-            <li onclick="toggleSidebar()">
-                <span class="menu-icon">&#128202;</span> Dashboard
-            </li>
-            <li onclick="openCurrentProfile()">
-                <span class="menu-icon">&#128100;</span> Profile
-            </li>
-            <li onclick="shareApp()">
-                <span class="menu-icon">&#128279;</span> Share App
-            </li>
-            <li id="installAppBtn" onclick="installPWA()" style="display:none;">
-                <span class="menu-icon">&#128242;</span> Install App
-            </li>
+        <ul class="menu">
+            <li><a href="#" class="active" onclick="closeSidebar(); window.location.reload();">Dashboard</a></li>
+            <li><a href="#" onclick="showNews(); closeSidebar();">Latest news</a></li>
+            <li id="install-item" style="display: none;"><a href="#" id="install-btn" style="color: #2E7D32; font-weight: 600;">📥 Install App</a></li>
+            <li><a href="#" onclick="alert('About Dharmavaram Dynasty:\n\nA comprehensive genealogy record.'); closeSidebar();">About</a></li>
+            <li><a href="#" onclick="alert('Please send feedback to admin.'); closeSidebar();">Feedback</a></li>
         </ul>
-    </div>
-    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+    </nav>
 
-    <script src="script.js"></script>
+    <!-- Main Content -->
+    <div id="main">
+        <header>
+            <div style="display: flex; align-items: center;">
+                <span class="toggle-btn" onclick="toggleSidebar()">&#9776;</span>
+            </div>
+            <div class="search-wrapper">
+                <!-- Home button is injected here by app.js -->
+                <input type="text" id="search-input" placeholder="Search family member...">
+                <div id="search-suggestions"></div>
+            </div>
+        </header>
+
+        <div id="tree"></div>
+    </div>
+
+    <!-- Person Details Modal -->
+    <div id="person-modal-overlay" aria-hidden="true">
+        <div id="person-modal">
+            <div class="modal-header">
+                <h3 id="person-modal-name">Name</h3>
+                <button id="person-modal-close" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-scroll-content">
+                <div class="avatar-section">
+                    <img id="person-modal-avatar" src="" alt="Profile">
+                    <div id="person-modal-avatar-fallback"></div>
+                    <div id="person-modal-id"></div>
+                </div>
+                <table class="details-table">
+                    <tbody id="person-modal-body">
+                        <!-- Rows injected by app.js -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="person-home-btn" class="btn btn-outline">Set as Home</button>
+                <button id="person-share-btn" class="btn btn-primary">Share Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Modal -->
+    <div id="news-modal-overlay" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(2px);">
+        <div style="background: #fff; width: 90%; max-width: 400px; border-radius: 12px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideUp 0.3s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--primary-color); font-size: 18px;">📢 Latest News</h3>
+                <button onclick="document.getElementById('news-modal-overlay').style.display='none'" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+            </div>
+            <div id="news-content" style="max-height: 60vh; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- Install Toast (Android/Desktop) -->
+    <div id="install-toast" class="install-toast">
+        <div class="toast-content">
+            <span style="font-weight: bold; font-size: 14px; margin-bottom: 2px;">Install App</span>
+            <span style="font-size: 12px; opacity: 0.8;">Add to home screen for offline access.</span>
+        </div>
+        <button id="install-toast-btn">Install</button>
+        <button id="install-toast-close" class="close-toast">&times;</button>
+    </div>
+
+    <!-- Install Instructions Page -->
+    <div id="install-page">
+        <div class="install-header">
+            <button id="install-page-close" class="install-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Install Instructions</h3>
+        </div>
+        <div id="install-page-content" class="install-content">
+            <!-- Content injected by app.js -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://balkan.app/js/FamilyTree.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Simple Sidebar Toggle Logic
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
+        // Register Service Worker
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    </script>
 </body>
 </html>
