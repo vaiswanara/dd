@@ -7,7 +7,7 @@
 
     <meta name="theme-color" content="#3498db">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -38,10 +38,19 @@
         <input type="file" id="csvFileInput" accept=".csv">
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <div class="tree-wrapper" id="mainWrapper">
         <div class="tree" id="treeContainer"></div>
     </div>
-    <div id="profileCard" class="profile-card" aria-hidden="true"></div>
+
+    <!-- Full Profile Modal -->
+    <div id="profileModal" class="modal-overlay" onclick="closeProfileModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeProfileModal()">&times;</span>
+            <div id="profileContent"></div>
+        </div>
+    </div>
 
     <!-- Sidebar & Overlay -->
     <div id="sidebar" class="sidebar">
@@ -54,6 +63,12 @@
         <ul class="menu-list">
             <li onclick="toggleSidebar()">
                 <span class="menu-icon">&#128202;</span> Dashboard
+            </li>
+            <li onclick="openCurrentProfile()">
+                <span class="menu-icon">&#128100;</span> Profile
+            </li>
+            <li id="installAppBtn" onclick="installPWA()" style="display:none;">
+                <span class="menu-icon">&#128242;</span> Install App
             </li>
         </ul>
     </div>

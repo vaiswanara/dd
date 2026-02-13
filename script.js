@@ -10,7 +10,7 @@ let dataMap = {};
 let photoMap = {};
 let activeFocusId = null;
 const spouseParentsExpanded = new Set();
-const profileCard = document.getElementById('profileCard');
+let deferredPrompt; // For PWA install prompt
 
 async function loadPhotoMap() {
     try {
@@ -26,17 +26,23 @@ async function loadPhotoMap() {
 
 window.addEventListener('DOMContentLoaded', () => {
     Promise.all([
-        fetch('family_data.csv').then(r => r.text()),
+        fetch('family_data.json').then(r => r.json()),
         loadPhotoMap(),
         fetchWelcomeMessage()
     ])
-        .then(([text]) => {
-            allData = parseCSV(text);
+        .then(([jsonData]) => {
+            allData = jsonData;
             rootNodes = buildHierarchy(allData);
             renderTree(rootNodes);
 
-            const homeNode = Object.values(dataMap).find(n => n.name === HOME_MEMBER_NAME);
-            if (homeNode) locateNode(homeNode.id);
+            // Check if user has set a custom Home Person
+            const storedHomeId = localStorage.getItem('familyTree_homeId');
+            if (storedHomeId && dataMap[storedHomeId]) {
+                locateNode(storedHomeId);
+            } else {
+                const homeNode = Object.values(dataMap).find(n => n.name === HOME_MEMBER_NAME);
+                if (homeNode) locateNode(homeNode.id);
+            }
         })
         .catch(e => console.log('Auto-load failed. Use manual upload.', e));
 });
@@ -56,6 +62,13 @@ async function fetchWelcomeMessage() {
         document.getElementById('welcomeBanner').style.display = 'none';
     }
 }
+
+// Listen for PWA install event
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installAppBtn').style.display = 'flex';
+});
 
 document.getElementById('csvFileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -111,13 +124,7 @@ document.addEventListener('click', function(e) {
     if (!document.querySelector('.search-box').contains(e.target) && !e.target.closest('.search-toggle-btn')) {
         searchDropdown.style.display = 'none';
     }
-
-    if (!e.target.closest('.person-circle') && !e.target.closest('#profileCard')) {
-        hideProfileCard();
-    }
 });
-
-document.getElementById('mainWrapper').addEventListener('scroll', hideProfileCard);
 
 function parseCSV(text) {
     const lines = text.trim().split('\n');
@@ -351,7 +358,6 @@ function createTreeHTML(node) {
                     <div class="person-block">
                         <div class="member-circle person-circle spouse-circle"
                              onclick="event.stopPropagation(); toggleNode('${ownerId}'); centerNodeFamily('${ownerId}'); return false;"
-                             onmousedown="event.stopPropagation()"
                              data-node-id="${s.id}"
                              title="${s.fullName}">
                             ${getCircleContent(s.id, s.fullName)}
@@ -487,39 +493,6 @@ function getParentNames(node) {
     return getDisplayNames(parentIds);
 }
 
-function showProfileCard(id, event) {
-    const node = dataMap[id];
-    if (!node) return;
-
-    const spouseNames = getDisplayNames(node.pids || []);
-    const parentNames = getParentNames(node);
-    const childrenCount = getRenderableChildren(node).length;
-
-    profileCard.innerHTML = `
-        <div class="pc-title">${node.name || 'Unknown'}</div>
-        <div class="pc-row"><strong>ID:</strong> ${node.id}</div>
-        <div class="pc-row"><strong>Parents:</strong> ${parentNames}</div>
-        <div class="pc-row"><strong>Spouse(s):</strong> ${spouseNames}</div>
-        <div class="pc-row"><strong>Children:</strong> ${childrenCount}</div>
-    `;
-
-    const pointerX = event.clientX || (event.touches && event.touches[0]?.clientX) || 0;
-    const pointerY = event.clientY || (event.touches && event.touches[0]?.clientY) || 0;
-    const cardWidth = 280;
-    const left = Math.min(window.innerWidth - cardWidth - 12, Math.max(12, pointerX + 14));
-    const top = Math.min(window.innerHeight - 180, Math.max(12, pointerY + 14));
-
-    profileCard.style.left = `${left}px`;
-    profileCard.style.top = `${top}px`;
-    profileCard.style.display = 'block';
-    profileCard.setAttribute('aria-hidden', 'false');
-}
-
-function hideProfileCard() {
-    profileCard.style.display = 'none';
-    profileCard.setAttribute('aria-hidden', 'true');
-}
-
 function applyLineageFocus(focusId) {
     const container = document.getElementById('treeContainer');
     container.querySelectorAll('li.lineage').forEach(el => el.classList.remove('lineage'));
@@ -647,8 +620,8 @@ function startLongPress(target, clientX, clientY) {
         const nodeId = target.dataset.nodeId;
         if (!nodeId) return;
         longPressActive = true;
-        suppressToggleOnce = target.classList.contains('primary-person');
-        showProfileCard(nodeId, { clientX, clientY });
+        suppressToggleOnce = true;
+        renderProfileModal(nodeId);
     }, LONG_PRESS_MS);
 }
 
@@ -676,6 +649,151 @@ document.addEventListener('mousedown', (e) => {
 document.addEventListener('mouseup', cancelLongPress);
 document.addEventListener('mouseleave', cancelLongPress);
 
+function openCurrentProfile() {
+    toggleSidebar(); // Close sidebar first
+    
+    let targetId = activeFocusId;
+    
+    // If no node is selected, try to find the stored home person, then the hardcoded home member
+    if (!targetId) {
+        const storedHomeId = localStorage.getItem('familyTree_homeId');
+        if (storedHomeId && dataMap[storedHomeId]) {
+            targetId = storedHomeId;
+        } else {
+            const homeNode = Object.values(dataMap).find(n => n.name === HOME_MEMBER_NAME);
+            if (homeNode) targetId = homeNode.id;
+        }
+    }
+
+    if (targetId) {
+        renderProfileModal(targetId);
+    } else {
+        showToast("Please select a family member first.");
+    }
+}
+
+function closeProfileModal() {
+    document.getElementById('profileModal').classList.remove('active');
+}
+
+function setHomePerson(id) {
+    if (!dataMap[id]) return;
+    localStorage.setItem('familyTree_homeId', id);
+    showToast(`Success! ${dataMap[id].name} is now set as your Home Person.`);
+    renderProfileModal(id); // Refresh modal to update button state
+}
+
+function shareProfile(id) {
+    const node = dataMap[id];
+    if (!node) return;
+
+    const spouseNames = getDisplayNames(node.pids || []);
+    const parentNames = getParentNames(node);
+    
+    const text = `Family Member Profile:\nName: ${node.name}\nID: ${node.id}\nSpouse: ${spouseNames}\nParents: ${parentNames}\n\n- Dharmavaram Dynasty Family Tree`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: node.name,
+            text: text,
+            url: window.location.href
+        }).catch(console.error);
+    } else {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Profile details copied to clipboard!');
+        });
+    }
+}
+
+async function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+        deferredPrompt = null;
+        document.getElementById('installAppBtn').style.display = 'none';
+    }
+    toggleSidebar();
+}
+
+function renderProfileModal(id) {
+    const node = dataMap[id];
+    if (!node) return;
+
+    const photoSrc = photoMap[id] || '';
+    const initial = getInitial(node.name);
+    const imgHtml = photoSrc 
+        ? `<img src="${photoSrc}" class="profile-img-large" alt="${node.name}">`
+        : `<div class="profile-img-large" style="display:flex;align-items:center;justify-content:center;background:#f0f2f5;font-size:48px;color:#3498db;margin:0 auto 10px;">${initial}</div>`;
+
+    // Check if this person is the current Home Person
+    const currentHomeId = localStorage.getItem('familyTree_homeId');
+    const isHome = currentHomeId === id;
+    const homeBtn = isHome 
+        ? `<button class="profile-action-btn" disabled style="background:#27ae60; cursor:default;">&#10003; Default Home Person</button>`
+        : `<button class="profile-action-btn" onclick="setHomePerson('${id}')">Set as Home Person</button>`;
+
+    const shareBtn = `<button class="profile-action-btn" style="background:#f39c12; margin-left:5px;" onclick="shareProfile('${id}')">Share</button>`;
+
+    // Parents
+    const parentLinks = (node.parents || []).map(p => 
+        `<span class="profile-link" onclick="renderProfileModal('${p.id}')">${p.name}</span>`
+    ).join('') || 'N/A';
+
+    // Spouses
+    const spouseLinks = (node.pids || []).map(pid => {
+        const s = dataMap[pid];
+        return s ? `<span class="profile-link" onclick="renderProfileModal('${s.id}')">${s.name}</span>` : '';
+    }).join('') || 'N/A';
+
+    // Children
+    const children = getRenderableChildren(node);
+    const childrenLinks = children.map(c => 
+        `<span class="profile-link" onclick="renderProfileModal('${c.id}')">${c.name}</span>`
+    ).join('') || 'N/A';
+
+    // Details Table
+    let detailsHtml = `<table class="profile-details-table">`;
+    
+    if (node.Birth) detailsHtml += `<tr><td class="profile-label">Date of Birth</td><td class="profile-value">${node.Birth}</td></tr>`;
+    if (node.Death) detailsHtml += `<tr><td class="profile-label">Date of Death</td><td class="profile-value">${node.Death}</td></tr>`;
+    
+    detailsHtml += `<tr><td class="profile-label">Parents</td><td class="profile-value">${parentLinks}</td></tr>`;
+    detailsHtml += `<tr><td class="profile-label">Spouse(s)</td><td class="profile-value">${spouseLinks}</td></tr>`;
+    detailsHtml += `<tr><td class="profile-label">Children</td><td class="profile-value">${childrenLinks}</td></tr>`;
+
+    if (node.Address) detailsHtml += `<tr><td class="profile-label">Address</td><td class="profile-value">${node.Address}</td></tr>`;
+    if (node.email) detailsHtml += `<tr><td class="profile-label">Email</td><td class="profile-value"><a href="mailto:${node.email}">${node.email}</a></td></tr>`;
+    if (node.phone) detailsHtml += `<tr><td class="profile-label">Phone</td><td class="profile-value"><a href="tel:${node.phone}">${node.phone}</a></td></tr>`;
+    
+    detailsHtml += `</table>`;
+
+    const content = `
+        <div class="profile-header">
+            ${imgHtml}
+            <h2>${node.name}</h2>
+            <p style="color:#777;">ID: ${node.id}</p>
+            <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                ${homeBtn}
+                ${shareBtn}
+            </div>
+        </div>
+        ${detailsHtml}
+    `;
+
+    document.getElementById('profileContent').innerHTML = content;
+    document.getElementById('profileModal').classList.add('active');
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast show';
+    setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+    }, 3000);
+}
+
 const originalToggleNode = toggleNode;
 toggleNode = function(id) {
     if (suppressToggleOnce) {
@@ -689,6 +807,7 @@ toggleNode = function(id) {
         hasMoved = false;
         return;
     }
+    activeFocusId = id; // Update active focus so Profile menu works for this person
     originalToggleNode(id);
 };
 
