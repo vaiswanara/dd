@@ -357,7 +357,7 @@ function createTreeHTML(node) {
                 return `
                     <div class="person-block">
                         <div class="member-circle person-circle spouse-circle"
-                             onclick="event.stopPropagation(); toggleNode('${ownerId}'); centerNodeFamily('${ownerId}'); return false;"
+                             onclick="event.stopPropagation(); focusFamily('${s.id}'); return false;"
                              data-node-id="${s.id}"
                              title="${s.fullName}">
                             ${getCircleContent(s.id, s.fullName)}
@@ -388,12 +388,12 @@ function createTreeHTML(node) {
                 <div class="person-block">
                     <div class="circle-wrapper">
                         <div class="member-circle person-circle primary-person"
-                             onclick="toggleNode('${node.id}'); centerNodeFamily('${node.id}')"
+                             onclick="focusFamily('${node.id}')"
                              data-node-id="${node.id}"
                              title="${node.name || ''}">
                             ${getCircleContent(node.id, node.name)}
                         </div>
-                        <div class="toggle-btn" onmousedown="event.stopPropagation()" onclick="event.stopPropagation(); toggleNode('${node.id}')"></div>
+                        <div class="toggle-btn" onmousedown="event.stopPropagation()" onclick="event.stopPropagation(); toggleNode('${node.id}'); centerNodeFamily('${node.id}')"></div>
                     </div>
                     <div class="member-name">${formatName(node.name)}</div>
                 </div>
@@ -830,6 +830,29 @@ toggleNode = function(id) {
     activeFocusId = id; // Update active focus so Profile menu works for this person
     originalToggleNode(id);
 };
+
+function focusFamily(id) {
+    if (suppressToggleOnce) {
+        suppressToggleOnce = false;
+        if (longPressActive) {
+            longPressActive = false;
+            return;
+        }
+    }
+    if (hasMoved) {
+        hasMoved = false;
+        return;
+    }
+    if (!dataMap[id]) return;
+
+    Object.values(dataMap).forEach(n => n.collapsed = true);
+    expandAncestors(dataMap[id]);
+    dataMap[id].collapsed = false;
+    
+    activeFocusId = id;
+    renderTree(rootNodes);
+    setTimeout(() => centerNodeFamily(id), 100);
+}
 
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
