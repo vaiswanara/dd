@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v2.16';
+const CACHE_NAME = 'family-tree-cache-v3.0';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [

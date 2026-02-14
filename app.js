@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const personHomeBtn = document.getElementById('person-home-btn');
     const personShareBtn = document.getElementById('person-share-btn');
     let activeModalPersonId = null;
+    let activePersonId = null;  // Currently centered person in the tree (used by profile button)
 
     // --- PWA Install Logic ---
     const installItem = document.getElementById('install-item');
@@ -101,12 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Open Install Page (Instructions)
     function openInstallPage() {
         if (!installPage || !installPageContent) return;
-        
-        let html = '';
+
         const logoHtml = `<img src="logo.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">`;
+        let html = '';
 
         if (isIos) {
-            // --- iOS Instructions ---
+            // --- iOS: existing steps ---
             html = `
                 <div style="text-align: center; padding: 10px 0 30px;">
                     ${logoHtml}
@@ -127,23 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         } else {
-            // --- Android / Desktop Instructions ---
+            // --- Android / Desktop: title, logo, description, install button (or manual steps), why install, safety info ---
             html = `
-                <div style="text-align: center; padding: 10px 0 30px;">
+                <div style="text-align: center; padding: 10px 0 20px;">
                     ${logoHtml}
-                    <h2 style="margin: 0 0 10px; color: #333;">Install App</h2>
-                    <p style="color: #666; font-size: 14px;">Install the app for offline access and better performance.</p>
+                    <h2 style="margin: 0 0 10px; color: #333; font-size: 22px;">Install DFWA App</h2>
+                    <p style="color: #666; font-size: 14px; line-height: 1.5;">Install the app for a better experience, offline access, and full-screen mode.</p>
                 </div>
             `;
 
             if (deferredPrompt) {
-                html += `
-                    <div class="step">
-                        <div class="step-num">1</div>
-                        <div class="step-text">Click the button below to install the app on your device.</div>
-                    </div>
-                    <button id="install-page-action-btn" class="install-action-btn">Install App</button>
-                `;
+                html += `<button id="install-page-action-btn" class="install-android-btn">Install for Android</button>`;
             } else {
                 html += `
                     <div class="step">
@@ -156,12 +151,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
             }
+
+            html += `
+                <div class="install-why-box">
+                    <h3>⭐ Why install DFWA?</h3>
+                    <ul>
+                        <li>Opens instantly like a mobile app</li>
+                        <li>Family tree in one tap</li>
+                        <li>Works even in slow internet</li>
+                        <li>No need to search the website again</li>
+                    </ul>
+                </div>
+                <div class="install-safety-box">
+                    <h3>🛡️ Safety Information</h3>
+                    <p>This is NOT an APK or Play Store application. It only creates a shortcut to this website on your phone's home screen.</p>
+                    <ul>
+                        <li>No files are downloaded to your phone</li>
+                        <li>No permissions are requested</li>
+                        <li>No personal information is collected</li>
+                        <li>No bank or payment data is accessed</li>
+                        <li>You can remove it anytime by deleting the icon</li>
+                    </ul>
+                </div>
+            `;
         }
 
         installPageContent.innerHTML = html;
         installPage.style.display = 'flex';
 
-        // Bind Install Button inside the page (if it exists)
         const actionBtn = document.getElementById('install-page-action-btn');
         if (actionBtn && deferredPrompt) {
             actionBtn.addEventListener('click', async () => {
@@ -175,6 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    window.openInstallPageFromMenu = openInstallPage;
 
     // 4. Event Listeners
     if (installBtn) {
@@ -205,6 +224,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (installPageClose) {
         installPageClose.addEventListener('click', () => {
             installPage.style.display = 'none';
+        });
+    }
+
+    const birthdaysPage = document.getElementById('birthdays-page');
+    const birthdaysContent = document.getElementById('birthdays-content');
+    const birthdaysPageClose = document.getElementById('birthdays-page-close');
+    if (birthdaysPageClose && birthdaysPage) {
+        birthdaysPageClose.addEventListener('click', () => {
+            birthdaysPage.style.display = 'none';
         });
     }
     
@@ -257,26 +285,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // SECTION 2.5: TEMPLATE DEFINITION
     // =================================================================================
     
-    // Define the custom 'circle' template globally once
-    if (typeof FamilyTree !== 'undefined') {
+    function isMobileViewport() {
+        return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function applyCircleTemplate() {
+        if (typeof FamilyTree === "undefined") return;
+
+        const mobile = isMobileViewport();
+        // Scale visual node elements up for mobile readability (~75% larger).
+        const cfg = mobile
+            ? {
+                width: 240, height: 180, cx: 120, cy: 64, radius: 61,
+                initialsSize: 42, initialsY: 78, nameSize: 19, nameY: 160,
+                nameWidth: 228, imgSize: 122, imgX: 59, imgY: 3
+            }
+            : {
+                width: 180, height: 120, cx: 90, cy: 40, radius: 35,
+                initialsSize: 24, initialsY: 48, nameSize: 11, nameY: 96,
+                nameWidth: 170, imgSize: 70, imgX: 55, imgY: 5
+            };
+
         FamilyTree.templates.circle = Object.assign({}, FamilyTree.templates.base);
-        FamilyTree.templates.circle.size = [180, 120]; // Wider node so full names can be shown
-        
-        // The Circle Shape (White background)
-        FamilyTree.templates.circle.node = 
-            '<circle cx="90" cy="40" r="35" fill="#ffffff" stroke="#aeaeae" stroke-width="1"></circle>';
-        
-        // Field 0: Initials (Centered inside circle - Black Text)
-        FamilyTree.templates.circle.field_0 = 
-            '<text style="font-size: 24px; font-weight: bold; fill: #000000; stroke: none;" fill="#000000" x="90" y="48" text-anchor="middle" pointer-events="none">{val}</text>';
-        
-        // Field 1: Name (Centered below circle)
-        FamilyTree.templates.circle.field_1 = 
-            '<text style="font-size: 11px; font-weight: 600; fill: #000000; stroke: none;" fill="#000000" x="90" y="96" text-anchor="middle" pointer-events="none" data-width="170">{val}</text>';
-            
-        // Image: Overlays the circle if an image exists
-        FamilyTree.templates.circle.img_0 = 
-            '<clipPath id="clip_id_{rand}"><circle cx="90" cy="40" r="35"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#clip_id_{rand})" xlink:href="{val}" x="55" y="5" width="70" height="70"></image><circle cx="90" cy="40" r="35" fill="none" stroke="#4A90E2" stroke-width="2"></circle>';
+        FamilyTree.templates.circle.size = [cfg.width, cfg.height];
+        FamilyTree.templates.circle.node =
+            `<circle cx="${cfg.cx}" cy="${cfg.cy}" r="${cfg.radius}" fill="#ffffff" stroke="#aeaeae" stroke-width="1"></circle>`;
+        FamilyTree.templates.circle.field_0 =
+            `<text style="font-size: ${cfg.initialsSize}px; font-weight: bold; fill: #000000; stroke: none;" fill="#000000" x="${cfg.cx}" y="${cfg.initialsY}" text-anchor="middle" pointer-events="none">{val}</text>`;
+        FamilyTree.templates.circle.field_1 =
+            `<text style="font-size: ${cfg.nameSize}px; font-weight: 600; fill: #000000; stroke: none;" fill="#000000" x="${cfg.cx}" y="${cfg.nameY}" text-anchor="middle" pointer-events="none" data-width="${cfg.nameWidth}">{val}</text>`;
+        FamilyTree.templates.circle.img_0 =
+            `<clipPath id="clip_id_{rand}"><circle cx="${cfg.cx}" cy="${cfg.cy}" r="${cfg.radius}"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#clip_id_{rand})" xlink:href="{val}" x="${cfg.imgX}" y="${cfg.imgY}" width="${cfg.imgSize}" height="${cfg.imgSize}"></image><circle cx="${cfg.cx}" cy="${cfg.cy}" r="${cfg.radius}" fill="none" stroke="#4A90E2" stroke-width="2"></circle>`;
     }
 
     // =================================================================================
@@ -401,6 +440,115 @@ document.addEventListener('DOMContentLoaded', () => {
         return dateStr;
     }
 
+    /**
+     * Parse birth date string (dd-MMM-yy or dd-MMM-yyyy) and return age in years, or null.
+     */
+    function getAgeFromBirth(birthStr) {
+        if (!birthStr || !String(birthStr).trim()) return null;
+        const parts = String(birthStr).trim().split('-');
+        if (parts.length !== 3) return null;
+        const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+        const day = parseInt(parts[0], 10);
+        const monthKey = parts[1].toUpperCase().slice(0, 3);
+        const month = months[monthKey];
+        if (month === undefined || isNaN(day)) return null;
+        let year = parseInt(parts[2], 10);
+        if (year < 100) {
+            const currentYear = new Date().getFullYear() % 100;
+            const pivot = currentYear + 10;
+            year = year > pivot ? 1900 + year : 2000 + year;
+        }
+        const birth = new Date(year, month, day);
+        if (isNaN(birth.getTime())) return null;
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+        return age < 0 || age > 150 ? null : age;
+    }
+
+    /**
+     * Parse birth date string to { month: 0-11, day: 1-31 } for matching month-day.
+     */
+    function getMonthDayFromBirth(birthStr) {
+        if (!birthStr || !String(birthStr).trim()) return null;
+        const parts = String(birthStr).trim().split('-');
+        if (parts.length !== 3) return null;
+        const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+        const day = parseInt(parts[0], 10);
+        const monthKey = parts[1].toUpperCase().slice(0, 3);
+        const month = months[monthKey];
+        if (month === undefined || isNaN(day) || day < 1 || day > 31) return null;
+        return { month, day };
+    }
+
+    const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    const MONTH_ABBR = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    /** Parse birth string and return 4-digit year, or null. */
+    function getBirthYearFromBirth(birthStr) {
+        if (!birthStr || !String(birthStr).trim()) return null;
+        const parts = String(birthStr).trim().split('-');
+        if (parts.length !== 3) return null;
+        let year = parseInt(parts[2], 10);
+        if (isNaN(year)) return null;
+        if (year < 100) {
+            const currentYear = new Date().getFullYear() % 100;
+            const pivot = currentYear + 10;
+            year = year > pivot ? 1900 + year : 2000 + year;
+        }
+        return year;
+    }
+
+    /**
+     * Build WhatsApp chat URL for a phone number. Strips non-digits; opens chat only (no pre-filled text).
+     */
+    function getWhatsAppUrl(phone) {
+        if (!phone || !String(phone).trim()) return '';
+        const digits = String(phone).replace(/\D/g, '');
+        return digits.length ? 'https://wa.me/' + digits : '';
+    }
+
+    /**
+     * Get birthdays occurring in the next `daysAhead` days. Returns array of
+     * { date, dateStr: "dd-MMM-yyyy", weekday, persons: [{ id, name, phone, ageAtDisplay }] }.
+     */
+    function getUpcomingBirthdays(daysAhead) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const byKey = {}; // key = "dd-MMM-yyyy" -> { dateStr, weekday, persons }
+
+        for (let i = 0; i < daysAhead; i++) {
+            const d = new Date(today);
+            d.setDate(d.getDate() + i);
+            const day = d.getDate();
+            const month = d.getMonth();
+            const year = d.getFullYear();
+            const dateStr = String(day) + '-' + MONTH_ABBR[month] + '-' + year;
+            const weekday = WEEKDAYS[d.getDay()];
+            const key = dateStr;
+            if (!byKey[key]) byKey[key] = { date: d, dateStr, weekday, persons: [] };
+
+            PEOPLE.forEach(p => {
+                const md = getMonthDayFromBirth(p.Birth || '');
+                if (!md || md.month !== month || md.day !== day) return;
+                const birthYear = getBirthYearFromBirth(p.Birth || '');
+                const ageAtDisplay = birthYear != null ? year - birthYear : null;
+                byKey[key].persons.push({
+                    id: p.id,
+                    name: (p.name || '').trim() || 'Unknown',
+                    phone: (p.phone || '').trim(),
+                    ageAtDisplay: ageAtDisplay != null && ageAtDisplay >= 0 && ageAtDisplay <= 150 ? ageAtDisplay : null
+                });
+            });
+        }
+
+        return Object.keys(byKey)
+            .sort()
+            .map(k => byKey[k])
+            .filter(entry => entry.persons.length > 0);
+    }
+
     function getInitials(name) {
         const parts = (name || "").trim().split(/\s+/).filter(Boolean);
         if (parts.length === 0) return "?";
@@ -487,8 +635,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const spouses = Array.isArray(p.pids) ? p.pids : [];
         const children = childrenMap.get(p.id) || [];
 
+        const birthFormatted = formatDate(p.Birth || "");
+        const age = getAgeFromBirth(p.Birth || "");
+        const birthWithAge = birthFormatted ? (birthFormatted + (age != null ? ` (${age})` : "")) : "";
+
         const rows = [
-            rowHtml("Date of Birth", formatDate(p.Birth || "")),
+            rowHtml("Date of Birth", birthWithAge),
             rowHtml("Parents", collectNames(parents)),
             rowHtml("Spouse(s)", collectNames(spouses)),
             rowHtml("Children", collectNames(children)),
@@ -618,8 +770,10 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} centerId - The ID of the person to be at the center of the view.
      */
     function drawTree(centerId) {
+        activePersonId = centerId;
         const familyData = getFamilySet(centerId);
         console.log(`Drawing tree for ${centerId}. Nodes count: ${familyData.length}`);
+        const mobile = isMobileViewport();
 
         if (tree) {
             // If the tree instance exists, we can update it.
@@ -628,6 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- FamilyTree.js Configuration ---
+        applyCircleTemplate();
         if (FamilyTree.elements) FamilyTree.elements.myTree = null; // Clear previous static elements if any
         tree = new FamilyTree(document.getElementById('tree'), {
             nodes: familyData,
@@ -646,10 +801,23 @@ document.addEventListener('DOMContentLoaded', () => {
             mode: 'light', // Changed to light for white background
             layout: FamilyTree.layout.normal,
             scaleInitial: FamilyTree.match.boundary,
+            padding: mobile ? 24 : 16,
+            levelSeparation: mobile ? 48 : 80,
+            siblingSeparation: mobile ? 18 : 35,
+            subtreeSeparation: mobile ? 18 : 35,
+            partnerNodeSeparation: mobile ? 12 : 20,
+            minPartnerSeparation: mobile ? 12 : 20,
             // Other settings for better UX
             enableSearch: false, // We use our own custom search
             template: 'circle', // Use our new custom circle template
         });
+
+        // Re-center after render so selected node and spouse stay in the viewport middle.
+        setTimeout(() => {
+            if (tree && typeof tree.center === "function") {
+                tree.center(centerId);
+            }
+        }, 0);
 
         // --- Custom Click Event for Lazy Loading ---
         tree.on('click', (sender, args) => {
@@ -743,9 +911,25 @@ document.addEventListener('DOMContentLoaded', () => {
         verticalAlign: 'middle'
     });
 
-    // Insert the button before the search input field
+    // Profile button: show details of the active (centered) person
+    const profileBtn = document.createElement('button');
+    profileBtn.innerHTML = '👤';
+    profileBtn.title = "View active person's details";
+    Object.assign(profileBtn.style, {
+        marginRight: '8px',
+        padding: '6px 10px',
+        fontSize: '18px',
+        cursor: 'pointer',
+        backgroundColor: '#fff',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        verticalAlign: 'middle'
+    });
+
+    // Insert Home then Profile before the search input field
     if (searchInput && searchInput.parentNode) {
         searchInput.parentNode.insertBefore(mainHomeBtn, searchInput);
+        searchInput.parentNode.insertBefore(profileBtn, searchInput);
     }
 
     // Add click listener to reset tree to Home Person
@@ -755,6 +939,14 @@ document.addEventListener('DOMContentLoaded', () => {
             drawTree(homeId);
             searchInput.value = ''; // Clear search text
             clearSuggestions();
+        }
+    });
+
+    profileBtn.addEventListener('click', () => {
+        if (activePersonId && peopleMap.has(activePersonId)) {
+            openPersonModal(activePersonId);
+        } else {
+            alert('No person selected. Tap a person on the tree first to center them, then tap the profile icon.');
         }
     });
 
@@ -800,6 +992,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error loading news:", err);
                 newsContent.innerHTML = '<p style="color: red; text-align: center;">Failed to load news.</p>';
             });
+    };
+
+    // =================================================================================
+    // SECTION 5.6: BIRTHDAYS PAGE (next 20 days)
+    // =================================================================================
+
+    window.showBirthdays = function() {
+        const page = document.getElementById('birthdays-page');
+        const content = document.getElementById('birthdays-content');
+        if (!page || !content) return;
+
+        const list = getUpcomingBirthdays(20);
+        if (list.length === 0) {
+            content.innerHTML = '<p style="color:#666; text-align:center; padding: 20px;">No birthdays in the next 20 days.</p>';
+        } else {
+            content.innerHTML = list.map(entry => {
+                const namesHtml = entry.persons.map(p => {
+                    const ageStr = p.ageAtDisplay != null ? ` (${p.ageAtDisplay})` : '';
+                    const phoneHtml = p.phone
+                        ? `<div class="birthday-phone"><a href="${getWhatsAppUrl(p.phone)}" target="_blank" rel="noopener" class="birthday-whatsapp-link" title="Open WhatsApp">${p.phone}</a></div>`
+                        : '';
+                    return `<div class="birthday-person-block">
+                        <div class="birthday-name"><a href="#" data-person-id="${p.id}">${p.name}${ageStr}</a></div>
+                        ${phoneHtml}
+                    </div>`;
+                }).join('');
+                return `<div class="birthday-date-block">
+                    <div class="birthday-date-line">${entry.dateStr} ${entry.weekday}</div>
+                    ${namesHtml}
+                </div>`;
+            }).join('');
+        }
+
+        content.querySelectorAll('.birthday-name a[data-person-id]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = link.getAttribute('data-person-id');
+                if (id && peopleMap.has(id)) {
+                    page.style.display = 'none';
+                    drawTree(id);
+                    openPersonModal(id);
+                }
+            });
+        });
+
+        page.style.display = 'flex';
     };
 
     // =================================================================================
