@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v3.6';
+const CACHE_NAME = 'family-tree-cache-v3.6.6';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
@@ -29,8 +29,7 @@ const URLS_TO_CACHE = [
     './manifest.json',
     './photos.json',
     './welcome.json',
-    './logo.png',
-    'https://balkan.app/js/FamilyTree.js',
+    './logo.png'
 ];
 
 // =================================================================================
@@ -91,24 +90,19 @@ self.addEventListener('fetch', event => {
 
                 // If the resource is not in the cache, fetch it from the network.
                 // console.log(`[Service Worker] Fetching from network: ${event.request.url}`);
-                return fetch(event.request)
-                    .then(networkResponse => {
-                        // After fetching, put a copy in the cache for next time.
-                        return caches.open(CACHE_NAME)
-                            .then(cache => {
-                                // IMPORTANT: Don't cache chrome-extension requests
-                                if (event.request.url.startsWith('chrome-extension://')) {
-                                    return networkResponse;
-                                }
-                                // console.log(`[Service Worker] Caching new resource: ${event.request.url}`);
-                                cache.put(event.request, networkResponse.clone());
-                                return networkResponse;
-                            });
-                    })
-                    .catch(error => {
-                        console.error('[Service Worker] Fetch failed; user is likely offline.', error);
-                        // Optional: You could return a fallback offline page here if you had one.
-                    });
+                return fetch(event.request).then(networkResponse => {
+                    // After fetching, put a copy in the cache for next time, but only for valid responses.
+                    if (networkResponse && networkResponse.status === 200 && !event.request.url.startsWith('chrome-extension://')) {
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then(cache => {
+                            cache.put(event.request, responseToCache);
+                        });
+                    }
+                    return networkResponse;
+                }).catch(error => {
+                    console.error('[Service Worker] Fetch failed; user is likely offline.', error);
+                    // Optional: You could return a fallback offline page here if you had one.
+                });
             })
     );
 });
