@@ -111,6 +111,17 @@
         .birthday-whatsapp-link { color: #25D366; text-decoration: none; font-weight: 500; }
         .birthday-whatsapp-link:hover { text-decoration: underline; }
 
+        /* --- Help Page --- */
+        #help-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .help-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .help-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .help-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .help-section { margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
+        .help-section:last-child { border-bottom: none; }
+        .help-section h3 { color: var(--primary-color); font-size: 16px; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+        .help-section p { margin: 0 0 5px; color: #444; font-size: 14px; line-height: 1.5; }
+        .help-section strong { color: #333; }
+
         /* --- Sidebar backdrop (mobile: tap outside to close) --- */
         #sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 999; }
         #sidebar-backdrop.show { display: block; }
@@ -141,6 +152,7 @@
             <li><a href="#" class="active" onclick="closeSidebar(); window.location.reload();">🌳 FAMILY TREE</a></li>
             <li><a href="#" onclick="showNews(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
+            <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" onclick="alert('About Dharmavaram Dynasty:\n\nA comprehensive genealogy record.'); closeSidebar();">ℹ️ ABOUT</a></li>
             <li><a href="#" onclick="alert('Please send feedback to admin.'); closeSidebar();">💬 FEEDBACK</a></li>
             <li><a href="#" id="install-btn">📥 Install App</a></li>
@@ -246,6 +258,58 @@
         </div>
         <div id="birthdays-content" class="birthdays-content">
             <!-- Content injected by app.js -->
+        </div>
+    </div>
+
+    <!-- Help Page -->
+    <div id="help-page">
+        <div class="help-header">
+            <button id="help-page-close" class="help-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Help & Guide</h3>
+        </div>
+        <div class="help-content">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <img src="logo.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <h2 style="margin: 0; color: #333; font-size: 20px;">Vamsha Vruksha</h2>
+                <p style="color: #777; font-size: 13px;">User Guide</p>
+            </div>
+
+            <div class="help-section">
+                <h3>📥 How to Install App</h3>
+                <p><strong>Android:</strong> Open Chrome menu (⋮) &rarr; Select "Install App" or "Add to Home screen".</p>
+                <p><strong>iOS:</strong> Tap Share button (⎋) &rarr; Scroll down &rarr; Tap "Add to Home Screen".</p>
+            </div>
+
+            <div class="help-section">
+                <h3>🔍 Search Bar</h3>
+                <p>Type a name in the top search bar. Tap on a name from the suggestions to view that person in the tree.</p>
+            </div>
+
+            <div class="help-section">
+                <h3>👤 Person Details</h3>
+                <p>Tap on any person in the tree to center them.</p>
+                <p>Click the <strong>Profile Icon (👤)</strong> next to the search bar to view full details (Parents, Spouse, Children, etc.).</p>
+                <p><em>Tip: You can also long-press a person on the tree to view details.</em></p>
+            </div>
+
+            <div class="help-section">
+                <h3>🏠 Set Home Person</h3>
+                <p>Go to your own profile details.</p>
+                <p>Click the <strong>"Set as Home"</strong> button.</p>
+                <p>Now, the <strong>Home Button (🏠)</strong> at the top will always bring the tree back to you.</p>
+            </div>
+
+            <div class="help-section">
+                <h3>↔️ Relationships</h3>
+                <p>Select any person in the tree.</p>
+                <p>Click the <strong>Relationship Icon (↔️)</strong> at the top.</p>
+                <p>It will show how the selected person is related to the Home Person (You).</p>
+            </div>
+
+            <div class="help-section">
+                <h3>🎂 Birthdays & Updates</h3>
+                <p>Check the Sidebar Menu (☰) for <strong>Birthdays</strong> (next 20 days) and latest <strong>Updates</strong>.</p>
+            </div>
         </div>
     </div>
 
