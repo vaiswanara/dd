@@ -6,8 +6,14 @@
     <title>VAMSHA VRUKSHA</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4A90E2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Vamsha Vruksha">
     <link rel="apple-touch-icon" href="app_icons/logo.png">
     <link rel="icon" href="app_icons/logo.png" type="image/png">
+    <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="icon" href="icons/icon-512.png" sizes="512x512" type="image/png">
     <style>
         /* --- CSS Variables & Reset --- */
         :root { --sidebar-width: 260px; --header-height: 60px; --primary-color: #4A90E2; --text-dark: #333; --bg-light: #f4f7f6; }
@@ -217,7 +223,7 @@
             <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" onclick="alert('About Dharmavaram Dynasty:\n\nA comprehensive genealogy record.'); closeSidebar();">ℹ️ ABOUT</a></li>
             <li><a href="#" onclick="alert('Please send feedback to admin.'); closeSidebar();">💬 FEEDBACK</a></li>
-            <li><a href="#" id="install-btn">📥 Install App</a></li>
+            <li id="install-item" style="display: none;"><a href="#" id="install-btn">📥 Install App</a></li>
         </ul>
     </nav>
 

@@ -31,7 +31,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
     const installItem = document.getElementById('install-item');
     if (installItem) installItem.style.display = 'block';
     
-    // Note: Toast logic is handled inside DOMContentLoaded to ensure elements exist
+    // FIX: Show toast immediately if DOM elements are ready (fixes Android issue)
+    const installToast = document.getElementById('install-toast');
+    if (installToast && !localStorage.getItem('installPromptDismissed')) {
+        setTimeout(() => installToast.classList.add('show'), 2000);
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
