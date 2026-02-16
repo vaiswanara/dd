@@ -9,12 +9,12 @@
   "display_override": ["standalone", "window-controls-overlay"],
   "icons": [
     {
-      "src": "logo.png",
+      "src": "app_icons/logo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512x512-maskable.png",
+      "src": "app_icons/icon-512x512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
