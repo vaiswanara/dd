@@ -1,8 +1,9 @@
 {
   "name": "Vamsha Vruksha",
-  "short_name": "VamshaVruksha",
+  "short_name": "DFWA",
   "id": "vamsha-vruksha-app",
-  "start_url": "/",
+  "start_url": "/dfwa/",
+  "scope": "/dfwa/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4A90E2",
