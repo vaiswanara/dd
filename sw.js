@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v4.0.33';
+const CACHE_NAME = 'family-tree-cache-v4.0.41';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
@@ -23,10 +23,10 @@ const URLS_TO_CACHE = [
     './index.html',
     './app.js',
     './config.json',
-    './app_icons/logo.png',
-    './app_icons/ftree.jpg',
-    './manifest.json'
-
+    './icon-192.png',
+    './icon-512.png',
+    './logo.png',
+    './download.png'
 ];
 
 // =================================================================================
@@ -52,7 +52,8 @@ self.addEventListener('install', event => {
                         config.data_files.manifest,
                         config.data_files.photos,
                         config.data_files.updates
-                    ].map(path => './' + path);
+                    ].filter(path => path) // Filter out undefined paths to prevent errors
+                     .map(path => './' + path);
                     
                     console.log('[Service Worker] Caching dynamic data files');
                     return cache.addAll(dataFiles);

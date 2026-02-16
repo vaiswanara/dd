@@ -21,20 +21,22 @@
 let deferredPrompt; // Global state to hold the prompt
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    console.log('beforeinstallprompt fired (global listener)');
-    
-    // If DOM is already ready, try to update UI immediately
-    const installItem = document.getElementById('install-item');
-    if (installItem) installItem.style.display = 'block';
-    
-    // FIX: Show toast immediately if DOM elements are ready (fixes Android issue)
-    const installToast = document.getElementById('install-toast');
-    if (installToast && !localStorage.getItem('installPromptDismissed')) {
-        setTimeout(() => installToast.classList.add('show'), 2000);
+    console.log('Install prompt event stashed.');
+
+    // ఎలిమెంట్ ఉందో లేదో చెక్ చేసి అప్పుడు డిస్‌ప్లే మార్చు
+    const showInstallUI = () => {
+        const installItem = document.getElementById('install-item');
+        if (installItem) {
+            installItem.style.display = 'block';
+        }
+    };
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        showInstallUI();
+    } else {
+        document.addEventListener('DOMContentLoaded', showInstallUI);
     }
 });
 
@@ -1916,4 +1918,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('tree').innerHTML = `<div style="color: red; text-align: center;">Error drawing tree: ${err.message}</div>`;
             }
         });
+
+    // =================================================================================
+    // SECTION 7: SERVICE WORKER REGISTRATION (PWA)
+    // =================================================================================
+    // PWA ఇన్‌స్టాల్ ప్రాంప్ట్ రావాలంటే సర్వీస్ వర్కర్ తప్పనిసరిగా రిజిస్టర్ అయి ఉండాలి.
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then((reg) => {
+                console.log('Service Worker registered successfully:', reg.scope);
+            })
+            .catch((err) => {
+                console.error('Service Worker registration failed:', err);
+            });
+    }
 });

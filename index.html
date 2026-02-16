@@ -6,14 +6,8 @@
     <title>VAMSHA VRUKSHA</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4A90E2">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Vamsha Vruksha">
-    <link rel="apple-touch-icon" href="app_icons/logo.png">
-    <link rel="icon" href="app_icons/logo.png" type="image/png">
-    <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
-    <link rel="icon" href="icons/icon-512.png" sizes="512x512" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" href="icon-192.png" type="image/png">
     <style>
         /* --- CSS Variables & Reset --- */
         :root { --sidebar-width: 260px; --header-height: 60px; --primary-color: #4A90E2; --text-dark: #333; --bg-light: #f4f7f6; }
@@ -161,7 +155,7 @@
         .open-tree-card:hover { border-color: var(--primary-color); }
         .open-tree-card:active { transform: scale(0.98); }
         /* Placeholder tree illustration using CSS/SVG background */
-        .open-tree-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; background-image: url('app_icons/ftree.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
+        .open-tree-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; background-image: url('ftree.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
         .open-tree-content { position: relative; z-index: 2; text-align: center; }
         .open-tree-btn { background: var(--primary-color); color: white; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 16px; border: none; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4); pointer-events: none; }
         
@@ -210,7 +204,7 @@
     <!-- Sidebar Navigation -->
     <nav id="sidebar">
         <div class="brand">
-            <img src="app_icons/logo.png" alt="DFWA Logo">
+            <img src="logo.png" alt="DFWA Logo">
             <h1>VAMSHA VRUKSHA</h1>
             <h2>Powerd by DFWA</h2>
         </div>
@@ -464,7 +458,7 @@
         </div>
         <div class="help-content">
             <div style="text-align: center; margin-bottom: 25px;">
-                <img src="app_icons/logo.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <img src="logo.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                 <h2 style="margin: 0; color: #333; font-size: 20px;">Vamsha Vruksha</h2>
                 <p style="color: #777; font-size: 13px;">User Guide</p>
             </div>
@@ -532,22 +526,6 @@
             if (backdrop) backdrop.addEventListener('click', closeSidebar);
         })();
     </script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => {
-        console.log('Service Worker registered', reg);
-      })
-      .catch(err => {
-        console.log('Service Worker failed', err);
-      });
-  });
-}
-</script>
-
-
 
 </body>
 </html>
