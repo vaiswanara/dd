@@ -6,8 +6,8 @@
     <title>VAMSHA VRUKSHA</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4A90E2">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" href="icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" href="logo.png" type="image/png">
     <style>
         /* --- CSS Variables & Reset --- */
         :root { --sidebar-width: 260px; --header-height: 60px; --primary-color: #4A90E2; --text-dark: #333; --bg-light: #f4f7f6; }
@@ -138,66 +138,6 @@
             #main { width: 100%; }
             header { padding: 0 10px; }
         }
-
-        /* --- Dashboard Styles --- */
-        #dashboard-page { display: none; flex: 1; padding: 20px; overflow-y: auto; background: #f4f7f6; animation: fadeIn 0.3s ease; }
-        .dash-welcome { background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .dash-welcome h2 { margin: 0; font-size: 18px; color: #333; }
-        .dash-date { color: #888; font-size: 14px; font-weight: 500; }
-        
-        .namaste-card { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 15px 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(30, 60, 114, 0.3); position: relative; overflow: hidden; }
-        .namaste-card { background: linear-gradient(135deg, #FF9966 0%, #FF5E62 100%); color: white; padding: 15px 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(255, 94, 98, 0.3); position: relative; overflow: hidden; }
-        .namaste-card h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
-        .namaste-card p { margin: 0; opacity: 0.95; font-size: 16px; font-weight: 500; }
-        .dash-message-card { display: none; background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; color: #E91E63; font-weight: 600; font-size: 15px; border-left: 5px solid #E91E63; animation: fadeIn 0.3s ease; line-height: 1.5; }
-        
-        .open-tree-card { background: #fff; border-radius: 16px; padding: 0; margin-bottom: 20px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; position: relative; height: 180px; display: flex; align-items: center; justify-content: center; border: 2px solid transparent; }
-        .open-tree-card:hover { border-color: var(--primary-color); }
-        .open-tree-card:active { transform: scale(0.98); }
-        /* Placeholder tree illustration using CSS/SVG background */
-        .open-tree-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; background-image: url('ftree.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
-        .open-tree-content { position: relative; z-index: 2; text-align: center; }
-        .open-tree-btn { background: var(--primary-color); color: white; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 16px; border: none; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4); pointer-events: none; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; }
-        .stat-card { background: #fff; padding: 20px 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 130px; }
-        .stat-card:active { transform: scale(0.98); }
-        .stat-icon { font-size: 28px; margin-bottom: 10px; }
-        .stat-value { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .stat-label { font-size: 12px; color: #777; font-weight: 500; text-transform: uppercase; }
-
-        /* Utility to hide tree */
-        .hidden { display: none !important; }
-
-        /* --- User Identity Card --- */
-        .user-identity-card { background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; animation: fadeIn 0.3s ease; }
-        .user-identity-content { display: flex; justify-content: space-between; align-items: center; }
-        .user-identity-info { display: flex; flex-direction: column; }
-        .user-identity-label { font-size: 12px; color: #888; margin-bottom: 4px; }
-        .user-identity-name { font-size: 16px; font-weight: bold; color: var(--primary-color); }
-        .user-change-btn { background: transparent; border: 1px solid #ccc; color: #666; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
-        .user-change-btn:hover { border-color: var(--primary-color); color: var(--primary-color); background: #f0f7ff; }
-
-        /* --- Generic App Toast --- */
-        .app-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(50, 50, 50, 0.95); color: #fff; padding: 14px 24px; border-radius: 50px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 6000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; font-size: 14px; font-weight: 500; text-align: center; max-width: 90%; width: max-content; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
-        .app-toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
-
-        /* --- Lineage Path Bar --- */
-        #lineage-bar { display: none; align-items: center; gap: 8px; padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #e0e0e0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-shrink: 0; }
-        #lineage-bar::-webkit-scrollbar { display: none; }
-        .lineage-item { font-size: 13px; color: #555; cursor: pointer; padding: 4px 12px; border-radius: 15px; background: #fff; border: 1px solid #ddd; flex-shrink: 0; transition: all 0.2s; font-weight: 500; }
-        .lineage-item:hover { border-color: var(--primary-color); color: var(--primary-color); background: #f0f7ff; }
-        .lineage-item.current { font-weight: bold; background: var(--primary-color); color: #fff; border-color: var(--primary-color); box-shadow: 0 2px 5px rgba(74, 144, 226, 0.3); }
-        .lineage-arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
-
-        /* --- Form Page --- */
-        #form-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; animation: fadeIn 0.3s ease; }
-        .form-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; flex-shrink: 0; }
-        .form-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
-        .form-content { flex: 1; width: 100%; height: 100%; display: flex; flex-direction: column; background: #f0f0f0; }
-        .form-iframe { width: 100%; flex: 1; border: none; display: block; background: #fff; }
-        .form-fallback { padding: 10px; text-align: center; background: #fff; border-bottom: 1px solid #eee; font-size: 13px; color: #666; }
-        .form-fallback a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -208,16 +148,14 @@
             <h1>VAMSHA VRUKSHA</h1>
             <h2>Powerd by DFWA</h2>
         </div>
-        <ul class="menu" id="sidebar-menu">
-            <li><a href="#" id="nav-dashboard" class="active" onclick="window.showDashboard(); closeSidebar();">🏠 Dashboard</a></li>
-            <li><a href="#" id="nav-tree" onclick="window.showTreePage(); closeSidebar();">🌳 FAMILY TREE</a></li>
+        <ul class="menu">
+            <li><a href="#" class="active" onclick="closeSidebar(); window.location.reload();">🌳 FAMILY TREE</a></li>
             <li><a href="#" onclick="showNews(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
-            <li><a href="#" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
             <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" onclick="alert('About Dharmavaram Dynasty:\n\nA comprehensive genealogy record.'); closeSidebar();">ℹ️ ABOUT</a></li>
             <li><a href="#" onclick="alert('Please send feedback to admin.'); closeSidebar();">💬 FEEDBACK</a></li>
-            <li id="install-item" style="display: none;"><a href="#" id="install-btn">📥 Install App</a></li>
+            <li><a href="#" id="install-btn">📥 Install App</a></li>
         </ul>
     </nav>
 
@@ -237,73 +175,7 @@
             </div>
         </header>
 
-        <!-- Dashboard Page -->
-        <div id="dashboard-page">
-            <!-- 1. Namaste Card (Moved to Top) -->
-            <div class="namaste-card">
-                <h1>🙏 Namaste!</h1>
-            </div>
-
-            <!-- 2. Welcome Header -->
-            <div class="dash-welcome" style="justify-content: center;">
-                <div style="text-align: center;">
-                    <h2>Welcome to Vamsha Vruksha</h2>
-                    <p style="font-size: 14px; color: #888; margin: 4px 0 0;">Powered by DFWA</p>
-                </div>
-                <div class="dash-date" id="dash-date" style="display: none;"></div>
-            </div>
-
-            <!-- 2.5 Dynamic Message Section -->
-            <div id="dash-dynamic-msg" class="dash-message-card"></div>
-
-            <!-- 3. User Identity Section (New Box) -->
-            <div id="dash-user-row" class="user-identity-card" style="display:none;">
-                <div class="user-identity-content">
-                    <div class="user-identity-info">
-                        <span class="user-identity-label">Home Person</span>
-                        <span id="dash-home-name" class="user-identity-name"></span>
-                    </div>
-                    <button onclick="window.changeHomePerson()" class="user-change-btn">Change</button>
-                </div>
-            </div>
-
-            <!-- Open Tree Card -->
-            <div class="open-tree-card" onclick="window.showTreePage()">
-                <div class="open-tree-bg"></div>
-                <div class="open-tree-content">
-                    <button class="open-tree-btn">Open Family Tree</button>
-                </div>
-            </div>
-
-            <!-- Family Info Section -->
-            <div class="stats-grid">
-                <div class="stat-card" onclick="window.showTreePage()">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-value" id="stat-total-members">-</div>
-                    <div class="stat-label">Total Members</div>
-                </div>
-                <div class="stat-card" onclick="window.showBirthdays()">
-                    <div class="stat-icon">🎂</div>
-                    <div class="stat-value" id="stat-upcoming-birthdays">-</div>
-                    <div class="stat-label">Upcoming Birthdays</div>
-                </div>
-                <div class="stat-card" onclick="window.focusSearch()">
-                    <div class="stat-icon">🔍</div>
-                    <div class="stat-value">Find</div>
-                    <div class="stat-label">Search Member</div>
-                </div>
-                <div class="stat-card" onclick="window.showFormPage()">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-value">Add</div>
-                    <div class="stat-label">Update Data</div>
-                </div>
-            </div>
-        </div>
-
         <div id="tree"></div>
-
-        <!-- Lineage Path Bar -->
-        <div id="lineage-bar"></div>
     </div>
 
     <!-- Person Details Modal -->
@@ -367,9 +239,6 @@
         <button id="install-toast-close" class="close-toast">&times;</button>
     </div>
 
-    <!-- Generic App Toast -->
-    <div id="app-toast" class="app-toast"></div>
-
     <!-- Install Instructions Page -->
     <div id="install-page">
         <div class="install-header">
@@ -385,68 +254,10 @@
     <div id="birthdays-page">
         <div class="birthdays-header">
             <button id="birthdays-page-close" class="birthdays-back">&larr;</button>
-            <h3 style="margin:0; font-size: 18px;">Upcoming Birthdays</h3>
+            <h3 style="margin:0; font-size: 18px;">Birthdays (next 20 days)</h3>
         </div>
         <div id="birthdays-content" class="birthdays-content">
             <!-- Content injected by app.js -->
-        </div>
-    </div>
-
-    <!-- Form Page -->
-    <div id="form-page">
-        <div class="form-header">
-            <button id="form-page-close" class="form-back">&larr;</button>
-            <h3 style="margin:0; font-size: 18px;">Submit Family Data</h3>
-        </div>
-        <div class="form-content" style="background: #fff; display: block; overflow-y: auto;">
-            <div style="text-align: center; padding: 30px 20px 10px;">
-                <p style="color: #666; margin: 0 0 15px; font-size: 15px;">Ready to add your family details?</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfXN90TgDOzXB3QfTte13QTdYXIpISceFku-sOdr9gTYspV3A/viewform" target="_blank" style="text-decoration: none;">
-                    <button style="background: var(--primary-color); color: white; padding: 15px 30px; border: none; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4); display: inline-flex; align-items: center; gap: 10px;">
-                        Open Google Form 📝
-                    </button>
-                </a>
-            </div>
-
-            <div style="padding: 20px 25px 40px; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
-                <h2 style="color: var(--primary-color); font-size: 20px; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Contribute to Vamsha Vruksha</h2>
-                
-                <p style="margin-bottom: 15px;">Namaste! We are maintaining this family tree to preserve our rich history and connect with our roots. Your contribution helps us keep this record accurate and complete for future generations.</p>
-
-                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Who can you add?</h3>
-                <p style="margin-bottom: 10px;">You may fill out this form to add or correct details for:</p>
-                <ul style="padding-left: 20px; color: #555; margin-bottom: 15px;">
-                    <li>Yourself</li>
-                    <li>Your children</li>
-                    <li>Your parents</li>
-                    <li>Any other relatives</li>
-                </ul>
-
-                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Important Notes</h3>
-                <ul style="padding-left: 20px; color: #555; margin-bottom: 15px;">
-                    <li style="margin-bottom: 8px;"><strong>Partial info is okay:</strong> It is fine if you do not know every detail.</li>
-                    <li style="margin-bottom: 8px;"><strong>Dates:</strong> Approximate years (e.g., "1985") are acceptable if exact dates are unknown.</li>
-                    <li style="margin-bottom: 8px;"><strong>Manual Update:</strong> This website does not update instantly. All entries are personally reviewed before being added.</li>
-                </ul>
-
-                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Photographs</h3>
-                <p style="margin-bottom: 15px;">Photos bring the tree to life! If you have a face photo, please attach it. Old photographs are also very welcome. This is optional.</p>
-
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; border-left: 4px solid #ccc;">
-                    <strong>Note on Google Sign-in:</strong><br>
-                    To securely attach a photo, Google may ask you to sign in. Please be assured that we never see your password or personal account details.
-                </div>
-
-                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Before you begin</h3>
-                <ul style="padding-left: 20px; color: #555; margin-bottom: 25px;">
-                    <li>Keep names and dates ready.</li>
-                    <li>Have photos ready on your device if you wish to upload them.</li>
-                </ul>
-
-                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
-                
-                <p style="text-align: center; font-weight: 500; color: var(--primary-color); font-style: italic;">Thank you for helping us preserve our heritage. Your time and effort are deeply appreciated.</p>
-            </div>
         </div>
     </div>
 
@@ -526,6 +337,22 @@
             if (backdrop) backdrop.addEventListener('click', closeSidebar);
         })();
     </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        console.log('Service Worker registered', reg);
+      })
+      .catch(err => {
+        console.log('Service Worker failed', err);
+      });
+  });
+}
+</script>
+
+
 
 </body>
 </html>
