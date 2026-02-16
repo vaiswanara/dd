@@ -1329,35 +1329,87 @@ document.addEventListener('DOMContentLoaded', () => {
     // SECTION 5.5: NEWS / WELCOME FEATURE
     // =================================================================================
     
-    // Expose this function to the global scope so the HTML onclick can find it
-    window.showNews = function() {
-        const newsModal = document.getElementById('news-modal-overlay');
-        const newsContent = document.getElementById('news-content');
-        
-        if (!newsModal || !newsContent) return;
-        
-        newsContent.innerHTML = '<p style="text-align:center; color:#666;">Loading updates...</p>';
-        newsModal.style.display = 'flex';
+    window.showUpdatesPage = function() {
+        const page = document.getElementById('updates-page');
+        const content = document.getElementById('updates-content');
+        if (!page || !content) return;
 
-        const updatesPath = (APP_CONFIG && APP_CONFIG.data_files) ? APP_CONFIG.data_files.updates : 'updates.json';
-        fetch(updatesPath)
-            .then(res => res.json())
-            .then(data => {
-                // Sort by date (assuming dd-mm-yyyy, simplified logic here or just take array order)
-                // We'll just map the array as is for now.
-                const html = data.map(item => `
-                    <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
-                        <div style="font-size: 12px; color: #4A90E2; font-weight: bold; margin-bottom: 4px;">📅 ${item.Date}</div>
-                        <div style="font-size: 14px; color: #333; line-height: 1.5;">${item.Message}</div>
-                    </div>
-                `).join('');
-                newsContent.innerHTML = html || '<p>No news available.</p>';
+        // Show page immediately with loading state
+        page.style.display = 'flex';
+        content.innerHTML = '<p style="text-align:center; color:#666; margin-top: 20px;">Loading updates...</p>';
+
+        // Get URL from config
+        const updatesUrl = (APP_CONFIG && APP_CONFIG.updates_url) ? APP_CONFIG.updates_url : null;
+
+        if (!updatesUrl) {
+            content.innerHTML = '<p style="text-align:center; color:red; margin-top: 20px;">Updates URL not configured.</p>';
+            return;
+        }
+        
+        const fetchUrl = `${updatesUrl}&t=${Date.now()}`; // Bypass cache
+
+        fetch(fetchUrl)
+            .then(res => res.text())
+            .then(csvText => {
+                const rows = csvText.split(/\r?\n/);
+                const validUpdates = [];
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                // Skip header row (index 0)
+                for (let i = 1; i < rows.length; i++) {
+                    // Split CSV line handling quoted commas
+                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+                    
+                    // Expected columns: Date, Message, Expiry
+                    if (cols.length < 2) continue;
+
+                    const dateStr = cols[0];
+                    const message = cols[1];
+                    const expiryStr = cols[2];
+
+                    const itemDate = parseCustomDate(dateStr);
+                    const expiryDate = parseCustomDate(expiryStr);
+
+                    // Check expiry
+                    if (expiryDate && today > expiryDate) {
+                        continue; // Skip expired messages
+                    }
+
+                    if (itemDate && message) {
+                        validUpdates.push({ dateObj: itemDate, dateStr: dateStr, message: message });
+                    }
+                }
+
+                // Sort by date descending (newest first)
+                validUpdates.sort((a, b) => b.dateObj - a.dateObj);
+
+                if (validUpdates.length === 0) {
+                    content.innerHTML = '<p style="text-align:center; padding: 20px; color: #666;">No active updates.</p>';
+                } else {
+                    content.innerHTML = validUpdates.map((item, index) => `
+                        <div class="update-item">
+                            <div class="update-number">${index + 1})</div>
+                            <div class="update-details">
+                                <div class="update-date">📅 ${item.dateStr}</div>
+                                <div class="update-text">${item.message}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
             })
             .catch(err => {
                 console.error("Error loading news:", err);
-                newsContent.innerHTML = '<p style="color: red; text-align: center;">Failed to load news.</p>';
+                content.innerHTML = '<p style="color: red; text-align: center; margin-top: 20px;">Failed to load updates.</p>';
             });
     };
+
+    const updatesPageClose = document.getElementById('updates-page-close');
+    if (updatesPageClose) {
+        updatesPageClose.addEventListener('click', () => {
+            document.getElementById('updates-page').style.display = 'none';
+        });
+    }
 
     // =================================================================================
     // SECTION 5.6: BIRTHDAYS PAGE (next 20 days)
@@ -1441,6 +1493,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
+    // SECTION 5.8.5: ABOUT PAGE
+    // =================================================================================
+
+    window.showAboutPage = function() {
+        const aboutPage = document.getElementById('about-page');
+        if (aboutPage) {
+            aboutPage.style.display = 'flex';
+        }
+    };
+
+    const aboutPageClose = document.getElementById('about-page-close');
+    if (aboutPageClose) {
+        aboutPageClose.addEventListener('click', () => {
+            document.getElementById('about-page').style.display = 'none';
+        });
+    }
+
+    // =================================================================================
+    // SECTION 5.8.6: FEEDBACK PAGE
+    // =================================================================================
+
+    window.showFeedbackPage = function() {
+        const feedbackPage = document.getElementById('feedback-page');
+        if (feedbackPage) {
+            feedbackPage.style.display = 'flex';
+        }
+    };
+
+    const feedbackPageClose = document.getElementById('feedback-page-close');
+    if (feedbackPageClose) {
+        feedbackPageClose.addEventListener('click', () => {
+            document.getElementById('feedback-page').style.display = 'none';
+        });
+    }
+
+    // =================================================================================
     // SECTION 5.9: DASHBOARD LOGIC
     // =================================================================================
 
@@ -1490,10 +1578,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }, duration);
     };
 
+    const dashSearchContainer = document.getElementById('dash-search-container');
+    const dashSearchInput = document.getElementById('dash-search-input');
+    const dashSearchSuggestions = document.getElementById('dash-search-suggestions');
+
     window.changeHomePerson = function() {
-        window.showToast("1. Search your name  👉  2. Open Profile  👉  3. Set as Home", 5000);
-        window.focusSearch();
+        if (dashSearchContainer) {
+            const isHidden = dashSearchContainer.style.display === 'none';
+            dashSearchContainer.style.display = isHidden ? 'block' : 'none';
+            if (isHidden && dashSearchInput) {
+                dashSearchInput.value = '';
+                if (dashSearchSuggestions) dashSearchSuggestions.style.display = 'none';
+                setTimeout(() => dashSearchInput.focus(), 100);
+            }
+        }
     };
+
+    if (dashSearchInput && dashSearchSuggestions) {
+        dashSearchInput.addEventListener('input', () => {
+            const query = dashSearchInput.value.toLowerCase().trim();
+            if (query.length < 3) {
+                dashSearchSuggestions.style.display = 'none';
+                return;
+            }
+            const matches = [];
+            for (const person of PEOPLE) {
+                if (person.name.toLowerCase().includes(query)) {
+                    matches.push(person);
+                    if (matches.length >= 10) break;
+                }
+            }
+            dashSearchSuggestions.innerHTML = matches.map(p => `
+                <div class="suggestion-item" data-id="${p.id}">
+                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                </div>
+            `).join('');
+            dashSearchSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+        dashSearchSuggestions.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (item) {
+                openPersonModal(item.dataset.id);
+                dashSearchContainer.style.display = 'none';
+            }
+        });
+    }
 
     function updateDashboard() {
         // 1. Set Date
@@ -1644,25 +1773,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 2. Find Descendants (First child chain, max 3)
-        const descendants = [];
-        curr = peopleMap.get(centerId);
-        for (let i = 0; i < 3; i++) {
-            const children = childrenMap.get(curr.id);
-            if (children && children.length > 0) {
-                // Pick first child
-                const childId = children[0];
-                if (peopleMap.has(childId)) {
-                    curr = peopleMap.get(childId);
-                    descendants.push(curr);
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-
         // 3. Build HTML
         const createItem = (p, isCurrent) => {
             // Use ONLY first name
@@ -1684,12 +1794,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Current
         const currentPerson = peopleMap.get(centerId);
         html += createItem(currentPerson, true);
-
-        // Descendants
-        descendants.forEach(p => {
-            html += arrow;
-            html += createItem(p, false);
-        });
 
         bar.innerHTML = html;
         

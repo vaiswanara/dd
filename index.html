@@ -110,6 +110,33 @@
         .install-hint { margin-top: 12px; color: #666; font-size: 13px; line-height: 1.6; }
         .install-hint code { background: #f6f7f9; border: 1px solid #eceff3; padding: 2px 6px; border-radius: 6px; }
 
+        /* --- About Page --- */
+        #about-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .about-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .about-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .about-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .about-section { margin-bottom: 25px; }
+        .about-section h3 { color: var(--primary-color); font-size: 18px; margin-bottom: 10px; border-bottom: 2px solid #f0f7ff; padding-bottom: 5px; display: inline-block; }
+        .about-section p { color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 10px; }
+        .about-card { background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-color); margin-top: 15px; }
+
+        /* --- Feedback Page --- */
+        #feedback-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .feedback-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .feedback-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .feedback-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+        /* --- Updates Page --- */
+        #updates-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .updates-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .updates-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .updates-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .update-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; display: flex; gap: 15px; }
+        .update-number { font-size: 27px; font-weight: bold; color: #ccc; min-width: 25px; }
+        .update-details { flex: 1; }
+        .update-date { font-size: 18px; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
+        .update-text { font-size: 23px; color: #333; line-height: 1.5; }
+
         /* --- Sidebar backdrop (mobile: tap outside to close) --- */
         #sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 999; }
         #sidebar-backdrop.show { display: block; }
@@ -199,13 +226,13 @@
         <ul class="menu" id="sidebar-menu">
             <li><a href="#" id="nav-dashboard" class="active" onclick="window.showDashboard(); closeSidebar();">🏠 Dashboard</a></li>
             <li><a href="#" id="nav-tree" onclick="window.showTreePage(); closeSidebar();">🌳 FAMILY TREE</a></li>
-            <li><a href="#" onclick="showNews(); closeSidebar();">📰 UPDATES</a></li>
+            <li><a href="#" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
             <li><a href="#" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
             <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
-            <li><a href="#" onclick="alert('About Dharmavaram Dynasty:\n\nA comprehensive genealogy record.'); closeSidebar();">ℹ️ ABOUT</a></li>
-            <li><a href="#" onclick="alert('Please send feedback to admin.'); closeSidebar();">💬 FEEDBACK</a></li>
+            <li><a href="#" onclick="window.showAboutPage(); closeSidebar();">ℹ️ ABOUT</a></li>
+            <li><a href="#" onclick="window.showFeedbackPage(); closeSidebar();">💬 FEEDBACK</a></li>
         </ul>
     </nav>
 
@@ -252,6 +279,11 @@
                         <span id="dash-home-name" class="user-identity-name"></span>
                     </div>
                     <button onclick="window.changeHomePerson()" class="user-change-btn">Change</button>
+                </div>
+                <!-- Inline Search for Home Person -->
+                <div id="dash-search-container" style="display:none; margin-top: 15px; position: relative;">
+                    <input type="text" id="dash-search-input" placeholder="Type name (min 3 chars)..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 16px;">
+                    <div id="dash-search-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
                 </div>
             </div>
 
@@ -331,17 +363,6 @@
             <div id="relationship-modal-body" style="padding: 20px 25px; line-height: 1.6; text-align: center;">
                 <!-- Content injected by app.js -->
             </div>
-        </div>
-    </div>
-
-    <!-- News Modal -->
-    <div id="news-modal-overlay" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(2px);">
-        <div style="background: #fff; width: 90%; max-width: 400px; border-radius: 12px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideUp 0.3s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <h3 style="margin: 0; color: var(--primary-color); font-size: 18px;">📢 Latest News</h3>
-                <button onclick="document.getElementById('news-modal-overlay').style.display='none'" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
-            </div>
-            <div id="news-content" style="max-height: 60vh; overflow-y: auto;"></div>
         </div>
     </div>
 
@@ -463,6 +484,76 @@
         </div>
     </div>
 
+    <!-- About Page -->
+    <div id="about-page">
+        <div class="about-header">
+            <button id="about-page-close" class="about-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">About</h3>
+        </div>
+        <div class="about-content">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="logo.png" alt="DFWA Logo" style="width: 80px; height: auto; margin-bottom: 10px;">
+                <h2 style="margin: 0; color: #333;">Vamsha Vruksha</h2>
+                <p style="color: #777; margin-top: 5px;">Preserving Our Roots</p>
+            </div>
+
+            <div class="about-section">
+                <h3>Our Mission</h3>
+                <p>
+                    This application is a dedicated initiative by the <strong>Dharmavaram Family Welfare Association (DFWA)</strong>. 
+                    Our goal is simple yet profound: to digitally preserve the genealogy of our family for generations to come.
+                </p>
+                <p>
+                    In an era where families are spread across the globe, this tool serves as a bridge, connecting us back to our shared origins. 
+                    It is a free service intended solely to foster relationships and maintain the unity of our extended family.
+                </p>
+            </div>
+
+            <div class="about-section">
+                <h3>Traditional Lineage Information</h3>
+                <p>
+                    You may notice fields for <strong>Gotra</strong>, <strong>Nakshatra</strong>, and <strong>Rashi</strong> in future profile sections. 
+                    Here is a brief explanation of their significance in our heritage.
+                </p>
+
+                <div class="about-card">
+                    <strong>Gotra (Ancestral Lineage)</strong><br>
+                    <span style="font-size: 14px; color: #555;">
+                        Gotra traces our patrilineal heritage back to the ancient sages (Rishis). It acts as a marker of our ancestral origin, 
+                        preserving a lineage identity that has been passed down for thousands of years.
+                    </span>
+                </div>
+
+                <div class="about-card" style="border-left-color: #E91E63;">
+                    <strong>Nakshatra & Rashi</strong><br>
+                    <span style="font-size: 14px; color: #555;">
+                        <strong>Nakshatra</strong> (Birth Star) and <strong>Rashi</strong> (Moon Sign) are traditional astronomical markers. 
+                        Historically, before modern calendars, these were used to record the precise time of a child's birth.
+                    </span>
+                </div>
+
+                <p style="margin-top: 15px;">
+                    <strong>Why we preserve this:</strong><br>
+                    Recording these details is an act of cultural continuity, not superstition. It helps future generations understand 
+                    how their ancestors identified themselves and marked time. It is a vital part of our unique cultural identity.
+                </p>
+
+                <p style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 14px; color: #856404; border: 1px solid #ffeeba;">
+                    <strong>Note:</strong> If you know these details, please enter them. If unsure, we encourage you to consult the elders in your family. 
+                    It is a great way to start a conversation about our history!
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; color: #666; font-style: italic; font-size: 14px;">
+                "Preserving our relationships and cultural memory together strengthens the bonds of our family unity."
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #aaa;">
+                Version 1.0.0 &bull; Built with ❤️ by DFWA
+            </div>
+        </div>
+    </div>
+
     <!-- Install App Page -->
     <div id="install-page">
         <div class="install-header">
@@ -486,6 +577,88 @@
                     Checking install availability…
                 </div>
             </div>
+
+            <!-- iOS Instructions -->
+            <div class="install-card" style="margin-top: 20px;">
+                <div class="install-hero">
+                    <div style="font-size: 48px; width: 72px; text-align: center;">🍎</div>
+                    <div>
+                        <h2>Install on iPhone / iPad</h2>
+                        <p>iOS does not support one-click install. Follow these manual steps:</p>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; font-size: 14px; color: #555; line-height: 1.6; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <ol style="padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 8px;">Open this website in <strong>Safari</strong>.</li>
+                        <li style="margin-bottom: 8px;">Tap the <strong>Share</strong> button (square with arrow up) at the bottom.</li>
+                        <li style="margin-bottom: 8px;">Scroll down and tap <strong>"Add to Home Screen"</strong>.</li>
+                        <li>Tap <strong>Add</strong> in the top right corner.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Safety Information -->
+            <div class="install-card" style="margin-top: 20px; background: #e8f5e9; border-color: #c8e6c9;">
+                <h3 style="margin: 0 0 10px; color: #2e7d32; display: flex; align-items: center; gap: 8px; font-size: 16px;">
+                    🛡️ Safety Information
+                </h3>
+                <p style="font-size: 14px; color: #333; line-height: 1.5; margin-bottom: 15px;">
+                    This is <strong>NOT</strong> an APK or Play Store application. It only creates a shortcut to this website on your phone's home screen.
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: #444;">
+                    <li style="margin-bottom: 8px; display: flex; gap: 10px;"><span style="color: #2e7d32;">✔</span> No files are downloaded to your phone</li>
+                    <li style="margin-bottom: 8px; display: flex; gap: 10px;"><span style="color: #2e7d32;">✔</span> No permissions are requested</li>
+                    <li style="margin-bottom: 8px; display: flex; gap: 10px;"><span style="color: #2e7d32;">✔</span> No personal information is collected</li>
+                    <li style="margin-bottom: 8px; display: flex; gap: 10px;"><span style="color: #2e7d32;">✔</span> No bank or payment data is accessed</li>
+                    <li style="margin-bottom: 8px; display: flex; gap: 10px;"><span style="color: #2e7d32;">✔</span> You can remove it anytime by deleting the icon</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: 600; color: #2e7d32; font-size: 14px; margin-bottom: 5px;">
+                    Your phone security and privacy remain completely safe.
+                </p>
+                <p style="margin: 0; font-size: 13px; color: #666;">
+                    This app works entirely inside your browser (Chrome/Safari).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Page -->
+    <div id="feedback-page">
+        <div class="feedback-header">
+            <button id="feedback-page-close" class="feedback-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Feedback</h3>
+        </div>
+        <div class="feedback-content">
+            <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
+                <div style="font-size: 48px; margin-bottom: 10px;">💬</div>
+                <h2 style="margin: 0; color: #333;">We'd love to hear from you!</h2>
+                <p style="color: #666; margin-top: 10px; line-height: 1.5;">
+                    Your feedback helps us improve the Vamsha Vruksha application for the entire family.
+                </p>
+            </div>
+
+            <div class="install-card" style="text-align: center; padding: 30px 20px;">
+                <p style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Admin / Developer</p>
+                <h3 style="margin: 0 0 25px; color: var(--primary-color); font-size: 20px;">Srikanth Dharmavaram</h3>
+                
+                <a href="https://wa.me/919482094290?text=Namaste%20Srikanth,%20I%20have%20some%20feedback%20regarding%20the%20Family%20Tree%20App..." target="_blank" style="text-decoration: none;">
+                    <button style="background: #25D366; color: white; border: none; padding: 12px 28px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: transform 0.2s;">
+                        <span style="font-size: 20px;">📱</span> Chat on WhatsApp
+                    </button>
+                </a>
+                <p style="margin-top: 20px; font-size: 15px; color: #555; font-weight: 500;">+91 94820 94290</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Updates Page -->
+    <div id="updates-page">
+        <div class="updates-header">
+            <button id="updates-page-close" class="updates-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Latest Updates</h3>
+        </div>
+        <div id="updates-content" class="updates-content">
+            <!-- Content injected by app.js -->
         </div>
     </div>
 
