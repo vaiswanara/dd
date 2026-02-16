@@ -1439,6 +1439,25 @@ document.addEventListener('DOMContentLoaded', () => {
         page.style.display = 'flex';
     };
 
+    // =================================================================================
+    // SECTION 5.8: HELP PAGE
+    // =================================================================================
+
+    window.showHelp = function() {
+        console.log("Opening Help Page...");
+        const helpPage = document.getElementById('help-page');
+        if (helpPage) {
+            helpPage.style.display = 'flex';
+        }
+    };
+
+    const helpPageClose = document.getElementById('help-page-close');
+    if (helpPageClose) {
+        helpPageClose.addEventListener('click', () => {
+            document.getElementById('help-page').style.display = 'none';
+        });
+    }
+
     /**
      * =================================================================================
      * SECTION 5.7: NEW DATABASE ADAPTER
