@@ -15,22 +15,18 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v5.0.0';
+const CACHE_NAME = 'family-tree-cache-v4.0.45';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
     './',
     './index.html',
     './app.js',
-    './FamilyTree.js',
-    './json_data/persons.json',
-    './json_data/families.json',
-    './json_data/places.json',
-    './json_data/contacts.json',
-    './manifest.json',
-    './photos.json',
-    './welcome.json',
-    './logo.png'
+    './config.json',
+    './icon-192.png',
+    './icon-512.png',
+    './logo.png',
+    './download-512.png'
 ];
 
 // =================================================================================
@@ -40,10 +36,30 @@ const URLS_TO_CACHE = [
 self.addEventListener('install', event => {
     console.log('[Service Worker] Install');
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => {
+        caches.open(CACHE_NAME).then(async cache => {
                 console.log('[Service Worker] Caching app shell');
-                return cache.addAll(URLS_TO_CACHE);
+                await cache.addAll(URLS_TO_CACHE);
+
+                // Dynamically cache data files defined in config.json
+                try {
+                    const response = await fetch('./config.json');
+                    const config = await response.json();
+                    const dataFiles = [
+                        config.data_files.persons,
+                        config.data_files.families,
+                        config.data_files.places,
+                        config.data_files.contacts,
+                        config.data_files.manifest,
+                        config.data_files.photos,
+                        config.data_files.updates
+                    ].filter(path => path) // Filter out undefined paths to prevent errors
+                     .map(path => './' + path);
+                    
+                    console.log('[Service Worker] Caching dynamic data files');
+                    return cache.addAll(dataFiles);
+                } catch (error) {
+                    console.error('[Service Worker] Failed to cache dynamic files:', error);
+                }
             })
             .then(() => self.skipWaiting()) // Activate worker immediately
     );
@@ -77,6 +93,13 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     // We only want to cache GET requests.
     if (event.request.method !== 'GET') {
+        return;
+    }
+
+    // EXCLUDE Google Sheets from Cache (Network Only)
+    // This ensures we never store the welcome message and always fetch it live.
+    if (event.request.url.includes('docs.google.com')) {
+        event.respondWith(fetch(event.request));
         return;
     }
 

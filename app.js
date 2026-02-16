@@ -17,23 +17,6 @@
  * =====================================================================================
  */
 
-// --- PWA: Global Event Listener (Must be outside DOMContentLoaded) ---
-let deferredPrompt; // Global state to hold the prompt
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-    console.log('beforeinstallprompt fired (global listener)');
-    
-    // If DOM is already ready, try to update UI immediately
-    const installItem = document.getElementById('install-item');
-    if (installItem) installItem.style.display = 'block';
-    
-    // Note: Toast logic is handled inside DOMContentLoaded to ensure elements exist
-});
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // =================================================================================
@@ -58,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     const searchSuggestions = document.getElementById('search-suggestions');
     const treeContainer = document.getElementById('tree');
+    const dashboardPage = document.getElementById('dashboard-page');
     const personModalOverlay = document.getElementById('person-modal-overlay');
     const personModal = document.getElementById('person-modal');
     const personModalClose = document.getElementById('person-modal-close');
@@ -74,165 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const relationshipModalBody = document.getElementById('relationship-modal-body');
     const relationshipModalClose = document.getElementById('relationship-modal-close');
     let HOME_PERSON_ID = null;
+    let APP_CONFIG = null;
 
-    // --- PWA Install Logic ---
-    const installItem = document.getElementById('install-item');
-    const installBtn = document.getElementById('install-btn'); // Sidebar Link
-    const installToast = document.getElementById('install-toast');
-    const installToastBtn = document.getElementById('install-toast-btn');
-    const installToastClose = document.getElementById('install-toast-close');
-    const installPage = document.getElementById('install-page');
-    const installPageContent = document.getElementById('install-page-content');
-    const installPageClose = document.getElementById('install-page-close');
-
-    // Detect iOS
-    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-
-    // 1. Handle Android/Desktop (Check if event fired before DOM was ready)
-    if (deferredPrompt) {
-        if (installItem) installItem.style.display = 'block';
-        if (!localStorage.getItem('installPromptDismissed') && installToast) {
-            setTimeout(() => installToast.classList.add('show'), 2000); // Delay slightly
-        }
-    }
-
-    // 2. Handle iOS (No event, just check UA)
-    if (isIos && !isStandalone) {
-        if (installItem) installItem.style.display = 'block';
-        // Optional: Show toast for iOS too, prompting them to open instructions
-        if (!localStorage.getItem('installPromptDismissed') && installToast) {
-            setTimeout(() => installToast.classList.add('show'), 2000);
-        }
-    }
-
-    // 3. Open Install Page (Instructions)
-    function openInstallPage() {
-        if (!installPage || !installPageContent) return;
-
-        const logoHtml = `<img src="logo.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">`;
-        let html = '';
-
-        if (isIos) {
-            // --- iOS: existing steps ---
-            html = `
-                <div style="text-align: center; padding: 10px 0 30px;">
-                    ${logoHtml}
-                    <h2 style="margin: 0 0 10px; color: #333;">Install on iOS</h2>
-                    <p style="color: #666; font-size: 14px;">Follow these steps to add the app to your Home Screen.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <div class="step-text">Tap the <strong>Share</strong> button <span class="share-icon"></span> in your browser bar.</div>
-                </div>
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <div class="step-text">Scroll down and tap <strong>Add to Home Screen</strong>.</div>
-                </div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <div class="step-text">Tap <strong>Add</strong> in the top right corner.</div>
-                </div>
-            `;
-        } else {
-            // --- Android / Desktop: title, logo, description, install button (or manual steps), why install, safety info ---
-            html = `
-                <div style="text-align: center; padding: 10px 0 20px;">
-                    ${logoHtml}
-                    <h2 style="margin: 0 0 10px; color: #333; font-size: 22px;">Install Vamsha Vruksha App</h2>
-                    <p style="color: #666; font-size: 14px; line-height: 1.5;">Install the app for a better experience, offline access, and full-screen mode.</p>
-                </div>
-            `;
-
-            if (deferredPrompt) {
-                html += `<button id="install-page-action-btn" class="install-android-btn">Install on Android</button>`;
-            } else {
-                html += `
-                    <div class="step">
-                        <div class="step-num">1</div>
-                        <div class="step-text">Tap the browser menu icon (usually <strong>⋮</strong> three dots) in the top right corner.</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">2</div>
-                        <div class="step-text">Select <strong>Install App</strong> or <strong>Add to Home screen</strong> from the menu.</div>
-                    </div>
-                `;
-            }
-
-            html += `
-                <div class="install-why-box">
-                    <h3>⭐ Why install Vamsha Vruksha?</h3>
-                    <ul>
-                        <li>Opens instantly like a mobile app</li>
-                        <li>Family tree in one tap</li>
-                        <li>Works even in slow internet</li>
-                        <li>No need to search the website again</li>
-                    </ul>
-                </div>
-                <div class="install-safety-box">
-                    <h3>🛡️ Safety Information</h3>
-                    <p>This is NOT an APK or Play Store application. It only creates a shortcut to this website on your phone's home screen.</p>
-                    <ul>
-                        <li>No files are downloaded to your phone</li>
-                        <li>No permissions are requested</li>
-                        <li>No personal information is collected</li>
-                        <li>No bank or payment data is accessed</li>
-                        <li>You can remove it anytime by deleting the icon</li>
-                    </ul>
-                </div>
-            `;
-        }
-
-        installPageContent.innerHTML = html;
-        installPage.style.display = 'flex';
-
-        const actionBtn = document.getElementById('install-page-action-btn');
-        if (actionBtn && deferredPrompt) {
-            actionBtn.addEventListener('click', async () => {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installPage.style.display = 'none';
-                if (installItem) installItem.style.display = 'none';
-                if (installToast) installToast.classList.remove('show');
-            });
-        }
-    }
-
-    window.openInstallPageFromMenu = openInstallPage;
-
-    // 4. Event Listeners
-    if (installBtn) {
-        installBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openInstallPage();
-            if (window.closeSidebar) window.closeSidebar();
-        });
-    }
-
-    if (installToastBtn) {
-        installToastBtn.addEventListener('click', async () => {
-            // For Toast: If Android, prompt directly. If iOS, show instructions page.
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
-            deferredPrompt = null;
-            if (installItem) installItem.style.display = 'none';
-            if (installToast) installToast.classList.remove('show');
-        } else if (isIos && !isStandalone) {
-                openInstallPage();
-            if (installToast) installToast.classList.remove('show');
-        }
-        });
-    }
-
-    if (installPageClose) {
-        installPageClose.addEventListener('click', () => {
-            installPage.style.display = 'none';
-        });
-    }
+    // --- Dashboard Elements ---
+    const dashDateEl = document.getElementById('dash-date');
+    const statTotalMembersEl = document.getElementById('stat-total-members');
+    const statUpcomingBirthdaysEl = document.getElementById('stat-upcoming-birthdays');
+    const dashDynamicMsgEl = document.getElementById('dash-dynamic-msg');
+    const navDashboard = document.getElementById('nav-dashboard');
+    const navTree = document.getElementById('nav-tree');
+    const lineageBar = document.getElementById('lineage-bar');
 
     const birthdaysPage = document.getElementById('birthdays-page');
     const birthdaysContent = document.getElementById('birthdays-content');
@@ -242,11 +77,133 @@ document.addEventListener('DOMContentLoaded', () => {
             birthdaysPage.style.display = 'none';
         });
     }
-    
-    if (installToastClose) {
-        installToastClose.addEventListener('click', () => {
-            if (installToast) installToast.classList.remove('show');
-            localStorage.setItem('installPromptDismissed', 'true');
+
+    // =================================================================================
+    // SECTION 1.2: PWA INSTALL + SERVICE WORKER
+    // =================================================================================
+
+    // --- Service Worker Registration (required for PWA install/offline) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('[PWA] Service worker registered', reg.scope))
+                .catch(err => console.warn('[PWA] Service worker registration failed', err));
+        });
+    }
+
+    // --- Install UI Elements ---
+    const installPage = document.getElementById('install-page');
+    const installPageClose = document.getElementById('install-page-close');
+    const installBtn = document.getElementById('install-app-btn');
+    const installHowBtn = document.getElementById('install-how-btn');
+    const installStatus = document.getElementById('install-status');
+    const navInstall = document.getElementById('nav-install');
+
+    let deferredInstallPrompt = null;
+
+    function isAppInstalled() {
+        // display-mode: standalone covers most modern browsers (Android Chrome, Edge, etc.)
+        // navigator.standalone covers older iOS Safari (not relevant for Android, but harmless).
+        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function setSidebarActive(activeId) {
+        // Keep existing behavior for dashboard/tree, extend to install.
+        [navDashboard, navTree, navInstall].forEach(el => {
+            if (!el) return;
+            el.classList.toggle('active', el.id === activeId);
+        });
+    }
+
+    function setInstallStatus(html) {
+        if (installStatus) installStatus.innerHTML = html;
+    }
+
+    function refreshInstallUi() {
+        if (!installBtn || !installStatus) return;
+
+        if (isAppInstalled()) {
+            installBtn.disabled = true;
+            setInstallStatus('✅ App is already installed on this device.');
+            return;
+        }
+
+        if (deferredInstallPrompt) {
+            installBtn.disabled = false;
+            setInstallStatus('Ready to install. Tap <code>Install on Android</code>.');
+            return;
+        }
+
+        // If no prompt is available, show guidance (common on desktop/iOS or if not eligible yet).
+        installBtn.disabled = true;
+        setInstallStatus(
+            'Install option is not available yet. ' +
+            'On Android Chrome, use <code>⋮</code> menu → <code>Add to Home screen</code> / <code>Install app</code>. ' +
+            'Also make sure you have opened this site at least once and you are online.'
+        );
+    }
+
+    window.showInstallPage = function () {
+        if (installPage) installPage.style.display = 'flex';
+        setSidebarActive('nav-install');
+        refreshInstallUi();
+    };
+
+    if (installPageClose && installPage) {
+        installPageClose.addEventListener('click', () => {
+            installPage.style.display = 'none';
+        });
+    }
+
+    if (installHowBtn) {
+        installHowBtn.addEventListener('click', () => {
+            alert(
+                'How to install on Android (Chrome):\n\n' +
+                '1) Open this website in Chrome\n' +
+                '2) Tap the (⋮) menu\n' +
+                '3) Tap "Install app" or "Add to Home screen"\n\n' +
+                'If you see the "Install on Android" button enabled here, you can use it directly.'
+            );
+        });
+    }
+
+    // Capture the install prompt when the browser decides the app is installable.
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); // prevent mini-infobar; we will prompt from our button
+        deferredInstallPrompt = e;
+        refreshInstallUi();
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+        refreshInstallUi();
+        if (window.showToast) window.showToast('App installed successfully.');
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (isAppInstalled()) {
+                if (window.showToast) window.showToast('App is already installed.');
+                refreshInstallUi();
+                return;
+            }
+
+            if (!deferredInstallPrompt) {
+                refreshInstallUi();
+                if (window.showToast) window.showToast('Install is not available right now. Use the browser menu to install.');
+                return;
+            }
+
+            try {
+                deferredInstallPrompt.prompt();
+                const choiceResult = await deferredInstallPrompt.userChoice;
+                console.log('[PWA] userChoice', choiceResult);
+            } catch (err) {
+                console.warn('[PWA] Install prompt failed', err);
+            } finally {
+                deferredInstallPrompt = null;
+                refreshInstallUi();
+            }
         });
     }
 
@@ -753,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getUpcomingBirthdays(daysAhead) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const byKey = {}; // key = "dd-MMM-yyyy" -> { dateStr, weekday, persons }
+        const result = [];
 
         for (let i = 0; i < daysAhead; i++) {
             const d = new Date(today);
@@ -763,27 +720,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const year = d.getFullYear();
             const dateStr = String(day) + '-' + MONTH_ABBR[month] + '-' + year;
             const weekday = WEEKDAYS[d.getDay()];
-            const key = dateStr;
-            if (!byKey[key]) byKey[key] = { date: d, dateStr, weekday, persons: [] };
+            
+            const dayEntry = { date: d, dateStr, weekday, persons: [] };
 
             PEOPLE.forEach(p => {
                 const md = getMonthDayFromBirth(p.Birth || '');
                 if (!md || md.month !== month || md.day !== day) return;
                 const birthYear = getBirthYearFromBirth(p.Birth || '');
                 const ageAtDisplay = birthYear != null ? year - birthYear : null;
-                byKey[key].persons.push({
+                dayEntry.persons.push({
                     id: p.id,
                     name: (p.name || '').trim() || 'Unknown',
                     phone: (p.phone || '').trim(),
                     ageAtDisplay: ageAtDisplay != null && ageAtDisplay >= 0 && ageAtDisplay <= 150 ? ageAtDisplay : null
                 });
             });
+
+            if (dayEntry.persons.length > 0) {
+                result.push(dayEntry);
+            }
         }
 
-        return Object.keys(byKey)
-            .sort()
-            .map(k => byKey[k])
-            .filter(entry => entry.persons.length > 0);
+        return result;
     }
 
     function getInitials(name) {
@@ -844,6 +802,16 @@ document.addEventListener('DOMContentLoaded', () => {
             idHtml += ` <span style="background-color: #4CAF50; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px; vertical-align: middle; font-weight: bold;">✓ Home Person</span>`;
         }
         personModalId.innerHTML = idHtml;
+
+        // Update "Set as Home" Button Visibility
+        // If this person is already the home person, hide the button.
+        if (personHomeBtn) {
+            if (isSetHome || (isDefaultHome && !storedHomeId)) {
+                personHomeBtn.style.display = 'none';
+            } else {
+                personHomeBtn.style.display = 'inline-block';
+            }
+        }
 
         const imageUrl = (p.image_url || "").trim();
         if (imageUrl) {
@@ -922,6 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('familyTreeHomeId', activeModalPersonId);
             // Re-render modal to show the new badge immediately
             openPersonModal(activeModalPersonId);
+            updateDashboard(); // Update the dashboard text immediately
         }
     });
 
@@ -1100,6 +1069,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activePersonId = centerId;
         HOME_PERSON_ID = centerId;
         const familyData = getFamilySet(centerId);
+        updateLineageBar(centerId); // Update lineage bar whenever tree is drawn
         console.log(`Drawing tree for ${centerId}. Nodes count: ${familyData.length}`);
         const mobile = isMobileViewport();
 
@@ -1140,13 +1110,6 @@ document.addEventListener('DOMContentLoaded', () => {
             enableSearch: false, // We use our own custom search
             template: 'circle', // Use our new custom circle template
         });
-
-        // Re-center after render so selected node and spouse stay in the viewport middle.
-        setTimeout(() => {
-            if (tree && typeof tree.center === "function") {
-                tree.center(centerId);
-            }
-        }, 0);
 
         // --- Custom Click Event for Lazy Loading ---
         tree.on('click', (sender, args) => {
@@ -1195,6 +1158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 drawTree(person.id);
                 clearSuggestions();
                 searchInput.value = '';
+                window.showTreePage(); // Ensure we switch to tree view
             });
             searchSuggestions.appendChild(item);
         });
@@ -1282,6 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const homeId = getHomePersonId();
         if (homeId) {
             drawTree(homeId);
+            window.showTreePage(); // Ensure we switch to tree view
             searchInput.value = ''; // Clear search text
             clearSuggestions();
         }
@@ -1374,7 +1339,8 @@ document.addEventListener('DOMContentLoaded', () => {
         newsContent.innerHTML = '<p style="text-align:center; color:#666;">Loading updates...</p>';
         newsModal.style.display = 'flex';
 
-        fetch('welcome.json')
+        const updatesPath = (APP_CONFIG && APP_CONFIG.data_files) ? APP_CONFIG.data_files.updates : 'updates.json';
+        fetch(updatesPath)
             .then(res => res.json())
             .then(data => {
                 // Sort by date (assuming dd-mm-yyyy, simplified logic here or just take array order)
@@ -1402,9 +1368,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = document.getElementById('birthdays-content');
         if (!page || !content) return;
 
-        const list = getUpcomingBirthdays(20);
+        const list = getUpcomingBirthdays(30);
         if (list.length === 0) {
-            content.innerHTML = '<p style="color:#666; text-align:center; padding: 20px;">No birthdays in the next 20 days.</p>';
+            content.innerHTML = '<p style="color:#666; text-align:center; padding: 20px;">No upcoming birthdays found.</p>';
         } else {
             content.innerHTML = list.map(entry => {
                 const namesHtml = entry.persons.map(p => {
@@ -1458,6 +1424,289 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // =================================================================================
+    // SECTION 5.6.5: FORM PAGE
+    // =================================================================================
+
+    window.showFormPage = function() {
+        const formPage = document.getElementById('form-page');
+        if (formPage) formPage.style.display = 'flex';
+    };
+
+    const formPageClose = document.getElementById('form-page-close');
+    if (formPageClose) {
+        formPageClose.addEventListener('click', () => {
+            document.getElementById('form-page').style.display = 'none';
+        });
+    }
+
+    // =================================================================================
+    // SECTION 5.9: DASHBOARD LOGIC
+    // =================================================================================
+
+    window.showDashboard = function() {
+        if (dashboardPage) dashboardPage.style.display = 'block';
+        if (treeContainer) treeContainer.style.display = 'none';
+        if (lineageBar) lineageBar.style.display = 'none';
+        
+        // Update Sidebar Active State
+        if (navDashboard) navDashboard.classList.add('active');
+        if (navTree) navTree.classList.remove('active');
+    };
+
+    window.showTreePage = function() {
+        if (dashboardPage) dashboardPage.style.display = 'none';
+        if (treeContainer) treeContainer.style.display = 'block';
+        if (lineageBar) lineageBar.style.display = 'flex';
+
+        // Update Sidebar Active State
+        if (navDashboard) navDashboard.classList.remove('active');
+        if (navTree) navTree.classList.add('active');
+
+        // If tree hasn't been drawn yet (edge case), draw it
+        if (!tree && PEOPLE.length > 0) {
+            const homeId = getHomePersonId();
+            if (homeId) drawTree(homeId);
+        }
+    };
+
+    window.focusSearch = function() {
+        window.showTreePage();
+        setTimeout(() => {
+            if (searchInput) searchInput.focus();
+        }, 100);
+    };
+
+    // Generic Toast Notification
+    window.showToast = function(message, duration = 4000) {
+        const toast = document.getElementById('app-toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        // Clear any existing timeout to prevent early dismissal if called rapidly
+        if (toast.timeoutId) clearTimeout(toast.timeoutId);
+        toast.timeoutId = setTimeout(() => {
+            toast.classList.remove('show');
+        }, duration);
+    };
+
+    window.changeHomePerson = function() {
+        window.showToast("1. Search your name  👉  2. Open Profile  👉  3. Set as Home", 5000);
+        window.focusSearch();
+    };
+
+    function updateDashboard() {
+        // 1. Set Date
+        // if (dashDateEl) {
+        //     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        //     dashDateEl.textContent = new Date().toLocaleDateString('en-US', options);
+        // }
+
+        // 2. Total Members
+        if (statTotalMembersEl) {
+            statTotalMembersEl.textContent = PEOPLE.length;
+        }
+
+        // 3. Upcoming Birthdays (Next 30 days)
+        if (statUpcomingBirthdaysEl) {
+            const upcoming = getUpcomingBirthdays(30);
+            // Count total people, not just dates
+            let count = 0;
+            upcoming.forEach(day => {
+                count += day.persons.length;
+            });
+            statUpcomingBirthdaysEl.textContent = count;
+        }
+
+        // 4. Home Person Name
+        const homeId = getHomePersonId();
+        const homeNameEl = document.getElementById('dash-home-name');
+        const userRowEl = document.getElementById('dash-user-row');
+        
+        if (homeId && peopleMap.has(homeId)) {
+            const p = peopleMap.get(homeId);
+            if (homeNameEl) homeNameEl.textContent = p.name;
+            if (userRowEl) userRowEl.style.display = 'block';
+        }
+        
+        // Update Lineage Bar for Home Person (default view)
+        if (homeId) updateLineageBar(homeId);
+
+        // 5. Fetch Dynamic Welcome Message from Google Sheet
+        fetchDashboardMessage();
+    }
+
+    function fetchDashboardMessage() {
+        const sheetUrl = (APP_CONFIG && APP_CONFIG.welcome_msg_url) ? APP_CONFIG.welcome_msg_url : null;
+        if (!sheetUrl) return;
+
+        // Append timestamp to bypass cache and ensure fresh data
+        const url = `${sheetUrl}&t=${Date.now()}`;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(csvText => {
+                const rows = csvText.split(/\r?\n/);
+                console.log(`[Dashboard] Fetched ${rows.length} rows from sheet.`);
+                if (rows.length < 2) return;
+
+                // Headers: start_date, Message, expiry
+                // We assume column order: 0=start_date, 1=Message, 2=expiry
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const validMessages = [];
+
+                for (let i = 1; i < rows.length; i++) {
+                    // Handle CSV splitting (regex handles quoted commas if any)
+                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+                    
+                    if (cols.length < 3) continue;
+
+                    const startDate = parseCustomDate(cols[0]);
+                    const message = cols[1];
+                    const expiryDate = parseCustomDate(cols[2]);
+
+                    if (startDate && expiryDate && message) {
+                        if (today >= startDate && today <= expiryDate) {
+                            validMessages.push({ start: startDate, msg: message });
+                        } else {
+                            // console.log("Skipping expired or future message:", message, startDate, expiryDate);
+                        }
+                    }
+                }
+
+                // Sort by start date descending (latest first)
+                validMessages.sort((a, b) => b.start - a.start);
+
+                if (validMessages.length > 0 && dashDynamicMsgEl) {
+                    console.log("[Dashboard] Showing message:", validMessages[0].msg);
+                    dashDynamicMsgEl.textContent = validMessages[0].msg;
+                    dashDynamicMsgEl.style.display = 'block';
+                } else if (dashDynamicMsgEl) {
+                    dashDynamicMsgEl.style.display = 'none';
+                }
+            })
+            .catch(err => console.error("Error fetching welcome message:", err));
+    }
+
+    function parseCustomDate(dateStr) {
+        if (!dateStr) return null;
+        // Normalize separators: replace / and space with -
+        const normalized = dateStr.trim().replace(/[\/\s]/g, '-');
+        const parts = normalized.split('-');
+        
+        if (parts.length !== 3) return null;
+        
+        const day = parseInt(parts[0], 10);
+        const monthStr = parts[1].toLowerCase();
+        let year = parseInt(parts[2], 10);
+        
+        // Handle 2-digit year (e.g. 26 -> 2026)
+        if (year < 100) year += 2000;
+        
+        const months = {jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11};
+        let month = months[monthStr];
+        
+        // Fallback: if month is a number (e.g. 02)
+        if (month === undefined) {
+            const mVal = parseInt(monthStr, 10);
+            if (!isNaN(mVal)) month = mVal - 1; // 0-indexed
+        }
+        
+        if (month === undefined || isNaN(month) || isNaN(day) || isNaN(year)) return null;
+        return new Date(year, months[monthStr], day);
+    }
+
+    // =================================================================================
+    // SECTION 5.10: LINEAGE BAR LOGIC
+    // =================================================================================
+
+    function updateLineageBar(centerId) {
+        const bar = document.getElementById('lineage-bar');
+        if (!bar) return;
+        
+        if (!centerId || !peopleMap.has(centerId)) {
+            bar.innerHTML = '';
+            return;
+        }
+
+        // 1. Find Ancestors (Father chain, max 3)
+        const ancestors = [];
+        let curr = peopleMap.get(centerId);
+        for (let i = 0; i < 3; i++) {
+            if (curr && curr.fid && peopleMap.has(curr.fid)) {
+                curr = peopleMap.get(curr.fid);
+                ancestors.unshift(curr); // Add to beginning
+            } else {
+                break;
+            }
+        }
+
+        // 2. Find Descendants (First child chain, max 3)
+        const descendants = [];
+        curr = peopleMap.get(centerId);
+        for (let i = 0; i < 3; i++) {
+            const children = childrenMap.get(curr.id);
+            if (children && children.length > 0) {
+                // Pick first child
+                const childId = children[0];
+                if (peopleMap.has(childId)) {
+                    curr = peopleMap.get(childId);
+                    descendants.push(curr);
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+
+        // 3. Build HTML
+        const createItem = (p, isCurrent) => {
+            // Use ONLY first name
+            const firstName = (p.name || '').trim().split(' ')[0];
+            const className = isCurrent ? 'lineage-item current' : 'lineage-item';
+            return `<div class="${className}" onclick="window.lineageClick('${p.id}')">${firstName}</div>`;
+        };
+
+        const arrow = `<div class="lineage-arrow">→</div>`;
+        
+        let html = '';
+        
+        // Ancestors
+        ancestors.forEach(p => {
+            html += createItem(p, false);
+            html += arrow;
+        });
+
+        // Current
+        const currentPerson = peopleMap.get(centerId);
+        html += createItem(currentPerson, true);
+
+        // Descendants
+        descendants.forEach(p => {
+            html += arrow;
+            html += createItem(p, false);
+        });
+
+        bar.innerHTML = html;
+        
+        // Scroll current item into view if needed
+        setTimeout(() => {
+            const currentEl = bar.querySelector('.current');
+            if (currentEl) {
+                currentEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }, 100);
+    }
+
+    window.lineageClick = function(id) {
+        drawTree(id);
+        window.showTreePage(); 
+    };
+
     /**
      * =================================================================================
      * SECTION 5.7: NEW DATABASE ADAPTER
@@ -1467,12 +1716,15 @@ document.addEventListener('DOMContentLoaded', () => {
      * application expects.
      */
     async function loadNewDatabase() {
+        console.log("Loading configuration...");
+        APP_CONFIG = await (await fetch('config.json')).json();
+
         console.log("Loading data from new database format...");
         const [personsRes, familiesRes, placesRes, contactsRes] = await Promise.all([
-            fetch('json_data/persons.json'),
-            fetch('json_data/families.json'),
-            fetch('json_data/places.json'),
-            fetch('json_data/contacts.json')
+            fetch(APP_CONFIG.data_files.persons),
+            fetch(APP_CONFIG.data_files.families),
+            fetch(APP_CONFIG.data_files.places),
+            fetch(APP_CONFIG.data_files.contacts)
         ]);
 
         const persons = await personsRes.json();
@@ -1562,7 +1814,8 @@ document.addEventListener('DOMContentLoaded', () => {
             PEOPLE = data;
             buildLookups();
             setupLongPressHandlers();
-            return fetch('photos.json');
+            const photosPath = (APP_CONFIG && APP_CONFIG.data_files) ? APP_CONFIG.data_files.photos : 'photos.json';
+            return fetch(photosPath);
         })
         .then(response => response.json())
         .then(photoData => {
@@ -1577,9 +1830,22 @@ document.addEventListener('DOMContentLoaded', () => {
         .finally(() => {
             // Draw the tree whether photos loaded successfully or not
             try {
+                // Populate Dashboard Data
+                updateDashboard();
+                // Show Dashboard by default
+                window.showDashboard();
+
                 const initialPersonId = getHomePersonId();
                 console.log("Initializing tree with person ID:", initialPersonId);
-                if (initialPersonId) drawTree(initialPersonId);
+                if (initialPersonId) {
+                    drawTree(initialPersonId);
+                    // Hide tree container immediately after drawing (since dashboard is default)
+                    // The showDashboard() call above sets display styles, but drawTree might reset container styles in some libs.
+                    // We reinforce the view state:
+                    if (dashboardPage.style.display !== 'none') {
+                        treeContainer.style.display = 'none';
+                    }
+                }
             } catch (err) {
                 console.error("Error drawing tree:", err);
                 document.getElementById('tree').innerHTML = `<div style="color: red; text-align: center;">Error drawing tree: ${err.message}</div>`;

@@ -1,0 +1,12 @@
+{
+  "welcome_msg_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5UWU44YZCZQ9Vc0Izg1vWwzigAhMPLTxQxXu8hZ2blBFhJm7KYH3kf2qHwOQehE1SQ5zNjzfg07Kf/pub?gid=1636589100&single=true&output=csv",
+  "data_files": {
+    "persons": "json_data/persons.json",
+    "families": "json_data/families.json",
+    "places": "json_data/places.json",
+    "contacts": "json_data/contacts.json",
+    "manifest": "manifest.json",
+    "photos": "photos.json",
+    "updates": "updates.json"
+  }
+}
