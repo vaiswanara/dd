@@ -292,6 +292,11 @@
                     <div class="stat-value">Find</div>
                     <div class="stat-label">Search Member</div>
                 </div>
+                <div class="stat-card" onclick="window.showFormPage()">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value">Add</div>
+                    <div class="stat-label">Update Data</div>
+                </div>
             </div>
         </div>
 
@@ -393,11 +398,55 @@
             <button id="form-page-close" class="form-back">&larr;</button>
             <h3 style="margin:0; font-size: 18px;">Submit Family Data</h3>
         </div>
-        <div class="form-content">
-            <div class="form-fallback">
-                If the form doesn't load below, <a href="https://docs.google.com/forms/d/e/1FAIpQLSfXN90TgDOzXB3QfTte13QTdYXIpISceFku-sOdr9gTYspV3A/viewform" target="_blank">click here to open it</a>.
+        <div class="form-content" style="background: #fff; display: block; overflow-y: auto;">
+            <div style="text-align: center; padding: 30px 20px 10px;">
+                <p style="color: #666; margin: 0 0 15px; font-size: 15px;">Ready to add your family details?</p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfXN90TgDOzXB3QfTte13QTdYXIpISceFku-sOdr9gTYspV3A/viewform" target="_blank" style="text-decoration: none;">
+                    <button style="background: var(--primary-color); color: white; padding: 15px 30px; border: none; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4); display: inline-flex; align-items: center; gap: 10px;">
+                        Open Google Form 📝
+                    </button>
+                </a>
             </div>
-            <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfXN90TgDOzXB3QfTte13QTdYXIpISceFku-sOdr9gTYspV3A/viewform?embedded=true"></iframe>
+
+            <div style="padding: 20px 25px 40px; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
+                <h2 style="color: var(--primary-color); font-size: 20px; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Contribute to Vamsha Vruksha</h2>
+                
+                <p style="margin-bottom: 15px;">Namaste! We are maintaining this family tree to preserve our rich history and connect with our roots. Your contribution helps us keep this record accurate and complete for future generations.</p>
+
+                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Who can you add?</h3>
+                <p style="margin-bottom: 10px;">You may fill out this form to add or correct details for:</p>
+                <ul style="padding-left: 20px; color: #555; margin-bottom: 15px;">
+                    <li>Yourself</li>
+                    <li>Your children</li>
+                    <li>Your parents</li>
+                    <li>Any other relatives</li>
+                </ul>
+
+                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Important Notes</h3>
+                <ul style="padding-left: 20px; color: #555; margin-bottom: 15px;">
+                    <li style="margin-bottom: 8px;"><strong>Partial info is okay:</strong> It is fine if you do not know every detail.</li>
+                    <li style="margin-bottom: 8px;"><strong>Dates:</strong> Approximate years (e.g., "1985") are acceptable if exact dates are unknown.</li>
+                    <li style="margin-bottom: 8px;"><strong>Manual Update:</strong> This website does not update instantly. All entries are personally reviewed before being added.</li>
+                </ul>
+
+                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Photographs</h3>
+                <p style="margin-bottom: 15px;">Photos bring the tree to life! If you have a face photo, please attach it. Old photographs are also very welcome. This is optional.</p>
+
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; border-left: 4px solid #ccc;">
+                    <strong>Note on Google Sign-in:</strong><br>
+                    To securely attach a photo, Google may ask you to sign in. Please be assured that we never see your password or personal account details.
+                </div>
+
+                <h3 style="font-size: 16px; color: #444; margin: 20px 0 10px;">Before you begin</h3>
+                <ul style="padding-left: 20px; color: #555; margin-bottom: 25px;">
+                    <li>Keep names and dates ready.</li>
+                    <li>Have photos ready on your device if you wish to upload them.</li>
+                </ul>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                
+                <p style="text-align: center; font-weight: 500; color: var(--primary-color); font-style: italic;">Thank you for helping us preserve our heritage. Your time and effort are deeply appreciated.</p>
+            </div>
         </div>
     </div>
 
