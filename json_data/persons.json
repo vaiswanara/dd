@@ -6582,5 +6582,21 @@
         "sex": "M",
         "birth_date": "01-OCT-2025",
         "birth_place_id": "P0073"
+    },
+    {
+        "person_id": "I500020",
+        "given_name": "SANJEEV",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0033"
+    },
+    {
+        "person_id": "I500021",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0073"
     }
 ]
