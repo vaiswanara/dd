@@ -24,9 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     
     let tree = null; // Holds the FamilyTree.js instance
-    const peopleMap = new Map(); // For fast person lookup by ID
-    const childrenMap = new Map(); // For fast children lookup by parent ID
-    const genderMap = new Map(); // For fast gender lookup by ID
+    // Expose maps globally for relationship.js
+    window.peopleMap = new Map();
+    window.childrenMap = new Map();
+    window.genderMap = new Map();
+    const peopleMap = window.peopleMap;
+    const childrenMap = window.childrenMap;
+    const genderMap = window.genderMap;
+
     let PEOPLE = []; // Will hold the family data fetched from JSON
     let suppressNextClick = false;
     let longPressTimer = null;
@@ -430,181 +435,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return node;
         });
-    }
-
-    function getAncestors(id) {
-        let ancestors = {};
-        let queue = [{ id: id, depth: 0 }];
-        let visited = new Set();
-
-        while (queue.length > 0) {
-            let current = queue.shift();
-            if (visited.has(current.id)) continue;
-            visited.add(current.id);
-
-            let person = peopleMap.get(current.id);
-            if (!person) continue;
-
-            ancestors[current.id] = current.depth;
-
-            if (person.fid)
-                queue.push({ id: person.fid, depth: current.depth + 1 });
-
-            if (person.mid)
-                queue.push({ id: person.mid, depth: current.depth + 1 });
-        }
-        return ancestors;
-    }
-
-    function getGender(personId) {
-        return genderMap.get(personId) || 'U'; // U for Unknown
-    }
-
-    function findRelationship(id1, id2) {
-        if(!id1 || !id2) return "Unknown";
-        if(id1 === id2) return "Self";
-
-        const person1 = peopleMap.get(id1);
-        if (person1 && person1.pids && person1.pids.includes(id2)) {
-            const gender2 = getGender(id2);
-            if (gender2 === 'M') return "Bhartha (Husband)";
-            if (gender2 === 'F') return "Bharya (Wife)";
-            return "Spouse";
-        }
-
-        let a1 = getAncestors(id1);
-        let a2 = getAncestors(id2);
-
-        let bestAncestor = null;
-        let bestDistance = Infinity;
-
-        for(let anc in a1){
-            if(a2[anc] !== undefined){
-                let dist = a1[anc] + a2[anc];
-                if(dist < bestDistance){
-                    bestDistance = dist;
-                    bestAncestor = anc;
-                }
-            }
-        }
-
-        if (!bestAncestor) return "No direct blood relation";
-
-        let pathUp = getAncestorPath(id1, bestAncestor);
-        let pathDown = getDescendantPath(bestAncestor, id2);
-
-        return interpretHinduRelation(id1, id2, pathUp, pathDown);
-    }
-
-    function getAncestorPath(startId, targetAncestor){
-        let queue = [{id:startId, path:[startId]}];
-        let visited = new Set();
-
-        while(queue.length){
-            let current = queue.shift();
-            if(visited.has(current.id)) continue;
-            visited.add(current.id);
-
-            if(current.id === targetAncestor)
-                return current.path;
-
-            let p = peopleMap.get(current.id);
-            if(!p) continue;
-
-            if(p.fid) queue.push({id:p.fid, path:[...current.path, p.fid]});
-            if(p.mid) queue.push({id:p.mid, path:[...current.path, p.mid]});
-        }
-        return null;
-    }
-
-    function getDescendantPath(ancestorId, targetId){
-        let queue = [{id:ancestorId, path:[ancestorId]}];
-        let visited = new Set();
-
-        while(queue.length){
-            let current = queue.shift();
-            if(visited.has(current.id)) continue;
-            visited.add(current.id);
-
-            if(current.id === targetId)
-                return current.path;
-
-            let children = childrenMap.get(current.id) || [];
-            children.forEach(child=>{
-                queue.push({id:child, path:[...current.path, child]});
-            });
-        }
-        return null;
-    }
-
-    function interpretHinduRelation(homeId, targetId, up, down) {
-        if (!up || !down) return "బంధువు (Relative)";
-
-        let u = up.length - 1;
-        let d = down.length - 1;
-
-        const homePerson = peopleMap.get(homeId);
-        const targetPerson = peopleMap.get(targetId);
-        if (!homePerson || !targetPerson) return "Unknown";
-
-        const targetGender = getGender(targetId);
-
-        // Direct line (ancestor)
-        if (d === 0) {
-            if (u === 1) { // Parent
-                if (targetId === homePerson.fid) return "తండ్రి (Father)";
-                if (targetId === homePerson.mid) return "తల్లి (Mother)";
-                return "Parent";
-            }
-            if (u === 2) { // Grandparent
-                const parentId = up[1];
-                if (parentId === homePerson.fid) { // Paternal
-                    return targetGender === 'M' ? "తండ్రి (Paternal Grandfather)" : "నాయనమ్మ (Paternal Grandmother)";
-                } else { // Maternal
-                    return targetGender === 'M' ? "తాత (Maternal Grandfather)" : "అమ్మమ్మ (Maternal Grandmother)";
-                }
-            }
-            if (u === 3) return "Great Grandparent";
-            return "Ancestor";
-        }
-
-        // Direct line (descendant)
-        if (u === 0) {
-            if (d === 1) return targetGender === 'M' ? "కొడుకు (Son)" : (targetGender === 'F' ? "కుమార్తె (Daughter)" : "Child");
-            if (d === 2) return targetGender === 'M' ? "మనమడు (Grandson)" : (targetGender === 'F' ? "మనవరాలు (Granddaughter)" : "Grandchild");
-            if (d === 3) return targetGender === 'M' ? "మునిమనమడు (Great Grandson)" : (targetGender === 'F' ? "ముని మనవరాలు (Great Granddaughter)" : "Great Grandchild");
-            return "Descendant";
-        }
-
-        // Siblings
-        if (u === 1 && d === 1) {
-            return targetGender === 'M' ? "సోదరుడు (Brother)" : "సోదరి (Sister)";
-        }
-
-        // Uncle / Aunt
-        if (u === 2 && d === 1) {
-            const parentId = up[1]; // home person's parent
-            if (parentId === homePerson.fid) { // Paternal side
-                if (targetGender === 'M') return "పెదనాన్న / చిన్నాన్న (Paternal Uncle)";
-                if (targetGender === 'F') return "అత్త (Paternal Aunt)";
-            } else if (parentId === homePerson.mid) { // Maternal side
-                if (targetGender === 'M') return "మామ (Maternal Uncle)";
-                if (targetGender === 'F') return "పెద్దమ్మ / పిన్నమ్మ (Maternal Aunt)";
-            }
-            return "Uncle / Aunt";
-        }
-
-        // Nephew / Niece
-        if (u === 1 && d === 2) {
-            return targetGender === 'M' ? "మెనల్లుడు (Nephew)" : "మెనకోడలు (Niece)";
-        }
-
-        // Cousins
-        if (u === 2 && d === 2) {
-            return "Cousin";
-        }
-
-        return "Bandhuvu (Relative)";
     }
 
     // =================================================================================
@@ -1070,6 +900,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawTree(centerId) {
         activePersonId = centerId;
         HOME_PERSON_ID = centerId;
+        window.HOME_PERSON_ID = centerId;
         const familyData = getFamilySet(centerId);
         updateLineageBar(centerId); // Update lineage bar whenever tree is drawn
         console.log(`Drawing tree for ${centerId}. Nodes count: ${familyData.length}`);
@@ -1531,6 +1362,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
+    // SECTION 5.11: RELATIONSHIP REPORT PAGE
+    // =================================================================================
+
+    window.showRelationshipReport = function() {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        // Safety check: Ensure relationship.js is loaded
+        if (typeof generateRelationshipReport !== 'function') {
+            alert("Error: relationship.js is not loaded. Please check if the file exists in your folder.");
+            return;
+        }
+
+        try {
+            const homeId = getHomePersonId();
+            content.innerHTML = generateRelationshipReport(homeId);
+            page.style.display = 'flex';
+
+            // Set document title for printing filename
+            if (homeId && peopleMap.has(homeId)) {
+                const p = peopleMap.get(homeId);
+                document.title = `${p.name.toUpperCase()} RELATIONSHIP REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            content.innerHTML = `<p style="color:red; padding:20px; text-align:center;">An error occurred while generating the report:<br>${e.message}</p>`;
+            page.style.display = 'flex';
+        }
+    };
+
+    const reportPageClose = document.getElementById('report-page-close');
+    if (reportPageClose) {
+        reportPageClose.addEventListener('click', () => {
+            document.getElementById('relationship-report-page').style.display = 'none';
+            document.title = "VAMSHA VRUKSHA"; // Restore default title
+        });
+    }
+
+    // =================================================================================
     // SECTION 5.9: DASHBOARD LOGIC
     // =================================================================================
 
@@ -1830,17 +1701,24 @@ document.addEventListener('DOMContentLoaded', () => {
         APP_CONFIG = await (await fetch('config.json')).json();
 
         console.log("Loading data from new database format...");
-        const [personsRes, familiesRes, placesRes, contactsRes] = await Promise.all([
+        const [personsRes, familiesRes, placesRes, contactsRes, dictRes] = await Promise.all([
             fetch(APP_CONFIG.data_files.persons),
             fetch(APP_CONFIG.data_files.families),
             fetch(APP_CONFIG.data_files.places),
-            fetch(APP_CONFIG.data_files.contacts)
+            fetch(APP_CONFIG.data_files.contacts),
+            fetch(APP_CONFIG.data_files.relationshipDictionary).catch(err => console.warn("Dict load fail", err))
         ]);
 
         const persons = await personsRes.json();
         const families = await familiesRes.json();
         const places = await placesRes.json();
         const contacts = await contactsRes.json();
+
+        if (dictRes && dictRes.ok) {
+            window.relationshipDictionary = await dictRes.json();
+        } else {
+            window.relationshipDictionary = {};
+        }
 
         // Create a map for easy lookup of contact info
         const contactsMap = new Map();
@@ -1961,4 +1839,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('tree').innerHTML = `<div style="color: red; text-align: center;">Error drawing tree: ${err.message}</div>`;
             }
         });
+
+    // =================================================================================
+    // SECTION 7: LANGUAGE TOGGLE
+    // =================================================================================
+    window.toggleLanguage = function() {
+        const toast = document.getElementById('language-selection-toast');
+        if (toast) {
+            toast.classList.add('show');
+        }
+    };
+
+    window.setLanguage = function(lang) {
+        localStorage.setItem('relation_language', lang);
+        const toast = document.getElementById('language-selection-toast');
+        if (toast) toast.classList.remove('show');
+        
+        // Reload to apply changes
+        setTimeout(() => location.reload(), 300);
+    };
+
+    // Update Language Display on Load
+    const lang = localStorage.getItem('relation_language') || 'te';
+    const langDisplay = document.getElementById('lang-display');
+    if(langDisplay) langDisplay.textContent = lang === 'te' ? "Telugu" : "Kannada";
 });

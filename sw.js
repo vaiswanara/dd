@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v5.0.18';
+const CACHE_NAME = 'family-tree-cache-v5.0.27';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
@@ -51,7 +51,8 @@ self.addEventListener('install', event => {
                         config.data_files.contacts,
                         config.data_files.manifest,
                         config.data_files.photos,
-                        config.data_files.updates
+                        config.data_files.updates,
+                        config.data_files.relationshipDictionary
                     ].filter(path => path) // Filter out undefined paths to prevent errors
                      .map(path => './' + path);
                     

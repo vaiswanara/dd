@@ -137,6 +137,13 @@
         .update-date { font-size: 18px; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
         .update-text { font-size: 23px; color: #333; line-height: 1.5; }
 
+        /* --- Relationship Report Page --- */
+        #relationship-report-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .report-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .report-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .report-content { padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .report-print-btn { margin-left: auto; background: var(--primary-color); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+
         /* --- Sidebar backdrop (mobile: tap outside to close) --- */
         #sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 999; }
         #sidebar-backdrop.show { display: block; }
@@ -213,6 +220,75 @@
         .form-iframe { width: 100%; flex: 1; border: none; display: block; background: #fff; }
         .form-fallback { padding: 10px; text-align: center; background: #fff; border-bottom: 1px solid #eee; font-size: 13px; color: #666; }
         .form-fallback a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
+
+        /* --- Print / Save PDF Styles --- */
+        @media print {
+            /* Hide all UI elements except the report */
+            #sidebar, #main, #sidebar-backdrop, .report-header, 
+            #person-modal-overlay, #relationship-modal-overlay, 
+            #app-toast, #birthdays-page, #form-page, #help-page, 
+            #install-page, #about-page, #feedback-page, #updates-page,
+            header {
+                display: none !important;
+            }
+
+            /* Reset Body for Print */
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                overflow: visible;
+                background: #fff;
+            }
+
+            /* Ensure Report Page is Visible and Flows Correctly */
+            #relationship-report-page {
+                display: block !important;
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+                z-index: auto !important;
+                background: #fff !important;
+            }
+
+            /* Style the Content for PDF/Print */
+            .report-content {
+                max-width: 100% !important;
+                padding: 0 40px !important; /* Add side margins for PDF */
+                margin: 0 !important;
+            }
+
+            /* Override Inline Styles for Better Print Layout */
+            .report-content > div {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            /* Clean up headers for print (remove backgrounds, add borders) */
+            .report-content h3 {
+                background: none !important;
+                border-left: none !important;
+                border-bottom: 1px solid #ccc !important;
+                padding-left: 0 !important;
+                margin-top: 30px !important;
+            }
+
+            /* Avoid Page Breaks Inside Sections */
+            .report-content h3, .report-content ul, .report-content li {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* --- Language Selection Toast --- */
+        #language-selection-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: #fff; color: #333; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 6000; opacity: 0; pointer-events: none; transition: all 0.3s ease; text-align: center; min-width: 300px; border: 1px solid #eee; }
+        #language-selection-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+        .lang-btn { padding: 10px 20px; margin: 0 5px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s; }
+        .lang-btn.te { background: #E91E63; color: white; }
+        .lang-btn.kn { background: #FF9800; color: white; }
+        .lang-close { position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #999; }
     </style>
 </head>
 <body>
@@ -226,8 +302,10 @@
         <ul class="menu" id="sidebar-menu">
             <li><a href="#" id="nav-dashboard" class="active" onclick="window.showDashboard(); closeSidebar();">🏠 Dashboard</a></li>
             <li><a href="#" id="nav-tree" onclick="window.showTreePage(); closeSidebar();">🌳 FAMILY TREE</a></li>
+            <li><a href="#" onclick="window.toggleLanguage(); closeSidebar();">🌐 Language: <span id="lang-display">TEL</span></a></li>
             <li><a href="#" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
+            <li><a href="#" onclick="window.showRelationshipReport(); closeSidebar();">📊 RELATION REPORT</a></li>
             <li><a href="#" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
             <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
@@ -657,8 +735,29 @@
         </div>
     </div>
 
+    <!-- Relationship Report Page -->
+    <div id="relationship-report-page">
+        <div class="report-header">
+            <button id="report-page-close" class="report-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Relationship Report</h3>
+            <button class="report-print-btn" onclick="window.print()">Save PDF</button>
+        </div>
+        <div id="report-content" class="report-content"></div>
+    </div>
+
+    <!-- Language Selection Toast -->
+    <div id="language-selection-toast">
+        <button class="lang-close" onclick="document.getElementById('language-selection-toast').classList.remove('show')">&times;</button>
+        <h3 style="margin: 0 0 15px; font-size: 16px;">Select Language / భాష / ಭಾಷೆ</h3>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="lang-btn te" onclick="window.setLanguage('te')">Telugu (తెలుగు)</button>
+            <button class="lang-btn kn" onclick="window.setLanguage('kn')">Kannada (ಕನ್ನಡ)</button>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://balkan.app/js/FamilyTree.js"></script>
+    <script src="relationship.js"></script>
     <script src="app.js"></script>
     <script>
         // Sidebar toggle and close (expose closeSidebar for menu onclick)
