@@ -1367,6 +1367,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State for the reports page
     let reportSelectedPersonId = null;
+    let reportSecondPersonId = null; // For Relationship Diagram
 
     window.showReportsPage = function() {
         const page = document.getElementById('reports-page');
@@ -1426,8 +1427,78 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Relationship Diagram Logic ---
+    window.toggleRelDiagramInputs = function() {
+        const div = document.getElementById('rel-diagram-inputs');
+        if (div) {
+            div.style.display = div.style.display === 'none' ? 'block' : 'none';
+            if (div.style.display === 'block') {
+                document.getElementById('rel-diagram-search-input').focus();
+            }
+        }
+    };
+
+    const relSearchInput = document.getElementById('rel-diagram-search-input');
+    const relSuggestions = document.getElementById('rel-diagram-suggestions');
+
+    if (relSearchInput && relSuggestions) {
+        relSearchInput.addEventListener('input', () => {
+            const query = relSearchInput.value.toLowerCase().trim();
+            if (query.length < 2) {
+                relSuggestions.style.display = 'none';
+                return;
+            }
+            const matches = PEOPLE.filter(p => p.name.toLowerCase().includes(query)).slice(0, 10);
+            relSuggestions.innerHTML = matches.map(p => `
+                <div class="suggestion-item" data-id="${p.id}">
+                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                </div>
+            `).join('');
+            relSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+
+        relSuggestions.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (item) {
+                reportSecondPersonId = item.dataset.id;
+                const p = peopleMap.get(reportSecondPersonId);
+                
+                document.getElementById('rel-diagram-selected').style.display = 'block';
+                document.getElementById('rel-diagram-selected-name').textContent = p.name;
+                
+                relSearchInput.value = '';
+                relSuggestions.style.display = 'none';
+            }
+        });
+    }
+
+    window.generateRelDiagram = function() {
+        if (!reportSelectedPersonId) {
+            alert("Please select the First Person (top search box) first.");
+            return;
+        }
+        if (!reportSecondPersonId) {
+            alert("Please select the Second Person.");
+            return;
+        }
+        
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        
+        if (typeof generateDiagramHTML !== 'function') {
+            alert("relationship.js is not updated yet.");
+            return;
+        }
+
+        content.innerHTML = generateDiagramHTML(reportSelectedPersonId, reportSecondPersonId);
+        page.style.display = 'flex';
+    };
+
     window.clearReportSelection = function() {
         reportSelectedPersonId = null;
+        reportSecondPersonId = null;
+        document.getElementById('rel-diagram-selected').style.display = 'none';
+        document.getElementById('rel-diagram-inputs').style.display = 'none';
         updateReportUI();
     };
 

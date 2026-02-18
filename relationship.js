@@ -87,7 +87,7 @@ function getRelationshipCode(homeId, targetId) {
     let visited = new Set([homeId]);
 
     // Limit depth to prevent performance issues on large graphs
-    const MAX_DEPTH = 8; 
+    const MAX_DEPTH = 100; 
 
     while (queue.length > 0) {
         let curr = queue.shift();
@@ -335,8 +335,9 @@ function generateRelationshipReport(customHomeId) {
 
     let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
     
-    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px;">Relationship Report</h2>`;
-    html += `<p style="color: #666;">Centered on: <strong>${p.name}</strong> (${p.id})</p>`;
+    html += `<div style="text-align: center; margin-bottom: 10px;"><img src="logo.png" style="width: 80px; height: auto; border: none;"></div>`;
+    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;">Relationship Report</h2>`;
+    html += `<p style="color: #666; text-align: center;">Centered on: <strong>${p.name}</strong> (${p.id})</p>`;
 
     // 1. SELF
     html += renderSection("SELF", [{ id: p.id, name: p.name }], id);
@@ -458,6 +459,244 @@ function renderSection(title, items, homeId) {
     });
     h += `</ul>`;
     return h;
+}
+
+// =================================================================================
+// DIAGRAM GENERATION
+// =================================================================================
+
+function generateDiagramHTML(id1, id2) {
+    const p1 = getPerson(id1);
+    const p2 = getPerson(id2);
+    
+    if (!p1 || !p2) return "<p>Person not found.</p>";
+
+    // 1. Get Path
+    const result = getRelationshipCode(id1, id2);
+    if (!result || !result.path || result.path.length === 0) {
+        return `<div style="text-align:center; padding:20px;">
+            <h3>No direct relationship path found.</h3>
+            <p>Try connecting them through a common ancestor manually.</p>
+        </div>`;
+    }
+
+    const path = result.path; // Array of IDs [Start, ..., End]
+    
+    // --- 0. Check for Sibling Bridge (Sibling Pivot) ---
+    // If the path steps sideways via a sibling relationship (e.g. Grandfather <-> Great Uncle),
+    // we use a specific layout for that.
+    let siblingIndex = -1;
+    for (let i = 0; i < path.length - 1; i++) {
+        const u = path[i];
+        const v = path[i+1];
+        const sibs = getSiblings(u);
+        if (sibs.includes(v)) {
+            siblingIndex = i;
+            break;
+        }
+    }
+
+    // Helper to render a single node card
+    const renderNode = (id, roleLabel) => {
+        const p = getPerson(id);
+        
+        let mediaHtml = '';
+        if (p.image_url) {
+            mediaHtml = `<img src="${p.image_url}">`;
+        } else {
+            const g = getGender(id);
+            const MALE_ICON = '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="#4A90E2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            const FEMALE_ICON = '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="#E91E63"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            const svg = (g === 'F') ? FEMALE_ICON : MALE_ICON;
+            mediaHtml = `<div style="width:50px; height:50px; margin-bottom:5px; border-radius:50%; border:1px solid #ddd; background:#fff; overflow:hidden;">${svg}</div>`;
+        }
+
+        // Change SELF to ME
+        let displayRole = roleLabel;
+        if (id === id1) displayRole = "ME";
+
+        return `
+            <div class="ca-node-wrapper">
+                <div class="ca-node">
+                    ${displayRole ? `<div class="ca-node-role">${displayRole}</div>` : ''}
+                    ${mediaHtml}
+                    <div class="ca-node-name">${p.name}</div>
+                    <div class="ca-node-id">${p.id}</div>
+                </div>
+            </div>`;
+    };
+
+    let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
+    html += `<div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #4A90E2; margin:0;">Relationship Diagram</h2>
+                <p style="color: #666;">${p1.name} ➡ ${p2.name}</p>
+             </div>`;
+    html += `<div class="ca-diagram">`;
+
+    if (siblingIndex !== -1) {
+        // --- SIBLING BRIDGE LAYOUT ---
+        const sib1Id = path[siblingIndex];
+        const sib2Id = path[siblingIndex + 1];
+        
+        // Left Branch: From Sibling 1 down to Start
+        const leftNodes = path.slice(0, siblingIndex).reverse();
+        // Right Branch: From Sibling 2 down to End
+        const rightNodes = path.slice(siblingIndex + 2);
+
+        html += `<div class="ca-sibling-container">`;
+
+        // Left Side (Sibling 1 + Descendants)
+        html += `<div class="ca-sibling-side">`;
+        html += renderNode(sib1Id, findRelationship(id1, sib1Id)); // Label relative to Start
+        if (leftNodes.length > 0) {
+            html += `<div class="ca-single-col">`;
+            let parentId = sib1Id;
+            leftNodes.forEach(nodeId => {
+                html += renderNode(nodeId, findRelationship(id1, nodeId));
+                parentId = nodeId;
+            });
+            html += `</div>`;
+        }
+        html += `</div>`; // End Left Side
+
+        // Right Side (Sibling 2 + Descendants)
+        html += `<div class="ca-sibling-side">`;
+        html += renderNode(sib2Id, findRelationship(id1, sib2Id)); // Label relative to Start (or End?) - usually Start is "You"
+        if (rightNodes.length > 0) {
+            html += `<div class="ca-single-col">`;
+            let parentId = sib2Id;
+            rightNodes.forEach(nodeId => {
+                html += renderNode(nodeId, findRelationship(id1, nodeId));
+                parentId = nodeId;
+            });
+            html += `</div>`;
+        }
+        html += `</div>`; // End Right Side
+
+        html += `</div>`; // End ca-sibling-container
+
+    } else {
+        // --- COMMON ANCESTOR LAYOUT (Existing Logic) ---
+        
+    // --- 1. Identify Pivot (Common Ancestor) ---
+    // We calculate the relative generation level of each node.
+    // Start = 0. Parent = +1. Child = -1. Sibling/Spouse = 0.
+    let generations = [0];
+    let currentGen = 0;
+    
+    for (let i = 0; i < path.length - 1; i++) {
+        const curr = path[i];
+        const next = path[i+1];
+        const pNext = getPerson(next);
+        
+        if (pNext.fid === curr || pNext.mid === curr) {
+            // Next is child of Current -> Going DOWN
+            currentGen--;
+        } else if (getPerson(curr).fid === next || getPerson(curr).mid === next) {
+            // Next is parent of Current -> Going UP
+            currentGen++;
+        }
+        // Else (Spouse/Sibling) -> Level stays same
+        generations.push(currentGen);
+    }
+
+    // Find the index with the highest generation (The Pivot)
+    let maxGen = -999;
+    let pivotIndex = 0;
+    generations.forEach((gen, idx) => {
+        if (gen > maxGen) {
+            maxGen = gen;
+            pivotIndex = idx;
+        }
+    });
+
+    const pivotId = path[pivotIndex];
+    const pivotPerson = getPerson(pivotId);
+
+    // --- 2. Split Path into Branches ---
+    // Left Branch: From Pivot down to Start (path[0])
+    // Right Branch: From Pivot down to End (path[length-1])
+    
+    // Slice excludes pivot from the list to avoid duplication in rendering
+    const leftNodes = path.slice(0, pivotIndex).reverse(); 
+    const rightNodes = path.slice(pivotIndex + 1);
+
+    // Render Pivot
+    html += `<div class="ca-pivot-wrapper">
+                ${renderNode(pivotId, findRelationship(id1, pivotId))}
+             </div>`;
+
+    // Render Branches Container
+    html += `<div class="ca-branches">`;
+
+    // Left Column
+    if (leftNodes.length > 0) {
+        // If right is empty (linear descendant case), treat as single column
+        const branchClass = rightNodes.length === 0 ? "ca-single-col left-stack" : "ca-branch left";
+        html += `<div class="${branchClass}">`;
+        // Iterate: Pivot -> Child -> ... -> Start
+        // We need to label the relationship relative to the node ABOVE it.
+        // For leftNodes[0], parent is Pivot.
+        let parentId = pivotId;
+        leftNodes.forEach(nodeId => {
+            html += renderNode(nodeId, findRelationship(id1, nodeId));
+            parentId = nodeId;
+        });
+        html += `</div>`;
+    }
+
+    // Right Column
+    if (rightNodes.length > 0) {
+        // If left is empty (linear ancestor case), we treat this as a single column centered
+        const branchClass = leftNodes.length === 0 ? "ca-single-col" : "ca-branch right";
+        html += `<div class="${branchClass}">`;
+        
+        let parentId = pivotId;
+        rightNodes.forEach(nodeId => {
+            html += renderNode(nodeId, findRelationship(id1, nodeId));
+            parentId = nodeId;
+        });
+        html += `</div>`;
+    }
+
+    } // End else (Common Ancestor)
+
+    html += `</div>`; // End ca-branches
+    html += `</div>`; // End ca-diagram
+
+    // Final Summary Sentence
+    const finalRel = findRelationship(id1, id2);
+    html += `<div style="text-align:center; margin-top:30px; font-size:18px; color:#333; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+                <strong>${p2.name}</strong> is your <strong>${finalRel}</strong>
+                <div style="margin-top: 8px; font-size: 12px; color: #999; font-family: monospace;">Code: ${result.code}</div>
+             </div>`;
+
+    html += `</div>`;
+    return html;
+}
+
+function getStepLabel(fromId, toId) {
+    const fromP = getPerson(fromId);
+    const toP = getPerson(toId);
+    
+    if (fromP.fid === toId) return "Father";
+    if (fromP.mid === toId) return "Mother";
+    
+    if (toP.fid === fromId || toP.mid === fromId) {
+        const g = getGender(toId);
+        return g === 'M' ? "Son" : (g === 'F' ? "Daughter" : "Child");
+    }
+    
+    if (fromP.pids && fromP.pids.includes(toId)) return "Spouse";
+    
+    // Sibling check
+    const sibs = getSiblings(fromId);
+    if (sibs.includes(toId)) {
+        const g = getGender(toId);
+        return g === 'M' ? "Brother" : (g === 'F' ? "Sister" : "Sibling");
+    }
+    
+    return "Related";
 }
 
 function parseDate(dateStr) {

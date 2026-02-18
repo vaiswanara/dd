@@ -244,6 +244,7 @@
             #person-modal-overlay, #relationship-modal-overlay, 
             #app-toast, #birthdays-page, #form-page, #help-page, 
             #install-page, #about-page, #feedback-page, #updates-page,
+            #reports-page,
             header {
                 display: none !important;
             }
@@ -292,6 +293,89 @@
                 margin-top: 30px !important;
             }
 
+            /* Remove borders from images in print */
+            img {
+                border: none !important;
+                outline: none !important;
+            }
+
+            /* Relationship Diagram Print Styles */
+            .rel-diagram-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+                gap: 5px;
+            }
+            .rel-node {
+                border: 2px solid #4A90E2;
+                border-radius: 12px;
+                padding: 10px;
+                text-align: center;
+                min-width: 180px;
+                max-width: 220px;
+                background: #fff;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 2;
+            }
+            .rel-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                /* Mobile Defaults */
+                height: 50px;
+                width: 100%;
+            }
+            /* Connector Line */
+            .rel-arrow::after {
+                content: '';
+                position: absolute;
+                background: #ccc;
+                z-index: 1;
+                /* Mobile: Vertical Line */
+                width: 2px;
+                height: 100%;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .rel-arrow-label {
+                position: relative;
+                z-index: 3;
+                background: #fff;
+                padding: 2px 8px;
+                color: #E91E63;
+                font-weight: bold;
+                font-size: 12px;
+                border: 1px solid #eee;
+                border-radius: 10px;
+                white-space: nowrap;
+            }
+
+            /* Desktop: Horizontal Layout (Left to Right) */
+            @media (min-width: 768px) {
+                .rel-diagram-container {
+                    flex-direction: row;
+                    overflow-x: auto;
+                    justify-content: center;
+                    padding-bottom: 40px;
+                }
+                .rel-arrow {
+                    height: auto;
+                    width: 60px;
+                    min-height: 40px;
+                }
+                /* Desktop: Horizontal Line */
+                .rel-arrow::after {
+                    width: 100%;
+                    height: 2px;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-50%);
+                }
+            }
+
             /* Avoid Page Breaks Inside Sections */
             .report-content h3, .report-content ul, .report-content li {
                 page-break-inside: avoid;
@@ -305,6 +389,113 @@
         .lang-btn.te { background: #E91E63; color: white; }
         .lang-btn.kn { background: #FF9800; color: white; }
         .lang-close { position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #999; }
+
+        /* --- Common Ancestor Diagram Styles --- */
+        .ca-diagram { display: flex; flex-direction: column; align-items: center; padding: 20px 10px; font-family: 'Segoe UI', sans-serif; overflow-x: auto; }
+        
+        .ca-node {
+            border: 2px solid #4A90E2; border-radius: 12px; padding: 10px; text-align: center;
+            width: 140px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center;
+        }
+        .ca-node img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; border: 1px solid #ddd; }
+        .ca-node-name { font-weight: bold; font-size: 13px; color: #333; line-height: 1.2; margin-bottom: 2px; }
+        .ca-node-id { font-size: 10px; color: #999; }
+        .ca-node-role { 
+            font-size: 10px; color: #E91E63; font-weight: bold; background: #fff0f5; 
+            padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; border: 1px solid #f8bbd0;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* Pivot (Top Node) */
+        .ca-pivot-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 30px; }
+        .ca-pivot-wrapper::after {
+            content: ''; position: absolute; top: 100%; left: 50%; width: 2px; height: 30px;
+            background: #bbb; transform: translateX(-50%);
+        }
+
+        /* Branches Container */
+        .ca-branches { display: flex; justify-content: center; gap: 40px; position: relative; }
+
+        /* Branch Column */
+        .ca-branch { display: flex; flex-direction: column; align-items: center; position: relative; padding-top: 30px; }
+
+        /* Horizontal Connector (Top of branches) */
+        .ca-branch::before { content: ''; position: absolute; top: 0; height: 2px; background: #bbb; }
+        
+        /* Left Branch: Line from center-right to right edge */
+        .ca-branch.left::before { right: -20px; width: calc(50% + 20px); }
+        
+        /* Right Branch: Line from center-left to left edge */
+        .ca-branch.right::before { left: -20px; width: calc(50% + 20px); }
+
+        /* Vertical Connector (From horizontal line down to first node) */
+        .ca-branch::after {
+            content: ''; position: absolute; top: 0; left: 50%; width: 2px; height: 30px;
+            background: #bbb; transform: translateX(-50%);
+        }
+
+        /* Node Wrapper in Column */
+        .ca-node-wrapper { position: relative; margin-bottom: 30px; }
+        .ca-node-wrapper:last-child { margin-bottom: 0; }
+
+        /* Line to next node */
+        .ca-node-wrapper::after {
+            content: ''; position: absolute; top: 100%; left: 50%; width: 2px; height: 30px;
+            background: #bbb; transform: translateX(-50%);
+        }
+        .ca-node-wrapper:last-child::after { display: none; }
+
+        /* Arrowhead for node connections */
+        .ca-node-wrapper::before {
+            content: ''; position: absolute; top: calc(100% + 25px); left: 50%; 
+            border: 5px solid transparent; border-top-color: #bbb; 
+            transform: translateX(-50%); z-index: 1;
+        }
+        .ca-node-wrapper:last-child::before { display: none; }
+
+        /* Reverse arrows for Left Branch (A -> Pivot) to show flow A -> B */
+        .ca-branch.left .ca-node-wrapper::before,
+        .ca-single-col.left-stack .ca-node-wrapper::before,
+        .ca-sibling-side:first-child .ca-node-wrapper::before {
+            border-top-color: transparent; border-bottom-color: #bbb;
+            top: calc(100% + 5px); /* Position at top of line, pointing up */
+        }
+
+        /* Linear Layout (Single Column) */
+        .ca-single-col { padding-top: 0; }
+        .ca-single-col::before, .ca-single-col::after { display: none; }
+
+        /* Print Overrides for Diagram */
+        @media print {
+            .ca-diagram { overflow: visible; width: 100%; }
+            .ca-node { border: 1px solid #4A90E2; box-shadow: none; }
+            .ca-pivot-wrapper::after, .ca-branch::before, .ca-branch::after, .ca-node-wrapper::after {
+                background: #000 !important; -webkit-print-color-adjust: exact;
+            }
+            .ca-node-wrapper::before { border-top-color: #000 !important; }
+            .ca-branch.left .ca-node-wrapper::before,
+            .ca-single-col.left-stack .ca-node-wrapper::before,
+            .ca-sibling-side:first-child .ca-node-wrapper::before {
+                border-top-color: transparent !important; border-bottom-color: #000 !important;
+            }
+            .ca-node-role { border: 1px solid #ccc; color: #000; }
+        }
+
+        /* --- Sibling Bridge Layout --- */
+        .ca-sibling-container { display: flex; justify-content: center; gap: 60px; position: relative; margin-top: 10px; }
+        
+        /* Connector Line between the two sibling columns at the top */
+        .ca-sibling-container::before {
+            content: ''; position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 2px; background: #bbb; z-index: 1;
+        }
+
+        .ca-sibling-side { display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        /* Hide the top connector for the single columns inside sibling layout */
+        .ca-sibling-side .ca-single-col { padding-top: 30px; }
+        .ca-sibling-side .ca-single-col::before { display: none; }
     </style>
 </head>
 <body>
@@ -775,11 +966,30 @@
                 <div class="report-link-item disabled" id="btn-close-family-report" onclick="window.generateSelectedReport('close-family')">
                     1) Close Family Report 📄
                 </div>
+                
+                <!-- New Relationship Diagram Option -->
+                <div class="report-link-item" id="btn-rel-diagram" onclick="window.toggleRelDiagramInputs()">
+                    2) Relationship Diagram ⟷
+                </div>
+
+                <!-- Second Person Selection UI (Hidden by default) -->
+                <div id="rel-diagram-inputs" style="display:none; margin-top:10px; padding:15px; background:#f8f9fa; border:1px solid #e0e0e0; border-radius: 8px;">
+                    <p style="margin:0 0 8px; font-size:14px; color:#555;">Select Second Person:</p>
+                    <div class="report-search-box" style="margin-bottom: 10px;">
+                        <input type="text" id="rel-diagram-search-input" class="report-search-input" placeholder="Search second person...">
+                        <div id="rel-diagram-suggestions" class="report-suggestions"></div>
+                    </div>
+                    <div id="rel-diagram-selected" style="display:none; margin-bottom:15px; font-weight:bold; color: var(--primary-color);">
+                        Selected: <span id="rel-diagram-selected-name"></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.generateRelDiagram()" style="width:100%;">Generate Diagram</button>
+                </div>
+
                 <div class="report-link-item disabled" id="btn-ancestors-report">
-                    2) Ancestors Report (Coming Soon) 🌳
+                    3) Ancestors Report (Coming Soon) 🌳
                 </div>
                 <div class="report-link-item disabled" id="btn-descendants-report">
-                    3) Descendants Report (Coming Soon) 👶
+                    4) Descendants Report (Coming Soon) 👶
                 </div>
             </div>
         </div>
