@@ -1362,10 +1362,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
-    // SECTION 5.11: RELATIONSHIP REPORT PAGE
+    // SECTION 5.11: REPORTS PAGE & GENERATION
     // =================================================================================
 
-    window.showRelationshipReport = function() {
+    // State for the reports page
+    let reportSelectedPersonId = null;
+
+    window.showReportsPage = function() {
+        const page = document.getElementById('reports-page');
+        if (page) {
+            page.style.display = 'flex';
+            // Reset selection on open if desired, or keep it. 
+            // Let's keep it but ensure UI is synced.
+            updateReportUI();
+            setTimeout(() => {
+                const input = document.getElementById('report-search-input');
+                if(input) input.focus();
+            }, 100);
+        }
+    };
+
+    const reportsPageClose = document.getElementById('reports-page-close');
+    if (reportsPageClose) {
+        reportsPageClose.addEventListener('click', () => {
+            document.getElementById('reports-page').style.display = 'none';
+        });
+    }
+
+    // Report Search Logic
+    const reportSearchInput = document.getElementById('report-search-input');
+    const reportSuggestions = document.getElementById('report-search-suggestions');
+
+    if (reportSearchInput && reportSuggestions) {
+        reportSearchInput.addEventListener('input', () => {
+            const query = reportSearchInput.value.toLowerCase().trim();
+            if (query.length < 2) {
+                reportSuggestions.style.display = 'none';
+                return;
+            }
+            const matches = [];
+            for (const person of PEOPLE) {
+                if (person.name.toLowerCase().includes(query)) {
+                    matches.push(person);
+                    if (matches.length >= 10) break;
+                }
+            }
+            reportSuggestions.innerHTML = matches.map(p => `
+                <div class="suggestion-item" data-id="${p.id}">
+                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                </div>
+            `).join('');
+            reportSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+
+        reportSuggestions.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (item) {
+                reportSelectedPersonId = item.dataset.id;
+                reportSearchInput.value = '';
+                reportSuggestions.style.display = 'none';
+                updateReportUI();
+            }
+        });
+    }
+
+    window.clearReportSelection = function() {
+        reportSelectedPersonId = null;
+        updateReportUI();
+    };
+
+    function updateReportUI() {
+        const card = document.getElementById('report-selected-person');
+        const nameSpan = document.getElementById('report-selected-name');
+        const btn = document.getElementById('btn-close-family-report');
+
+        if (reportSelectedPersonId && peopleMap.has(reportSelectedPersonId)) {
+            const p = peopleMap.get(reportSelectedPersonId);
+            card.style.display = 'flex';
+            nameSpan.textContent = p.name;
+            if(btn) btn.classList.remove('disabled');
+        } else {
+            card.style.display = 'none';
+            nameSpan.textContent = 'None';
+            if(btn) btn.classList.add('disabled');
+        }
+    }
+
+    window.generateSelectedReport = function(reportType) {
+        if (!reportSelectedPersonId) {
+            alert("Please search and select a person first.");
+            return;
+        }
+
+        if (reportType === 'close-family') {
+            showRelationshipReport(reportSelectedPersonId);
+        }
+    };
+
+    // Modified to accept an ID
+    window.showRelationshipReport = function(targetId) {
         const page = document.getElementById('relationship-report-page');
         const content = document.getElementById('report-content');
         if (!page || !content) return;
@@ -1377,13 +1472,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const homeId = getHomePersonId();
-            content.innerHTML = generateRelationshipReport(homeId);
+            // Use targetId if provided, otherwise fallback to home (though new UI enforces selection)
+            const idToUse = targetId || getHomePersonId();
+            content.innerHTML = generateRelationshipReport(idToUse);
             page.style.display = 'flex';
 
             // Set document title for printing filename
-            if (homeId && peopleMap.has(homeId)) {
-                const p = peopleMap.get(homeId);
+            if (idToUse && peopleMap.has(idToUse)) {
+                const p = peopleMap.get(idToUse);
                 document.title = `${p.name.toUpperCase()} RELATIONSHIP REPORT`;
             }
         } catch (e) {

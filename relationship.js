@@ -328,8 +328,8 @@ function findRelationship(id1, id2) {
 // REPORT GENERATION LOGIC
 // =================================================================================
 
-function generateRelationshipReport() {
-    const id = getHomeId();
+function generateRelationshipReport(customHomeId) {
+    const id = customHomeId || getHomeId();
     const p = getPerson(id);
     if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Home person not found or data not loaded yet.</p>";
 
@@ -339,19 +339,19 @@ function generateRelationshipReport() {
     html += `<p style="color: #666;">Centered on: <strong>${p.name}</strong> (${p.id})</p>`;
 
     // 1. SELF
-    html += renderSection("SELF", [{ id: p.id, name: p.name }]);
+    html += renderSection("SELF", [{ id: p.id, name: p.name }], id);
 
     // 2. PARENTS
     const parents = getParents(id).map(x => ({ ...x, name: safeName(x.id) }));
-    html += renderSection("PARENTS", parents);
+    html += renderSection("PARENTS", parents, id);
 
     // 3. GRANDPARENTS
     const gps = getGrandParents(id).map(x => ({ ...x, name: safeName(x.id) }));
-    html += renderSection("GRANDPARENTS", gps);
+    html += renderSection("GRANDPARENTS", gps, id);
 
     // 4. SIBLINGS
     const siblings = getSiblings(id).map(sid => ({ id: sid, name: safeName(sid) }));
-    html += renderSection("SIBLINGS", siblings);
+    html += renderSection("SIBLINGS", siblings, id);
 
     // 5. SIBLINGS CHILDREN
     if (siblings.length > 0) {
@@ -365,12 +365,12 @@ function generateRelationshipReport() {
                 });
             }
         });
-        html += renderComplexSection("SIBLINGS' CHILDREN", sibChildrenList);
+        html += renderComplexSection("SIBLINGS' CHILDREN", sibChildrenList, id);
     }
 
     // 6. CHILDREN
     const children = getChildrenIds(id).map(cid => ({ id: cid, name: safeName(cid) }));
-    html += renderSection("CHILDREN", children);
+    html += renderSection("CHILDREN", children, id);
 
     // 7. GRANDCHILDREN
     if (children.length > 0) {
@@ -384,7 +384,7 @@ function generateRelationshipReport() {
                 });
             }
         });
-        html += renderComplexSection("GRANDCHILDREN", grandChildrenList);
+        html += renderComplexSection("GRANDCHILDREN", grandChildrenList, id);
     }
 
     // 8. SPOUSE SIDE
@@ -401,15 +401,15 @@ function generateRelationshipReport() {
 
             // Spouse Parents
             const sParents = getParents(pid).map(x => ({ ...x, name: safeName(x.id) }));
-            spouseSideHtml += renderSubList("Parents", sParents);
+            spouseSideHtml += renderSubList("Parents", sParents, id);
 
             // Spouse Grandparents
             const sGps = getGrandParents(pid).map(x => ({ ...x, name: safeName(x.id) }));
-            spouseSideHtml += renderSubList("Grandparents", sGps);
+            spouseSideHtml += renderSubList("Grandparents", sGps, id);
 
             // Spouse Siblings
             const sSibs = getSiblings(pid).map(sid => ({ id: sid, name: safeName(sid) }));
-            spouseSideHtml += renderSubList("Siblings", sSibs);
+            spouseSideHtml += renderSubList("Siblings", sSibs, id);
 
             // Spouse Siblings Children
             if (sSibs.length > 0) {
@@ -444,12 +444,13 @@ function generateRelationshipReport() {
     return html;
 }
 
-function renderSection(title, items) {
+function renderSection(title, items, homeId) {
     if (!items || items.length === 0) return "";
+    const hId = homeId || getHomeId();
     let h = `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${title}</h3>`;
     h += `<ul style="list-style-type: disc; padding-left: 25px; margin-top: 5px;">`;
     items.forEach(item => {
-        let relation = findRelationship(getHomeId(), item.id);
+        let relation = findRelationship(hId, item.id);
         h += `<li style="margin-bottom: 4px;">
         <strong>${item.name}</strong> 
         <span style="color:#E91E63; font-size:13px;"> — ${relation}</span>
@@ -508,14 +509,15 @@ function getSiblingTerm(homeId, siblingId) {
         : getTerm({ te: "చెల్లి", kn: "ತಂಗಿ" });
 }
 
-function renderComplexSection(title, groups) {
+function renderComplexSection(title, groups, homeId) {
     if (!groups || groups.length === 0) return "";
+    const hId = homeId || getHomeId();
     let h = `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${title}</h3>`;
     groups.forEach(g => {
         h += `<div style="margin-top: 10px; font-weight: 600; color: #555; margin-left: 10px;">${g.header}</div>`;
         h += `<ul style="list-style-type: circle; padding-left: 40px; margin-top: 5px;">`;
         g.items.forEach(item => {
-            let relation = findRelationship(getHomeId(), item.id);
+            let relation = findRelationship(hId, item.id);
             h += `<li style="margin-bottom: 4px;">
             ${item.name} 
             <span style="color:#E91E63; font-size:13px;"> — ${relation}</span>
@@ -526,12 +528,13 @@ function renderComplexSection(title, groups) {
     return h;
 }
 
-function renderSubList(label, items) {
+function renderSubList(label, items, homeId) {
     if (!items || items.length === 0) return "";
+    const hId = homeId || getHomeId();
     let h = `<div style="font-weight: bold; margin-top: 10px; color: #444;">${label}:</div>`;
     h += `<ul style="margin-top: 5px; margin-bottom: 10px;">`;
     items.forEach(item => {
-        let relation = findRelationship(getHomeId(), item.id);
+        let relation = findRelationship(hId, item.id);
         h += `<li style="margin-bottom: 4px;">
         <strong>${item.name}</strong> 
         <span style="color:#E91E63; font-size:13px;"> — ${relation}</span>

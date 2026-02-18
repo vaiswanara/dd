@@ -137,6 +137,22 @@
         .update-date { font-size: 18px; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
         .update-text { font-size: 23px; color: #333; line-height: 1.5; }
 
+        /* --- Reports Selection Page --- */
+        #reports-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .reports-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .reports-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .reports-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        
+        .report-search-box { position: relative; margin-bottom: 20px; }
+        .report-search-input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        .report-search-input:focus { border-color: var(--primary-color); }
+        .report-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        .selected-person-card { background: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px solid #90caf9; margin-bottom: 25px; display: none; align-items: center; justify-content: space-between; }
+        .report-link-item { display: block; background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 10px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s; border-left: 4px solid var(--primary-color); cursor: pointer; }
+        .report-link-item:hover { background: #f9f9f9; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .report-link-item.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
         /* --- Relationship Report Page --- */
         #relationship-report-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
         .report-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
@@ -305,7 +321,7 @@
             <li><a href="#" onclick="window.toggleLanguage(); closeSidebar();">🌐 Language: <span id="lang-display">TEL</span></a></li>
             <li><a href="#" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
-            <li><a href="#" onclick="window.showRelationshipReport(); closeSidebar();">📊 RELATION REPORT</a></li>
+            <li><a href="#" onclick="window.showReportsPage(); closeSidebar();">📊 REPORTS</a></li>
             <li><a href="#" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
             <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
@@ -732,6 +748,40 @@
         </div>
         <div id="updates-content" class="updates-content">
             <!-- Content injected by app.js -->
+        </div>
+    </div>
+
+    <!-- Reports Selection Page -->
+    <div id="reports-page">
+        <div class="reports-header">
+            <button id="reports-page-close" class="reports-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Reports</h3>
+        </div>
+        <div class="reports-content">
+            <p style="color: #666; margin-bottom: 10px;">Select a person to generate reports:</p>
+            
+            <div class="report-search-box">
+                <input type="text" id="report-search-input" class="report-search-input" placeholder="Search name...">
+                <div id="report-search-suggestions" class="report-suggestions"></div>
+            </div>
+
+            <div id="report-selected-person" class="selected-person-card">
+                <div><strong>Selected:</strong> <span id="report-selected-name">None</span></div>
+                <button onclick="window.clearReportSelection()" style="background:none; border:none; color:red; font-size:18px; cursor:pointer;">&times;</button>
+            </div>
+
+            <h4 style="margin-bottom: 15px; color: #444;">Available Reports:</h4>
+            <div id="report-links-container">
+                <div class="report-link-item disabled" id="btn-close-family-report" onclick="window.generateSelectedReport('close-family')">
+                    1) Close Family Report 📄
+                </div>
+                <div class="report-link-item disabled" id="btn-ancestors-report">
+                    2) Ancestors Report (Coming Soon) 🌳
+                </div>
+                <div class="report-link-item disabled" id="btn-descendants-report">
+                    3) Descendants Report (Coming Soon) 👶
+                </div>
+            </div>
         </div>
     </div>
 
