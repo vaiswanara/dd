@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function interpretHinduRelation(homeId, targetId, up, down) {
-        if (!up || !down) return "Bandhuvu (Relative)";
+        if (!up || !down) return "బంధువు (Relative)";
 
         let u = up.length - 1;
         let d = down.length - 1;
@@ -550,16 +550,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Direct line (ancestor)
         if (d === 0) {
             if (u === 1) { // Parent
-                if (targetId === homePerson.fid) return "Tandri (Father)";
-                if (targetId === homePerson.mid) return "Talli (Mother)";
+                if (targetId === homePerson.fid) return "తండ్రి (Father)";
+                if (targetId === homePerson.mid) return "తల్లి (Mother)";
                 return "Parent";
             }
             if (u === 2) { // Grandparent
                 const parentId = up[1];
                 if (parentId === homePerson.fid) { // Paternal
-                    return targetGender === 'M' ? "Tata (Paternal Grandfather)" : "Nayanamma (Paternal Grandmother)";
+                    return targetGender === 'M' ? "తండ్రి (Paternal Grandfather)" : "నాయనమ్మ (Paternal Grandmother)";
                 } else { // Maternal
-                    return targetGender === 'M' ? "Tata (Maternal Grandfather)" : "Ammamma (Maternal Grandmother)";
+                    return targetGender === 'M' ? "తాత (Maternal Grandfather)" : "అమ్మమ్మ (Maternal Grandmother)";
                 }
             }
             if (u === 3) return "Great Grandparent";
@@ -568,33 +568,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Direct line (descendant)
         if (u === 0) {
-            if (d === 1) return targetGender === 'M' ? "Koduku (Son)" : (targetGender === 'F' ? "Kumarthe (Daughter)" : "Child");
-            if (d === 2) return targetGender === 'M' ? "Manavadu (Grandson)" : (targetGender === 'F' ? "Manavaralu (Granddaughter)" : "Grandchild");
-            if (d === 3) return targetGender === 'M' ? "Muni Manavadu (Great Grandson)" : (targetGender === 'F' ? "Muni Manavaralu (Great Granddaughter)" : "Great Grandchild");
+            if (d === 1) return targetGender === 'M' ? "కొడుకు (Son)" : (targetGender === 'F' ? "కుమార్తె (Daughter)" : "Child");
+            if (d === 2) return targetGender === 'M' ? "మనమడు (Grandson)" : (targetGender === 'F' ? "మనవరాలు (Granddaughter)" : "Grandchild");
+            if (d === 3) return targetGender === 'M' ? "మునిమనమడు (Great Grandson)" : (targetGender === 'F' ? "ముని మనవరాలు (Great Granddaughter)" : "Great Grandchild");
             return "Descendant";
         }
 
         // Siblings
         if (u === 1 && d === 1) {
-            return targetGender === 'M' ? "Sodharudu (Brother)" : "Sodari (Sister)";
+            return targetGender === 'M' ? "సోదరుడు (Brother)" : "సోదరి (Sister)";
         }
 
         // Uncle / Aunt
         if (u === 2 && d === 1) {
             const parentId = up[1]; // home person's parent
             if (parentId === homePerson.fid) { // Paternal side
-                if (targetGender === 'M') return "Pedananna / Chinnananna (Paternal Uncle)";
-                if (targetGender === 'F') return "Atta (Paternal Aunt)";
+                if (targetGender === 'M') return "పెదనాన్న / చిన్నాన్న (Paternal Uncle)";
+                if (targetGender === 'F') return "అత్త (Paternal Aunt)";
             } else if (parentId === homePerson.mid) { // Maternal side
-                if (targetGender === 'M') return "Mama (Maternal Uncle)";
-                if (targetGender === 'F') return "Peddamma / Pinnamma (Maternal Aunt)";
+                if (targetGender === 'M') return "మామ (Maternal Uncle)";
+                if (targetGender === 'F') return "పెద్దమ్మ / పిన్నమ్మ (Maternal Aunt)";
             }
             return "Uncle / Aunt";
         }
 
         // Nephew / Niece
         if (u === 1 && d === 2) {
-            return targetGender === 'M' ? "Menalludu (Nephew)" : "Menakodalu (Niece)";
+            return targetGender === 'M' ? "మెనల్లుడు (Nephew)" : "మెనకోడలు (Niece)";
         }
 
         // Cousins
