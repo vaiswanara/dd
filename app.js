@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const FEMALE_ICON_SVG = '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="#E91E63"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
     
     const searchInput = document.getElementById('search-input');
-    const searchWrapper = document.querySelector('.search-wrapper');
-    const dashboardHeaderTitle = document.getElementById('dashboard-header-title');
     const searchSuggestions = document.getElementById('search-suggestions');
     const treeContainer = document.getElementById('tree');
     const dashboardPage = document.getElementById('dashboard-page');
@@ -1538,8 +1536,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dashboardPage) dashboardPage.style.display = 'block';
         if (treeContainer) treeContainer.style.display = 'none';
         if (lineageBar) lineageBar.style.display = 'none';
-        if (searchWrapper) searchWrapper.style.display = 'none';
-        if (dashboardHeaderTitle) dashboardHeaderTitle.style.display = 'block';
         
         // Update Sidebar Active State
         if (navDashboard) navDashboard.classList.add('active');
@@ -1550,8 +1546,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dashboardPage) dashboardPage.style.display = 'none';
         if (treeContainer) treeContainer.style.display = 'block';
         if (lineageBar) lineageBar.style.display = 'flex';
-        if (searchWrapper) searchWrapper.style.display = 'flex';
-        if (dashboardHeaderTitle) dashboardHeaderTitle.style.display = 'none';
 
         // Update Sidebar Active State
         if (navDashboard) navDashboard.classList.remove('active');

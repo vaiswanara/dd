@@ -245,10 +245,6 @@
             <div style="display: flex; align-items: center;">
                 <span class="toggle-btn" onclick="toggleSidebar()">&#9776;</span>
             </div>
-            <div id="dashboard-header-title" style="display: none; flex: 1; text-align: center;">
-                <h2 style="margin: 0; font-size: 23px; color: var(--primary-color); letter-spacing: 0.5px;">Welcome to Vamsha Vruksha</h2>
-                <p style="margin: 2px 0 0; font-size: 14px; color: #777; font-weight: 500;">Powered by DFWA</p>
-            </div>
             <div class="search-wrapper">
                 <!-- Home button is injected here by app.js -->
                 <input type="text" id="search-input" placeholder="Search family member...">
@@ -260,7 +256,16 @@
         <div id="dashboard-page">
             <!-- 1. Namaste Card (Moved to Top) -->
             <div class="namaste-card">
-                <h1>HARE SRINIVASA 🙏</h1>
+                <h1>🙏 Namaste!</h1>
+            </div>
+
+            <!-- 2. Welcome Header -->
+            <div class="dash-welcome" style="justify-content: center;">
+                <div style="text-align: center;">
+                    <h2>Welcome to Vamsha Vruksha</h2>
+                    <p style="font-size: 14px; color: #888; margin: 4px 0 0;">Powered by DFWA</p>
+                </div>
+                <div class="dash-date" id="dash-date" style="display: none;"></div>
             </div>
 
             <!-- 2.5 Dynamic Message Section -->
