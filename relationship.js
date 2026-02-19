@@ -229,17 +229,35 @@ function resolveRelationName(result, homePerson, targetPerson) {
     // 3. Age-based Rules
     if (entry.ageRule) {
         // Rule: pedda_chinna (e.g., for FB - Father's Brother)
-        // Logic: Compare Target vs Home's Parent (who is Target's Sibling)
-        if (entry.ageRule === 'pedda_chinna' && path.length >= 3) {
-            const parentId = path[path.length - 2]; // The node before target
-            const parent = getPerson(parentId);
-            const comparison = compareAge(targetPerson, parent);
-            
-            if (comparison === 'older') return getTerm(entry.pedda || entry.elder);
-            if (comparison === 'younger') return getTerm(entry.chinna || entry.younger);
-            
-            // Fallback if ages unknown
-            return getTerm(entry.pedda || entry.elder) + "/" + getTerm(entry.chinna || entry.younger);
+        if (entry.ageRule === 'pedda_chinna') {
+            let comparisonNodeId = null;
+
+            // 1. For direct/classificatory uncles/aunts (FB, MB, FZ, MZ), 
+            // we must compare the Target with the Ego's Parent (path[1]).
+            // This handles deep paths like FFBS (Father's Father's Brother's Son) -> FB
+            if (['FB', 'MB', 'FZ', 'MZ'].includes(code) && path.length >= 2) {
+                comparisonNodeId = path[1];
+            }
+            // 2. For Spouse's uncles/aunts (HFB, HMB, etc.),
+            // we compare Target with Spouse's Parent (path[2]).
+            else if (['HFB', 'HFZ', 'HMB', 'HMZ', 'WFB', 'WFZ', 'WMB', 'WMZ'].includes(code) && path.length >= 3) {
+                comparisonNodeId = path[2];
+            }
+            // 3. Default/Fallback: Compare with the node immediately preceding the target.
+            else if (path.length >= 3) {
+                comparisonNodeId = path[path.length - 2];
+            }
+
+            if (comparisonNodeId) {
+                const parent = getPerson(comparisonNodeId);
+                const comparison = compareAge(targetPerson, parent);
+                
+                if (comparison === 'older') return getTerm(entry.pedda || entry.elder);
+                if (comparison === 'younger') return getTerm(entry.chinna || entry.younger);
+                
+                // Fallback if ages unknown
+                return getTerm(entry.pedda || entry.elder) + "/" + getTerm(entry.chinna || entry.younger);
+            }
         }
 
         // Rule: sibling_child (e.g., for BS - Brother's Son)
@@ -301,7 +319,8 @@ function compareAge(p1, p2) {
         const d1 = parseDate(p1.Birth);
         const d2 = parseDate(p2.Birth);
         
-        if (d1 && d2) {
+        // Ensure both dates are valid numbers before comparing
+        if (d1 && d2 && !isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
             // Earlier birth date = Older person
             if (d1 < d2) return 'older';
             if (d1 > d2) return 'younger';
@@ -309,29 +328,7 @@ function compareAge(p1, p2) {
         }
     }
     
-    // 2. Fallback: ID-based comparison
-    // Logic: Lower ID number implies entered earlier -> Elder
-    if (p1 && p2 && p1.id && p2.id) {
-        const getNum = (id) => {
-            const match = String(id).match(/(\d+)/);
-            return match ? parseInt(match[0], 10) : null;
-        };
-
-        const n1 = getNum(p1.id);
-        const n2 = getNum(p2.id);
-
-        if (n1 !== null && n2 !== null) {
-            if (n1 < n2) return 'older';
-            if (n1 > n2) return 'younger';
-            return 'same';
-        }
-        
-        // Fallback to string comparison
-        if (p1.id < p2.id) return 'older';
-        if (p1.id > p2.id) return 'younger';
-        return 'same';
-    }
-
+    // 2. NO ID Fallback. If dates are missing or invalid, return null.
     return null;
 }
 
@@ -919,12 +916,39 @@ function getStepLabel(fromId, toId) {
 
 function parseDate(dateStr) {
     if (!dateStr) return null;
-    const parts = dateStr.split('-');
+    const s = String(dateStr).trim();
+    
+    // 1. Handle Year only (e.g. "1952")
+    if (/^\d{4}$/.test(s)) {
+        return new Date(parseInt(s, 10), 0, 1);
+    }
+
+    // 2. Handle standard formats (dd-MMM-yyyy, dd/MMM/yyyy, etc)
+    // Added dot (.) to split regex just in case
+    const parts = s.split(/[\-\/\s\.]+/);
     if (parts.length !== 3) return null;
+
+    // Handle YYYY-MM-DD (ISO format)
+    if (parts[0].length === 4 && !isNaN(parts[0])) {
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10);
+        const d = parseInt(parts[2], 10);
+        return new Date(y, m - 1, d);
+    }
+
     const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
     const day = parseInt(parts[0], 10);
-    const monthKey = parts[1].toUpperCase().slice(0, 3);
-    const month = months[monthKey];
+    const monthKey = parts[1].trim().toUpperCase().slice(0, 3);
+    
+    // Try text month first, then numeric fallback
+    let month = months[monthKey];
+    if (month === undefined) {
+        const mVal = parseInt(parts[1], 10);
+        if (!isNaN(mVal) && mVal >= 1 && mVal <= 12) {
+            month = mVal - 1;
+        }
+    }
+
     let year = parseInt(parts[2], 10);
     if (year < 100) {
         const currentYear = new Date().getFullYear() % 100;
