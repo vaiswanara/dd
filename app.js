@@ -66,6 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const relationshipModalClose = document.getElementById('relationship-modal-close');
     let HOME_PERSON_ID = null;
     let APP_CONFIG = null;
+    const IS_ADM_PAGE = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/adm/');
+    const APP_BASE_PREFIX = IS_ADM_PAGE ? '../' : '';
+
+    function toAppPath(path) {
+        const raw = String(path || '').trim();
+        if (!raw) return raw;
+        if (/^(?:[a-z]+:|\/\/|\/)/i.test(raw)) return raw;
+        return APP_BASE_PREFIX + raw.replace(/^\.?\//, '');
+    }
 
     // --- Dashboard Elements ---
     const dashDateEl = document.getElementById('dash-date');
@@ -92,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Service Worker Registration (required for PWA install/offline) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
+            navigator.serviceWorker.register(toAppPath('sw.js'))
                 .then(reg => console.log('[PWA] Service worker registered', reg.scope))
                 .catch(err => console.warn('[PWA] Service worker registration failed', err));
         });
@@ -1985,15 +1994,15 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadNewDatabase() {
         console.log("Loading configuration...");
-        APP_CONFIG = await (await fetch('config.json')).json();
+        APP_CONFIG = await (await fetch(toAppPath('config.json'))).json();
 
         console.log("Loading data from new database format...");
         const [personsRes, familiesRes, placesRes, contactsRes, dictRes] = await Promise.all([
-            fetch(APP_CONFIG.data_files.persons),
-            fetch(APP_CONFIG.data_files.families),
-            fetch(APP_CONFIG.data_files.places),
-            fetch(APP_CONFIG.data_files.contacts),
-            fetch(APP_CONFIG.data_files.relationshipDictionary).catch(err => console.warn("Dict load fail", err))
+            fetch(toAppPath(APP_CONFIG.data_files.persons)),
+            fetch(toAppPath(APP_CONFIG.data_files.families)),
+            fetch(toAppPath(APP_CONFIG.data_files.places)),
+            fetch(toAppPath(APP_CONFIG.data_files.contacts)),
+            fetch(toAppPath(APP_CONFIG.data_files.relationshipDictionary)).catch(err => console.warn("Dict load fail", err))
         ]);
 
         const persons = await personsRes.json();
@@ -2089,15 +2098,15 @@ document.addEventListener('DOMContentLoaded', () => {
             PEOPLE = data;
             buildLookups();
             setupLongPressHandlers();
-            const photosPath = (APP_CONFIG && APP_CONFIG.data_files) ? APP_CONFIG.data_files.photos : 'photos.json';
-            return fetch(photosPath);
+            const photosPath = (APP_CONFIG && APP_CONFIG.data_files) ? APP_CONFIG.data_files.photos : 'json_data/photos.json';
+            return fetch(toAppPath(photosPath));
         })
         .then(response => response.json())
         .then(photoData => {
             // Update peopleMap with image URLs from the JSON file
             for (const [id, url] of Object.entries(photoData)) {
                 if (peopleMap.has(id)) {
-                    peopleMap.get(id).image_url = url;
+                    peopleMap.get(id).image_url = toAppPath(url);
                 }
             }
         })
