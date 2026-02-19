@@ -81,7 +81,7 @@
     },
     {
         "person_id": "I0541",
-        "given_name": "",
+        "given_name": "PADMAVATHI(1st w)",
         "surname": "",
         "sex": "F",
         "birth_date": "",
@@ -5369,7 +5369,7 @@
     },
     {
         "person_id": "I0543",
-        "given_name": "JAYALAKSHMI",
+        "given_name": "MAHALAKSHMI",
         "surname": "PALURU",
         "sex": "F",
         "birth_date": "",
@@ -6598,5 +6598,205 @@
         "sex": "M",
         "birth_date": "03-JUN-2025",
         "birth_place_id": "P0073"
+    },
+    {
+        "person_id": "I500022",
+        "given_name": "AMBUJAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500023",
+        "given_name": "THUNGAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500024",
+        "given_name": "BHAGIRATHA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500025",
+        "given_name": "SETHANNA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500026",
+        "given_name": "RAGHAVENDRACHAR",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500027",
+        "given_name": "PADMAVATHI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500028",
+        "given_name": "INDIRA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500029",
+        "given_name": "KRISHNA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500030",
+        "given_name": "TRIVENI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500031",
+        "given_name": "DRAUPADI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500032",
+        "given_name": "JAYALAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500033",
+        "given_name": "HARISCHANDRA BHAT",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500034",
+        "given_name": "PADMINI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500035",
+        "given_name": "VENKATA RAMANA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500036",
+        "given_name": "VAMSI",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500037",
+        "given_name": "NARAYANA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500038",
+        "given_name": "SUBBARAO",
+        "surname": "KARNAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500039",
+        "given_name": "LAKSHMAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500040",
+        "given_name": "RAMADEVI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500041",
+        "given_name": "NARAYANA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500042",
+        "given_name": "Mrs Narayana Rao",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500043",
+        "given_name": "SREENIVASA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500044",
+        "given_name": "Mrs Sreenivasa Rao",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500045",
+        "given_name": "DIVAN VENKANNA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500046",
+        "given_name": "Mrs Divan Venkanna",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
     }
 ]

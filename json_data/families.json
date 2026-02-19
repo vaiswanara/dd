@@ -2060,7 +2060,12 @@
             "I0438",
             "I0539",
             "I0542",
-            "I0543"
+            "I0543",
+            "I500028",
+            "I500029",
+            "I500030",
+            "I500031",
+            "I500032"
         ]
     },
     {
@@ -3140,6 +3145,114 @@
         "marriage_place_id": "",
         "children": [
             "I0322"
+        ]
+    },
+    {
+        "family_id": "F500011",
+        "husband_id": "I0540",
+        "wife_id": "I500022",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500023",
+            "I500024",
+            "I500025"
+        ]
+    },
+    {
+        "family_id": "F500012",
+        "husband_id": "I500026",
+        "wife_id": "I500023",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I0439"
+        ]
+    },
+    {
+        "family_id": "F500013",
+        "husband_id": "I500026",
+        "wife_id": "I500027",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": []
+    },
+    {
+        "family_id": "F500014",
+        "husband_id": "I500033",
+        "wife_id": "I500031",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500034"
+        ]
+    },
+    {
+        "family_id": "F500015",
+        "husband_id": "I500035",
+        "wife_id": "I500034",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I0504",
+            "I500036"
+        ]
+    },
+    {
+        "family_id": "F500016",
+        "husband_id": "I500037",
+        "wife_id": "I0542",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": []
+    },
+    {
+        "family_id": "F500017",
+        "husband_id": "I500038",
+        "wife_id": "I500039",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500026",
+            "I0541"
+        ]
+    },
+    {
+        "family_id": "F500018",
+        "husband_id": "I500038",
+        "wife_id": "I500040",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": []
+    },
+    {
+        "family_id": "F500019",
+        "husband_id": "I500041",
+        "wife_id": "I500042",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500038"
+        ]
+    },
+    {
+        "family_id": "F500020",
+        "husband_id": "I500045",
+        "wife_id": "I500046",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500043"
+        ]
+    },
+    {
+        "family_id": "F500021",
+        "husband_id": "I500043",
+        "wife_id": "I500044",
+        "marriage_date": "",
+        "marriage_place_id": "",
+        "children": [
+            "I500041"
         ]
     }
 ]
