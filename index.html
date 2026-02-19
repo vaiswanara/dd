@@ -496,6 +496,38 @@
         /* Hide the top connector for the single columns inside sibling layout */
         .ca-sibling-side .ca-single-col { padding-top: 30px; }
         .ca-sibling-side .ca-single-col::before { display: none; }
+
+        /* --- Responsive Mobile Adjustments for Diagram --- */
+        @media (max-width: 768px) {
+            .ca-node {
+                width: 90px;
+                padding: 5px;
+                min-height: 90px;
+            }
+            .ca-node img {
+                width: 35px;
+                height: 35px;
+            }
+            .ca-node-name {
+                font-size: 11px;
+                margin-bottom: 0;
+            }
+            .ca-node-id {
+                font-size: 9px;
+            }
+            .ca-node-role {
+                font-size: 9px;
+                padding: 2px 4px;
+                margin-bottom: 4px;
+            }
+            .ca-branches {
+                gap: 10px;
+            }
+            .ca-branch.left::before { right: -5px; width: calc(50% + 5px); }
+            .ca-branch.right::before { left: -5px; width: calc(50% + 5px); }
+            .ca-sibling-container { gap: 20px; }
+            .ca-sibling-container::before { width: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -985,11 +1017,11 @@
                     <button class="btn btn-primary" onclick="window.generateRelDiagram()" style="width:100%;">Generate Diagram</button>
                 </div>
 
-                <div class="report-link-item disabled" id="btn-ancestors-report">
-                    3) Ancestors Report (Coming Soon) 🌳
+                <div class="report-link-item" id="btn-ancestors-report" onclick="window.generateSelectedReport('ancestors')">
+                    3) Ancestors Report 🌳
                 </div>
-                <div class="report-link-item disabled" id="btn-descendants-report">
-                    4) Descendants Report (Coming Soon) 👶
+                <div class="report-link-item" id="btn-descendants-report" onclick="window.generateSelectedReport('descendants')">
+                    4) Descendants Report 👶
                 </div>
             </div>
         </div>
@@ -1012,6 +1044,7 @@
         <div style="display: flex; justify-content: center; gap: 10px;">
             <button class="lang-btn te" onclick="window.setLanguage('te')">Telugu (తెలుగు)</button>
             <button class="lang-btn kn" onclick="window.setLanguage('kn')">Kannada (ಕನ್ನಡ)</button>
+            <button class="lang-btn en" onclick="window.setLanguage('en')" style="background: #607D8B; color: white;">English Script</button>
         </div>
     </div>
 

@@ -461,6 +461,159 @@ function renderSection(title, items, homeId) {
     return h;
 }
 
+function generateAncestorsReport(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 10px;"><img src="logo.png" style="width: 80px; height: auto; border: none;"></div>`;
+    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;">Ancestors Report</h2>`;
+    html += `<p style="color: #666; text-align: center;">Ancestors of: <strong>${p.name}</strong> (${p.id})</p>`;
+
+    let currentGenIds = [];
+    if (p.fid) currentGenIds.push(p.fid);
+    if (p.mid) currentGenIds.push(p.mid);
+
+    let genIndex = 1;
+
+    while (currentGenIds.length > 0) {
+        let genTitle = "";
+        if (genIndex === 1) genTitle = "Parents";
+        else if (genIndex === 2) genTitle = "Grandparents";
+        else if (genIndex === 3) genTitle = "Great-Grandparents";
+        else genTitle = `${"Great-".repeat(genIndex - 2)}Grandparents`;
+
+        html += `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${genTitle}</h3>`;
+        html += `<ul style="list-style-type: disc; padding-left: 25px; margin-top: 5px;">`;
+
+        let nextGenIds = [];
+        
+        currentGenIds.forEach(ancId => {
+            const anc = getPerson(ancId);
+            if (anc) {
+                const g = getGender(ancId);
+                let role = "";
+                if (genIndex === 1) role = (g === 'M' ? "Father" : "Mother");
+                else if (genIndex === 2) role = (g === 'M' ? "Grandfather" : "Grandmother");
+                else {
+                    const greats = "Great-".repeat(genIndex - 2);
+                    role = greats + (g === 'M' ? "Grandfather" : "Grandmother");
+                }
+
+                let displayRole = role;
+                const relObj = getRelationshipCode(id, ancId);
+                if (relObj) {
+                    const dict = window.relationshipDictionary || {};
+                    let extra = "";
+                    if (dict[relObj.code]) {
+                        extra = resolveRelationName(relObj, getPerson(id), anc);
+                    } else {
+                        extra = relObj.code;
+                    }
+                    if (extra) displayRole += ` (${extra})`;
+                }
+
+                html += `<li style="margin-bottom: 4px;">
+                    <strong>${anc.name}</strong> 
+                    <span style="color:#E91E63; font-size:13px;"> — ${displayRole}</span>
+                </li>`;
+
+                if (anc.fid) nextGenIds.push(anc.fid);
+                if (anc.mid) nextGenIds.push(anc.mid);
+            }
+        });
+
+        html += `</ul>`;
+        currentGenIds = nextGenIds;
+        genIndex++;
+        
+        if (genIndex > 20) break; // Safety break
+    }
+
+    if (genIndex === 1) {
+        html += `<p style="text-align:center; margin-top:20px; color:#666;">No ancestors recorded for this person.</p>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+function generateDescendantsReport(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 10px;"><img src="logo.png" style="width: 80px; height: auto; border: none;"></div>`;
+    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;">Descendants Report</h2>`;
+    html += `<p style="color: #666; text-align: center;">Descendants of: <strong>${p.name}</strong> (${p.id})</p>`;
+
+    let currentGenIds = getChildrenIds(id);
+    let genIndex = 1;
+
+    while (currentGenIds.length > 0) {
+        let genTitle = "";
+        if (genIndex === 1) genTitle = "Children";
+        else if (genIndex === 2) genTitle = "Grandchildren";
+        else if (genIndex === 3) genTitle = "Great-Grandchildren";
+        else genTitle = `${"Great-".repeat(genIndex - 2)}Grandchildren`;
+
+        html += `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${genTitle}</h3>`;
+        html += `<ul style="list-style-type: disc; padding-left: 25px; margin-top: 5px;">`;
+
+        let nextGenIds = [];
+        
+        currentGenIds.forEach(descId => {
+            const desc = getPerson(descId);
+            if (desc) {
+                const g = getGender(descId);
+                let role = "";
+                if (genIndex === 1) role = (g === 'M' ? "Son" : (g === 'F' ? "Daughter" : "Child"));
+                else if (genIndex === 2) role = (g === 'M' ? "Grandson" : (g === 'F' ? "Granddaughter" : "Grandchild"));
+                else {
+                    const greats = "Great-".repeat(genIndex - 2);
+                    role = greats + (g === 'M' ? "Grandson" : (g === 'F' ? "Granddaughter" : "Grandchild"));
+                }
+
+                let displayRole = role;
+                const relObj = getRelationshipCode(id, descId);
+                if (relObj) {
+                    const dict = window.relationshipDictionary || {};
+                    let extra = "";
+                    if (dict[relObj.code]) {
+                        extra = resolveRelationName(relObj, getPerson(id), desc);
+                    } else {
+                        extra = relObj.code;
+                    }
+                    if (extra) displayRole += ` (${extra})`;
+                }
+
+                html += `<li style="margin-bottom: 4px;">
+                    <strong>${desc.name}</strong> 
+                    <span style="color:#E91E63; font-size:13px;"> — ${displayRole}</span>
+                </li>`;
+
+                const kids = getChildrenIds(descId);
+                if (kids) nextGenIds.push(...kids);
+            }
+        });
+
+        html += `</ul>`;
+        currentGenIds = nextGenIds;
+        genIndex++;
+        
+        if (genIndex > 20) break; // Safety break
+    }
+
+    if (genIndex === 1) {
+        html += `<p style="text-align:center; margin-top:20px; color:#666;">No descendants recorded for this person.</p>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
 // =================================================================================
 // DIAGRAM GENERATION
 // =================================================================================
@@ -496,10 +649,35 @@ function generateDiagramHTML(id1, id2) {
         }
     }
 
+    // Helper to determine label (Name or Code) for the diagram node
+    const getDiagramLabel = (targetId) => {
+        const r = getRelationshipCode(id1, targetId);
+        if (!r) return "";
+        if (r.code === 'SELF') return "Self";
+        
+        const dict = window.relationshipDictionary || {};
+        // If in dictionary (e.g. Uncle) or simple 1-char code (F, M), use full name
+        if (dict[r.code] || r.code.length <= 1) {
+            return resolveRelationName(r, p1, getPerson(targetId));
+        }
+        
+        // Otherwise use the Code (e.g. FFZDSW) to save space in the box
+        return r.code;
+    };
+
     // Helper to render a single node card
     const renderNode = (id, roleLabel) => {
         const p = getPerson(id);
         
+        // Format Name: SRIKANTH DHARMAVARAM -> SRIKANTH.D
+        let displayName = p.name || "";
+        const parts = displayName.trim().split(/\s+/);
+        if (parts.length > 1) {
+            const firstName = parts.slice(0, -1).join(" ");
+            const lastInitial = parts[parts.length - 1].charAt(0);
+            displayName = `${firstName}.${lastInitial}`;
+        }
+
         let mediaHtml = '';
         if (p.image_url) {
             mediaHtml = `<img src="${p.image_url}">`;
@@ -520,7 +698,7 @@ function generateDiagramHTML(id1, id2) {
                 <div class="ca-node">
                     ${displayRole ? `<div class="ca-node-role">${displayRole}</div>` : ''}
                     ${mediaHtml}
-                    <div class="ca-node-name">${p.name}</div>
+                    <div class="ca-node-name">${displayName}</div>
                     <div class="ca-node-id">${p.id}</div>
                 </div>
             </div>`;
@@ -547,12 +725,12 @@ function generateDiagramHTML(id1, id2) {
 
         // Left Side (Sibling 1 + Descendants)
         html += `<div class="ca-sibling-side">`;
-        html += renderNode(sib1Id, findRelationship(id1, sib1Id)); // Label relative to Start
+        html += renderNode(sib1Id, getDiagramLabel(sib1Id)); // Label relative to Start
         if (leftNodes.length > 0) {
             html += `<div class="ca-single-col">`;
             let parentId = sib1Id;
             leftNodes.forEach(nodeId => {
-                html += renderNode(nodeId, findRelationship(id1, nodeId));
+                html += renderNode(nodeId, getDiagramLabel(nodeId));
                 parentId = nodeId;
             });
             html += `</div>`;
@@ -561,12 +739,12 @@ function generateDiagramHTML(id1, id2) {
 
         // Right Side (Sibling 2 + Descendants)
         html += `<div class="ca-sibling-side">`;
-        html += renderNode(sib2Id, findRelationship(id1, sib2Id)); // Label relative to Start (or End?) - usually Start is "You"
+        html += renderNode(sib2Id, getDiagramLabel(sib2Id)); // Label relative to Start
         if (rightNodes.length > 0) {
             html += `<div class="ca-single-col">`;
             let parentId = sib2Id;
             rightNodes.forEach(nodeId => {
-                html += renderNode(nodeId, findRelationship(id1, nodeId));
+                html += renderNode(nodeId, getDiagramLabel(nodeId));
                 parentId = nodeId;
             });
             html += `</div>`;
@@ -623,7 +801,7 @@ function generateDiagramHTML(id1, id2) {
 
     // Render Pivot
     html += `<div class="ca-pivot-wrapper">
-                ${renderNode(pivotId, findRelationship(id1, pivotId))}
+                ${renderNode(pivotId, getDiagramLabel(pivotId))}
              </div>`;
 
     // Render Branches Container
@@ -639,7 +817,7 @@ function generateDiagramHTML(id1, id2) {
         // For leftNodes[0], parent is Pivot.
         let parentId = pivotId;
         leftNodes.forEach(nodeId => {
-            html += renderNode(nodeId, findRelationship(id1, nodeId));
+            html += renderNode(nodeId, getDiagramLabel(nodeId));
             parentId = nodeId;
         });
         html += `</div>`;
@@ -653,7 +831,7 @@ function generateDiagramHTML(id1, id2) {
         
         let parentId = pivotId;
         rightNodes.forEach(nodeId => {
-            html += renderNode(nodeId, findRelationship(id1, nodeId));
+            html += renderNode(nodeId, getDiagramLabel(nodeId));
             parentId = nodeId;
         });
         html += `</div>`;
@@ -669,6 +847,19 @@ function generateDiagramHTML(id1, id2) {
     html += `<div style="text-align:center; margin-top:30px; font-size:18px; color:#333; padding: 15px; background: #f9f9f9; border-radius: 8px;">
                 <strong>${p2.name}</strong> is your <strong>${finalRel}</strong>
                 <div style="margin-top: 8px; font-size: 12px; color: #999; font-family: monospace;">Code: ${result.code}</div>
+             </div>`;
+
+    // Legend for Abbreviations
+    html += `<div style="margin-top: 20px; padding: 15px; border-top: 1px solid #eee; font-size: 13px; color: #666; text-align: center; background: #fff;">
+                <strong>Relationship Codes:</strong><br>
+                <span style="display:inline-block; margin: 2px 5px;">M = Mother</span>
+                <span style="display:inline-block; margin: 2px 5px;">F = Father</span>
+                <span style="display:inline-block; margin: 2px 5px;">B = Brother</span>
+                <span style="display:inline-block; margin: 2px 5px;">Z = Sister</span><br>
+                <span style="display:inline-block; margin: 2px 5px;">S = Son</span>
+                <span style="display:inline-block; margin: 2px 5px;">D = Daughter</span>
+                <span style="display:inline-block; margin: 2px 5px;">W = Wife</span>
+                <span style="display:inline-block; margin: 2px 5px;">H = Husband</span>
              </div>`;
 
     html += `</div>`;
@@ -735,17 +926,17 @@ function getSiblingTerm(homeId, siblingId) {
     
     if (unknownAge) {
         return sibGender === 'M' 
-            ? getTerm({ te: "అన్న/తమ్ముడు", kn: "ಅಣ್ಣ/ತಮ್ಮ" }) 
-            : getTerm({ te: "అక్క/చెల్లి", kn: "ಅಕ್ಕ/ತಂಗಿ" });
+            ? getTerm({ te: "అన్న/తమ్ముడు", kn: "ಅಣ್ಣ/ತಮ್ಮ", en: "Anna/Tamma" }) 
+            : getTerm({ te: "అక్క/చెల్లి", kn: "ಅಕ್ಕ/ತಂಗಿ", en: "Akka/Tangi" });
     }
     
     if (sibGender === 'M') return isElder 
-        ? getTerm({ te: "అన్న", kn: "ಅಣ್ಣ" }) 
-        : getTerm({ te: "తమ్ముడు", kn: "ತಮ್ಮ" });
+        ? getTerm({ te: "అన్న", kn: "ಅಣ್ಣ", en: "Anna" }) 
+        : getTerm({ te: "తమ్ముడు", kn: "ತಮ್ಮ", en: "Tamma" });
         
     return isElder 
-        ? getTerm({ te: "అక్క", kn: "ಅಕ್ಕ" }) 
-        : getTerm({ te: "చెల్లి", kn: "ತಂಗಿ" });
+        ? getTerm({ te: "అక్క", kn: "ಅಕ್ಕ", en: "Akka" }) 
+        : getTerm({ te: "చెల్లి", kn: "ತಂಗಿ", en: "Tangi" });
 }
 
 function renderComplexSection(title, groups, homeId) {

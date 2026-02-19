@@ -1527,6 +1527,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (reportType === 'close-family') {
             showRelationshipReport(reportSelectedPersonId);
+        } else if (reportType === 'ancestors') {
+            showAncestorsReport(reportSelectedPersonId);
+        } else if (reportType === 'descendants') {
+            showDescendantsReport(reportSelectedPersonId);
         }
     };
 
@@ -1557,6 +1561,52 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Report Generation Error:", e);
             content.innerHTML = `<p style="color:red; padding:20px; text-align:center;">An error occurred while generating the report:<br>${e.message}</p>`;
             page.style.display = 'flex';
+        }
+    };
+
+    window.showAncestorsReport = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateAncestorsReport !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateAncestorsReport(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} ANCESTORS REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
+        }
+    };
+
+    window.showDescendantsReport = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateDescendantsReport !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateDescendantsReport(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} DESCENDANTS REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
         }
     };
 
@@ -2029,5 +2079,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update Language Display on Load
     const lang = localStorage.getItem('relation_language') || 'te';
     const langDisplay = document.getElementById('lang-display');
-    if(langDisplay) langDisplay.textContent = lang === 'te' ? "Telugu" : "Kannada";
+    if(langDisplay) {
+        if (lang === 'te') langDisplay.textContent = "Telugu";
+        else if (lang === 'kn') langDisplay.textContent = "Kannada";
+        else if (lang === 'en') langDisplay.textContent = "Eng Script";
+        else langDisplay.textContent = "Telugu";
+    }
 });
