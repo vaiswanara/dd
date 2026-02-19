@@ -6,7 +6,7 @@
 console.log("relationship.js loaded");
 
 // --- Language Configuration ---
-window.RELATION_LANGUAGE = localStorage.getItem('relation_language') || 'te';
+window.RELATION_LANGUAGE = localStorage.getItem('relation_language') || 'kn';
 
 function getTerm(entryValue) {
     if (!entryValue) return "";
@@ -214,7 +214,7 @@ function resolveRelationName(result, homePerson, targetPerson) {
     const entry = dict[code];
 
     // If no exact match in dictionary, return the code itself
-    if (!entry) return expandCode(code);
+    if (!entry) return code;
 
     // 1. Direct Name
     if (entry.name) return getTerm(entry.name);
@@ -296,17 +296,43 @@ function resolveRelationName(result, homePerson, targetPerson) {
  * Returns 'older', 'younger', or null.
  */
 function compareAge(p1, p2) {
-    if (!p1 || !p2 || !p1.Birth || !p2.Birth) return null;
+    // 1. Try Date-based comparison first
+    if (p1 && p2 && p1.Birth && p2.Birth) {
+        const d1 = parseDate(p1.Birth);
+        const d2 = parseDate(p2.Birth);
+        
+        if (d1 && d2) {
+            // Earlier birth date = Older person
+            if (d1 < d2) return 'older';
+            if (d1 > d2) return 'younger';
+            return 'same';
+        }
+    }
     
-    const d1 = parseDate(p1.Birth);
-    const d2 = parseDate(p2.Birth);
-    
-    if (!d1 || !d2) return null;
-    
-    // Earlier birth date = Older person
-    if (d1 < d2) return 'older';
-    if (d1 > d2) return 'younger';
-    return 'same';
+    // 2. Fallback: ID-based comparison
+    // Logic: Lower ID number implies entered earlier -> Elder
+    if (p1 && p2 && p1.id && p2.id) {
+        const getNum = (id) => {
+            const match = String(id).match(/(\d+)/);
+            return match ? parseInt(match[0], 10) : null;
+        };
+
+        const n1 = getNum(p1.id);
+        const n2 = getNum(p2.id);
+
+        if (n1 !== null && n2 !== null) {
+            if (n1 < n2) return 'older';
+            if (n1 > n2) return 'younger';
+            return 'same';
+        }
+        
+        // Fallback to string comparison
+        if (p1.id < p2.id) return 'older';
+        if (p1.id > p2.id) return 'younger';
+        return 'same';
+    }
+
+    return null;
 }
 
 // --- Main Entry Point ---

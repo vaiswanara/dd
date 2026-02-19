@@ -250,10 +250,47 @@ document.addEventListener('DOMContentLoaded', () => {
             if (person.mid) addChild(person.mid, person.id);
         });
 
-        // After populating, sort all children arrays by person ID to ensure consistent order.
+        // Helper to parse date for sorting (returns timestamp or null)
+        const parseSortDate = (dateStr) => {
+            if (!dateStr || !String(dateStr).trim()) return null;
+            const parts = String(dateStr).trim().split('-');
+            if (parts.length !== 3) return null;
+            const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+            const day = parseInt(parts[0], 10);
+            const monthKey = parts[1].toUpperCase().slice(0, 3);
+            const month = months[monthKey];
+            let year = parseInt(parts[2], 10);
+            
+            if (month === undefined || isNaN(day) || isNaN(year)) return null;
+            
+            // Handle 2-digit years consistent with other app logic
+            if (year < 100) {
+                const currentYear = new Date().getFullYear() % 100;
+                const pivot = currentYear + 10;
+                year = year > pivot ? 1900 + year : 2000 + year;
+            }
+            return new Date(year, month, day).getTime();
+        };
+
+        // After populating, sort all children arrays.
         for (const children of childrenMap.values()) {
-            // Default string sort is sufficient for IDs like "I0112", "I0113", etc.
+            // 1. Default sort by ID (stable baseline)
             children.sort();
+
+            // 2. Check if ALL children in this group have a valid birth date
+            const allHaveBirth = children.every(childId => {
+                const p = peopleMap.get(childId);
+                return p && p.Birth && parseSortDate(p.Birth) !== null;
+            });
+
+            // 3. If all have birth dates, sort by age (older first -> earlier date first)
+            if (allHaveBirth) {
+                children.sort((a, b) => {
+                    const dateA = parseSortDate(peopleMap.get(a).Birth);
+                    const dateB = parseSortDate(peopleMap.get(b).Birth);
+                    return dateA - dateB;
+                });
+            }
         }
 
         // --- Infer Genders ---
@@ -307,12 +344,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const cfg = mobile
             ? {
                 width: 240, height: 180, cx: 120, cy: 64, radius: 61,
-                initialsSize: 42, initialsY: 78, nameSize: 19, nameY: 160,
+                initialsSize: 42, initialsY: 78, nameSize: 19, nameY: 145,
+                relSize: 14, relY: 165,
                 nameWidth: 228, imgSize: 122, imgX: 59, imgY: 3
             }
             : {
                 width: 180, height: 120, cx: 90, cy: 40, radius: 35,
-                initialsSize: 24, initialsY: 48, nameSize: 11, nameY: 96,
+                initialsSize: 24, initialsY: 48, nameSize: 11, nameY: 88,
+                relSize: 9, relY: 102,
                 nameWidth: 170, imgSize: 70, imgX: 55, imgY: 5
             };
 
@@ -330,6 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `<text style="font-size: ${cfg.nameSize}px; font-weight: 600; fill: #000000; stroke: none;" fill="#000000" x="${cfg.cx}" y="${cfg.nameY}" text-anchor="middle" pointer-events="none" data-width="${cfg.nameWidth}">{val}</text>`;
         FamilyTree.templates.circle.img_0 =
             `<clipPath id="clip_id_{rand}"><circle cx="${cfg.cx}" cy="${cfg.cy}" r="${cfg.radius}"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#clip_id_{rand})" xlink:href="{val}" x="${cfg.imgX}" y="${cfg.imgY}" width="${cfg.imgSize}" height="${cfg.imgSize}"></image><circle cx="${cfg.cx}" cy="${cfg.cy}" r="${cfg.radius}" fill="none" stroke="#4A90E2" stroke-width="2"></circle>`;
+        FamilyTree.templates.circle.field_2 =
+            `<text style="font-size: ${cfg.relSize}px; fill: #E91E63; stroke: none;" fill="#E91E63" x="${cfg.cx}" y="${cfg.relY}" text-anchor="middle" pointer-events="none">{val}</text>`;
         // New field for gender icons
         FamilyTree.templates.circle.gender_icon = `<foreignObject x="${iconX}" y="${iconY}" width="${iconSize}" height="${iconSize}">{val}</foreignObject>`;
     }
@@ -384,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // that is not present in the current dataset. We must filter them out.
         const nodes = Array.from(familySet.values());
         const nodeIds = new Set(nodes.map(n => n.id));
+        const homeId = getHomePersonId();
 
         return nodes.map(node => {
             // We are modifying the clones created in addNode, so this is safe.
@@ -431,6 +473,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const firstNameFull = parts.slice(0, -1).join(" ");
                 const surnameInitial = parts[parts.length - 1].charAt(0).toUpperCase();
                 node._label = `${firstNameFull}.${surnameInitial}`;
+            }
+
+            node._relation = "";
+            if (homeId && typeof findRelationship === 'function') {
+                if (node.id === homeId) {
+                    node._relation = "ME";
+                } else {
+                    const rel = findRelationship(homeId, node.id);
+                    if (rel && rel !== "Unknown") {
+                        node._relation = `(${rel})`;
+                    }
+                }
             }
 
             return node;
@@ -921,6 +975,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Bind to precomputed fields to avoid callback incompatibilities.
                 field_0: "_initials",
                 field_1: "_label",
+                field_2: "_relation",
                 img_0: "image_url",
                 gender_icon: "gender_icon_svg"
             },
@@ -1253,6 +1308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = document.getElementById('birthdays-content');
         if (!page || !content) return;
 
+        const homeId = getHomePersonId();
         const list = getUpcomingBirthdays(30);
         if (list.length === 0) {
             content.innerHTML = '<p style="color:#666; text-align:center; padding: 20px;">No upcoming birthdays found.</p>';
@@ -1260,11 +1316,25 @@ document.addEventListener('DOMContentLoaded', () => {
             content.innerHTML = list.map(entry => {
                 const namesHtml = entry.persons.map(p => {
                     const ageStr = p.ageAtDisplay != null ? ` (${p.ageAtDisplay})` : '';
+                    
+                    let relationHtml = '';
+                    if (homeId && typeof findRelationship === 'function') {
+                        if (p.id === homeId) {
+                            relationHtml = `<div style="font-size: 13px; color: #E91E63; margin-top: 2px;">You (Home)</div>`;
+                        } else {
+                            const rel = findRelationship(homeId, p.id);
+                            if (rel && rel !== "Unknown") {
+                                relationHtml = `<div style="font-size: 13px; color: #E91E63; margin-top: 2px;">${rel}</div>`;
+                            }
+                        }
+                    }
+
                     const phoneHtml = p.phone
                         ? `<div class="birthday-phone"><a href="${getWhatsAppUrl(p.phone)}" target="_blank" rel="noopener" class="birthday-whatsapp-link" title="Open WhatsApp">${p.phone}</a></div>`
                         : '';
                     return `<div class="birthday-person-block">
                         <div class="birthday-name"><a href="#" data-person-id="${p.id}">${p.name}${ageStr}</a></div>
+                        ${relationHtml}
                         ${phoneHtml}
                     </div>`;
                 }).join('');
@@ -2077,12 +2147,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Update Language Display on Load
-    const lang = localStorage.getItem('relation_language') || 'te';
+    const lang = localStorage.getItem('relation_language') || 'kn';
     const langDisplay = document.getElementById('lang-display');
     if(langDisplay) {
         if (lang === 'te') langDisplay.textContent = "Telugu";
         else if (lang === 'kn') langDisplay.textContent = "Kannada";
         else if (lang === 'en') langDisplay.textContent = "Eng Script";
-        else langDisplay.textContent = "Telugu";
+        else langDisplay.textContent = "Kannada";
     }
 });
