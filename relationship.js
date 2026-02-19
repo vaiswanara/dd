@@ -706,6 +706,7 @@ function generateDiagramHTML(id1, id2) {
 
     let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
     html += `<div style="text-align: center; margin-bottom: 20px;">
+                <img src="logo.png" alt="Logo" style="width: 80px; height: auto; border: none; margin-bottom: 10px; display: inline-block;">
                 <h2 style="color: #4A90E2; margin:0;">Relationship Diagram</h2>
                 <p style="color: #666;">${p1.name} ➡ ${p2.name}</p>
              </div>`;
