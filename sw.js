@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v6.0.3';
+const CACHE_NAME = 'family-tree-cache-v6.0.4';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
@@ -42,10 +42,17 @@ self.addEventListener('install', event => {
                 console.log('[Service Worker] Caching app shell');
                 await cache.addAll(URLS_TO_CACHE);
 
-                // Dynamically cache data files defined in config.json
+                // Dynamically cache data files defined in config.json.
+                // We fetch with a timestamp to ensure we get the LATEST config (bypassing HTTP cache),
+                // but we store it as './config.json' so the app finds it offline.
                 try {
-                    const response = await fetch('./config.json');
-                    const config = await response.json();
+                    const configReq = new Request(`./config.json?t=${Date.now()}`);
+                    const response = await fetch(configReq);
+                    const config = await response.clone().json(); // Clone because we read body twice (json + put)
+                    
+                    // Store the fresh config in cache using the standard key
+                    await cache.put('./config.json', response);
+
                     const dataFiles = [
                         config.data_files.persons,
                         config.data_files.families,

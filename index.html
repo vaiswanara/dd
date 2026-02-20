@@ -542,14 +542,14 @@
             <li><a href="#" id="nav-dashboard" class="active" onclick="window.showDashboard(); closeSidebar();">🏠 Dashboard</a></li>
             <li><a href="#" id="nav-tree" onclick="window.showTreePage(); closeSidebar();">🌳 FAMILY TREE</a></li>
             <li><a href="#" onclick="window.toggleLanguage(); closeSidebar();">🌐 Language: <span id="lang-display">TEL</span></a></li>
-            <li><a href="#" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
-            <li><a href="#" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
-            <li><a href="#" onclick="window.showReportsPage(); closeSidebar();">📊 REPORTS</a></li>
-            <li><a href="#" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
-            <li><a href="#" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
+            <li><a href="#" id="nav-updates" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
+            <li><a href="#" id="nav-birthdays" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
+            <li><a href="#" id="nav-reports" onclick="window.showReportsPage(); closeSidebar();">📊 REPORTS</a></li>
+            <li><a href="#" id="nav-update-data" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
+            <li><a href="#" id="nav-help" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
-            <li><a href="#" onclick="window.showAboutPage(); closeSidebar();">ℹ️ ABOUT</a></li>
-            <li><a href="#" onclick="window.showFeedbackPage(); closeSidebar();">💬 FEEDBACK</a></li>
+            <li><a href="#" id="nav-about" onclick="window.showAboutPage(); closeSidebar();">ℹ️ ABOUT</a></li>
+            <li><a href="#" id="nav-feedback" onclick="window.showFeedbackPage(); closeSidebar();">💬 FEEDBACK</a></li>
         </ul>
     </nav>
 
@@ -563,8 +563,8 @@
                 <span class="toggle-btn" onclick="toggleSidebar()">&#9776;</span>
             </div>
             <div id="dashboard-header-title" style="display: none; flex: 1; text-align: center;">
-                <h2 style="margin: 0; font-size: 23px; color: var(--primary-color); letter-spacing: 0.5px;">VAMSHA VRUKSHA</h2>
-                <p style="margin: 2px 0 0; font-size: 14px; color: #777; font-weight: 500;">HARE SRINIVASA</p>
+                <h2 style="margin: 0; font-size: 26px; color: var(--primary-color); letter-spacing: 0.5px;">VAMSHA VRUKSHA</h2>
+                
             </div>
             <div class="search-wrapper">
                 <!-- Home button is injected here by app.js -->
@@ -576,7 +576,7 @@
         <!-- Dashboard Page -->
         <div id="dashboard-page">
             <!-- 1. Namaste Card (Moved to Top) -->
-            <div class="namaste-card">
+            <div class="namaste-card" id="dashboard-family-card">
                 <h1 id="dashboard-main-title">FAMILY TREE</h1>
             </div>
 
@@ -609,12 +609,12 @@
 
             <!-- Family Info Section -->
             <div class="stats-grid">
-                <div class="stat-card" onclick="window.showTreePage()">
+                <div class="stat-card" id="dash-card-tree" onclick="window.showTreePage()">
                     <div class="stat-icon">👥</div>
                     <div class="stat-value" id="stat-total-members">-</div>
                     <div class="stat-label">Total Members</div>
                 </div>
-                <div class="stat-card" onclick="window.showBirthdays()">
+                <div class="stat-card" id="dash-card-birthdays" onclick="window.showBirthdays()">
                     <div class="stat-icon">🎂</div>
                     <div class="stat-value" id="stat-upcoming-birthdays">-</div>
                     <div class="stat-label">Upcoming Birthdays</div>
@@ -624,12 +624,12 @@
                     <div class="stat-value">Find</div>
                     <div class="stat-label">Search Member</div>
                 </div>
-                <div class="stat-card" onclick="window.showReportsPage()">
+                <div class="stat-card" id="dash-card-reports" onclick="window.showReportsPage()">
                     <div class="stat-icon">📊</div>
                     <div class="stat-value">Reports</div>
                     <div class="stat-label">View Reports</div>
                 </div>
-                <div class="stat-card" onclick="window.showFormPage()">
+                <div class="stat-card" id="dash-card-update-data" onclick="window.showFormPage()">
                     <div class="stat-icon">📝</div>
                     <div class="stat-value">Add</div>
                     <div class="stat-label">Update Data</div>

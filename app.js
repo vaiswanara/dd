@@ -304,12 +304,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper to parse date for sorting (returns timestamp or null)
         const parseSortDate = (dateStr) => {
             if (!dateStr || !String(dateStr).trim()) return null;
-            const parts = String(dateStr).trim().split('-');
+            // Handle separators -, /, ., or space
+            const parts = String(dateStr).trim().split(/[\-\/\.\s]+/);
             if (parts.length !== 3) return null;
             const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
             const day = parseInt(parts[0], 10);
-            const monthKey = parts[1].toUpperCase().slice(0, 3);
-            const month = months[monthKey];
+            const p1 = parts[1].toUpperCase().slice(0, 3);
+            let month = months[p1];
+            
+            // Fallback for numeric month (e.g. 01, 12)
+            if (month === undefined) {
+                const mVal = parseInt(parts[1], 10);
+                if (!isNaN(mVal) && mVal >= 1 && mVal <= 12) month = mVal - 1;
+            }
+            
             let year = parseInt(parts[2], 10);
             
             if (month === undefined || isNaN(day) || isNaN(year)) return null;
@@ -328,20 +336,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1. Default sort by ID (stable baseline)
             children.sort();
 
-            // 2. Check if ALL children in this group have a valid birth date
-            const allHaveBirth = children.every(childId => {
-                const p = peopleMap.get(childId);
-                return p && p.Birth && parseSortDate(p.Birth) !== null;
-            });
+            // 2. Sort by age (older first -> earlier date first)
+            children.sort((a, b) => {
+                const pA = peopleMap.get(a);
+                const pB = peopleMap.get(b);
+                
+                const dateA = pA && pA.Birth ? parseSortDate(pA.Birth) : null;
+                const dateB = pB && pB.Birth ? parseSortDate(pB.Birth) : null;
 
-            // 3. If all have birth dates, sort by age (older first -> earlier date first)
-            if (allHaveBirth) {
-                children.sort((a, b) => {
-                    const dateA = parseSortDate(peopleMap.get(a).Birth);
-                    const dateB = parseSortDate(peopleMap.get(b).Birth);
-                    return dateA - dateB;
-                });
-            }
+                if (dateA !== null && dateB !== null) return dateA - dateB;
+                if (dateA !== null) return -1; // Has date -> comes first
+                if (dateB !== null) return 1;  // Has date -> comes first
+                return 0;
+            });
         }
 
         // --- Infer Genders ---
@@ -674,6 +681,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const dayEntry = { date: d, dateStr, weekday, persons: [] };
 
             PEOPLE.forEach(p => {
+                if (p.deceased) return;
+                if (p.birth_date_type !== 'exact') return;
+
                 const md = getMonthDayFromBirth(p.Birth || '');
                 if (!md || md.month !== month || md.day !== day) return;
                 const birthYear = getBirthYearFromBirth(p.Birth || '');
@@ -682,7 +692,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: p.id,
                     name: (p.name || '').trim() || 'Unknown',
                     phone: (p.phone || '').trim(),
-                    ageAtDisplay: ageAtDisplay != null && ageAtDisplay >= 0 && ageAtDisplay <= 150 ? ageAtDisplay : null
+                    ageAtDisplay: ageAtDisplay != null && ageAtDisplay >= 0 && ageAtDisplay <= 150 ? ageAtDisplay : null,
+                    jyotisha: p.jyotisha
                 });
             });
 
@@ -1681,6 +1692,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const namesHtml = entry.persons.map(p => {
                     const ageStr = p.ageAtDisplay != null ? ` (${p.ageAtDisplay})` : '';
                     
+                    let jyotishaHtml = '';
+                    if (p.jyotisha) {
+                        const parts = [];
+                        if (p.jyotisha.gothra) parts.push(p.jyotisha.gothra);
+                        if (p.jyotisha.nakshatra) parts.push(p.jyotisha.nakshatra);
+                        if (p.jyotisha.rashi) parts.push(p.jyotisha.rashi);
+                        if (parts.length > 0) {
+                            jyotishaHtml = `<div style="font-size: 12px; color: #666; margin-top: 2px;">${parts.join(' - ')}</div>`;
+                        }
+                    }
+
                     let relationHtml = '';
                     if (homeId && typeof findRelationship === 'function') {
                         if (p.id === homeId) {
@@ -1698,6 +1720,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         : '';
                     return `<div class="birthday-person-block">
                         <div class="birthday-name"><a href="#" data-person-id="${p.id}">${p.name}${ageStr}</a></div>
+                        ${jyotishaHtml}
                         ${relationHtml}
                         ${phoneHtml}
                     </div>`;
@@ -2187,37 +2210,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userRowEl) userRowEl.style.display = 'block';
 
             if (dashTitleEl) {
-                const storedHomeId = localStorage.getItem('familyTreeHomeId');
-                if (storedHomeId) {
-                    const parts = (p.name || '').trim().split(/\s+/);
-                    const surname = parts.length > 0 ? parts[parts.length - 1] : '';
-                    if (surname) {
-                        const titleText = `${surname.toUpperCase()} FAMILY TREE`;
-                        dashTitleEl.textContent = titleText;
+                const surname = p.surname || '';
+                const cardEl = document.getElementById('dashboard-family-card');
+                
+                if (surname) {
+                    if (cardEl) cardEl.style.display = 'block';
+                    const titleText = surname.toUpperCase() + " FAMILY";
+                    dashTitleEl.textContent = titleText;
 
-                        // Dynamic resizing to fit single line
-                        dashTitleEl.style.whiteSpace = 'nowrap';
-                        dashTitleEl.style.overflow = 'hidden';
-                        dashTitleEl.style.textOverflow = 'ellipsis';
-                        dashTitleEl.style.maxWidth = '100%';
-                        dashTitleEl.style.display = 'block';
+                    // Dynamic resizing to fit single line
+                    dashTitleEl.style.whiteSpace = 'nowrap';
+                    dashTitleEl.style.overflow = 'hidden';
+                    dashTitleEl.style.textOverflow = 'ellipsis';
+                    dashTitleEl.style.maxWidth = '100%';
+                    dashTitleEl.style.display = 'block';
 
-                        // Heuristic: Base 24px fits ~18 chars comfortably on mobile
-                        const len = titleText.length;
-                        const newSize = len > 18 ? Math.max(14, Math.floor(24 * (18 / len))) : 24;
-                        dashTitleEl.style.fontSize = newSize + 'px';
-                        dashTitleEl.style.letterSpacing = len > 18 ? '0px' : '1px';
-                    }
+                    // Heuristic: Base 24px fits ~15 chars comfortably on mobile
+                    const len = titleText.length;
+                    const newSize = len > 15 ? Math.max(10, Math.floor(24 * (15 / len))) : 24;
+                    dashTitleEl.style.fontSize = newSize + 'px';
+                    dashTitleEl.style.letterSpacing = len > 15 ? '0px' : '1px';
                 } else {
-                    dashTitleEl.textContent = "FAMILY TREE";
-                    // Reset dynamic styles
-                    dashTitleEl.style.whiteSpace = '';
-                    dashTitleEl.style.overflow = '';
-                    dashTitleEl.style.textOverflow = '';
-                    dashTitleEl.style.maxWidth = '';
-                    dashTitleEl.style.display = '';
-                    dashTitleEl.style.fontSize = '';
-                    dashTitleEl.style.letterSpacing = '';
+                    if (cardEl) cardEl.style.display = 'none';
+                    dashTitleEl.style.display = 'none';
                 }
             }
         }
@@ -2312,6 +2327,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Date(year, months[monthStr], day);
     }
 
+    function applyFeatureVisibility() {
+        if (!APP_CONFIG || !APP_CONFIG.features) {
+            console.log("Config features not found, showing all defaults.");
+            return;
+        }
+        const f = APP_CONFIG.features;
+        const setVisible = (id, visible) => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = visible ? '' : 'none';
+        };
+
+        // Sidebar Items
+        setVisible('nav-dashboard', f.dashboard !== false);
+        setVisible('nav-tree', f.tree !== false);
+        setVisible('nav-birthdays', f.birthdays !== false);
+        setVisible('nav-updates', f.updates !== false);
+        setVisible('nav-reports', f.reports !== false);
+        setVisible('nav-install', f.install !== false);
+        setVisible('nav-help', f.help !== false);
+        setVisible('nav-about', f.about !== false);
+        setVisible('nav-feedback', f.feedback !== false);
+        setVisible('nav-update-data', f.update_data !== false);
+
+        // Dashboard Items (Cards/Buttons)
+        setVisible('dash-card-birthdays', f.birthdays !== false);
+        setVisible('dash-card-updates', f.updates !== false);
+        setVisible('dash-card-reports', f.reports !== false);
+        setVisible('dash-card-tree', f.tree !== false);
+        setVisible('dash-card-update-data', f.update_data !== false);
+    }
+
     // =================================================================================
     // SECTION 5.10: LINEAGE BAR LOGIC
     // =================================================================================
@@ -2386,6 +2432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadNewDatabase() {
         console.log("Loading configuration...");
         APP_CONFIG = await (await fetch(toAppPath('config.json'))).json();
+        applyFeatureVisibility();
 
         console.log("Loading data from new database format...");
         const [personsRes, familiesRes, placesRes, contactsRes, dictRes] = await Promise.all([
@@ -2447,10 +2494,12 @@ document.addEventListener('DOMContentLoaded', () => {
             newPeopleMap.set(p.person_id, {
                 id: p.person_id,
                 name: fullName,
+                surname: surname,
                 fid: "",
                 mid: "",
                 pids: [],
                 Birth: p.birth_date || "",
+                birth_date_type: p.birth_date_type || "",
                 Death: p.death_date || "",
                 deceased: isDeceased,
                 death_date: p.death_date || "",
@@ -2523,8 +2572,13 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Populate Dashboard Data
                 updateDashboard();
-                // Show Dashboard by default
-                window.showDashboard();
+                
+                // Show Dashboard by default unless disabled in config
+                if (APP_CONFIG && APP_CONFIG.features && APP_CONFIG.features.dashboard === false) {
+                    window.showTreePage();
+                } else {
+                    window.showDashboard();
+                }
 
                 const initialPersonId = getHomePersonId();
                 console.log("Initializing tree with person ID:", initialPersonId);

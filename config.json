@@ -9,6 +9,18 @@
     "manifest": "manifest.json",
     "photos": "json_data/photos.json",
     "updates": "updates.json",
-    "relationshipDictionary": "json_data/relationshipDictionary.json"
+    "relationshipDictionary": "relationshipDictionary.json"
+  },
+  "features": {
+    "dashboard": true,
+    "tree": true,
+    "birthdays": true,
+    "updates": true,
+    "reports": true,
+    "install": true,
+    "help": true,
+    "about": true,
+    "feedback": true,
+    "update_data": true
   }
 }
