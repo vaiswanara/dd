@@ -925,9 +925,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 rows.push(rowHtml("Date of Death", deathFormatted));
             }
         }
+
+        if (p.jyotisha) {
+            if (p.jyotisha.gothra) {
+                rows.push(rowHtml("Gothra", p.jyotisha.gothra));
+            }
+            if (p.jyotisha.nakshatra || p.jyotisha.rashi) {
+                const parts = [];
+                if (p.jyotisha.nakshatra) parts.push(p.jyotisha.nakshatra);
+                if (p.jyotisha.rashi) parts.push(p.jyotisha.rashi);
+                if (parts.length > 0) {
+                    rows.push(rowHtml("Jyotisha", parts.join(" - ")));
+                }
+            }
+        }
+
+        rows.push(rowHtml("Parents", collectNames(parents)));
+        rows.push(rowHtml("Spouse(s)", collectNames(spouses)));
+
+        if (p.divorces && Array.isArray(p.divorces) && p.divorces.length > 0) {
+            const divIds = p.divorces.map(d => d.spouse_id).filter(id => id);
+            if (divIds.length > 0) {
+                rows.push(rowHtml("Divorced", collectNames(divIds)));
+            }
+        }
+
         rows.push(
-            rowHtml("Parents", collectNames(parents)),
-            rowHtml("Spouse(s)", collectNames(spouses)),
             rowHtml("Children", collectNames(children)),
             rowHtml("Siblings", collectNames(siblings)),
             rowHtml("Address", p.Address || ""),
@@ -2156,11 +2179,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const homeId = getHomePersonId();
         const homeNameEl = document.getElementById('dash-home-name');
         const userRowEl = document.getElementById('dash-user-row');
+        const dashTitleEl = document.getElementById('dashboard-main-title');
         
         if (homeId && peopleMap.has(homeId)) {
             const p = peopleMap.get(homeId);
             if (homeNameEl) homeNameEl.textContent = p.name;
             if (userRowEl) userRowEl.style.display = 'block';
+
+            if (dashTitleEl) {
+                const storedHomeId = localStorage.getItem('familyTreeHomeId');
+                if (storedHomeId) {
+                    const parts = (p.name || '').trim().split(/\s+/);
+                    const surname = parts.length > 0 ? parts[parts.length - 1] : '';
+                    if (surname) {
+                        const titleText = `${surname.toUpperCase()} FAMILY TREE`;
+                        dashTitleEl.textContent = titleText;
+
+                        // Dynamic resizing to fit single line
+                        dashTitleEl.style.whiteSpace = 'nowrap';
+                        dashTitleEl.style.overflow = 'hidden';
+                        dashTitleEl.style.textOverflow = 'ellipsis';
+                        dashTitleEl.style.maxWidth = '100%';
+                        dashTitleEl.style.display = 'block';
+
+                        // Heuristic: Base 24px fits ~18 chars comfortably on mobile
+                        const len = titleText.length;
+                        const newSize = len > 18 ? Math.max(14, Math.floor(24 * (18 / len))) : 24;
+                        dashTitleEl.style.fontSize = newSize + 'px';
+                        dashTitleEl.style.letterSpacing = len > 18 ? '0px' : '1px';
+                    }
+                } else {
+                    dashTitleEl.textContent = "FAMILY TREE";
+                    // Reset dynamic styles
+                    dashTitleEl.style.whiteSpace = '';
+                    dashTitleEl.style.overflow = '';
+                    dashTitleEl.style.textOverflow = '';
+                    dashTitleEl.style.maxWidth = '';
+                    dashTitleEl.style.display = '';
+                    dashTitleEl.style.fontSize = '';
+                    dashTitleEl.style.letterSpacing = '';
+                }
+            }
         }
         
         // Update Lineage Bar for Home Person (default view)
@@ -2400,7 +2459,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 phone: contactInfo.phone || "",
                 note: contactInfo.note || "",
                 custom,
-                image_url: "" // Populated later by photos.json
+                image_url: "", // Populated later by photos.json
+                jyotisha: p.jyotisha || {},
+                divorces: p.divorces || []
             });
         }
 

@@ -664,8 +664,25 @@
                         <input id="admin-birth-date" placeholder="12-Jan-1985">
                     </div>
                     <div class="admin-field">
+                        <label>Birth Date Type</label>
+                        <div class="admin-radio-inline">
+                            <label class="admin-check-inline">
+                                <input id="admin-birth-date-type-exact" name="admin-birth-date-type" type="radio" value="exact" checked>
+                                <span>Exact</span>
+                            </label>
+                            <label class="admin-check-inline">
+                                <input id="admin-birth-date-type-approximate" name="admin-birth-date-type" type="radio" value="approximate">
+                                <span>Approximate</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="admin-field">
                         <label for="admin-birth-place-id">Birth Place ID</label>
                         <input id="admin-birth-place-id" placeholder="P0001">
+                    </div>
+                    <div class="admin-field">
+                        <label for="admin-birth-place-name">Birth Place Name</label>
+                        <input id="admin-birth-place-name" placeholder="Place name">
                     </div>
                     <div class="admin-field admin-field-check">
                         <label for="admin-is-deceased">Status</label>
@@ -718,25 +735,103 @@
             </section>
 
             <section class="admin-section">
-                <h4>Photo</h4>
-                <div class="admin-photo-wrap">
-                    <img id="admin-photo-preview" class="admin-photo-preview" alt="Photo preview">
-                    <div class="admin-photo-meta">
-                        <div><strong>Current Path:</strong> <span id="admin-photo-path">-</span></div>
-                        <div class="admin-note">Expected format: <code>icons/Ixxxx.jpg</code> (or png/webp/jpeg).</div>
+                <details id="admin-jyotisha-details">
+                    <summary class="admin-collapsible-summary">Jyotisha</summary>
+                    <div class="admin-grid" style="margin-top:10px;">
+                        <div class="admin-field">
+                            <label for="admin-jyotisha-gothra">Gothra</label>
+                            <select id="admin-jyotisha-gothra">
+                                <option value="">Select Gothra</option>
+                                <option value="Atri">Atri</option>
+                                <option value="Bharadwaja">Bharadwaja</option>
+                                <option value="Bhrigu">Bhrigu</option>
+                                <option value="Gautama">Gautama</option>
+                                <option value="Harita">Harita</option>
+                                <option value="Jamadagni">Jamadagni</option>
+                                <option value="Kashyapa">Kashyapa</option>
+                                <option value="Kaundinya">Kaundinya</option>
+                                <option value="Vasishta">Vasishta</option>
+                                <option value="Vishwamitra">Vishwamitra</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label for="admin-jyotisha-nakshatra">Nakshatra</label>
+                            <select id="admin-jyotisha-nakshatra">
+                                <option value="">Select Nakshatra</option>
+                                <option value="Ashwini">Ashwini</option>
+                                <option value="Bharani">Bharani</option>
+                                <option value="Krittika">Krittika</option>
+                                <option value="Rohini">Rohini</option>
+                                <option value="Mrigashira">Mrigashira</option>
+                                <option value="Ardra">Ardra</option>
+                                <option value="Punarvasu">Punarvasu</option>
+                                <option value="Pushya">Pushya</option>
+                                <option value="Ashlesha">Ashlesha</option>
+                                <option value="Magha">Magha</option>
+                                <option value="Purva Phalguni">Purva Phalguni</option>
+                                <option value="Uttara Phalguni">Uttara Phalguni</option>
+                                <option value="Hasta">Hasta</option>
+                                <option value="Chitra">Chitra</option>
+                                <option value="Swati">Swati</option>
+                                <option value="Vishakha">Vishakha</option>
+                                <option value="Anuradha">Anuradha</option>
+                                <option value="Jyeshtha">Jyeshtha</option>
+                                <option value="Mula">Mula</option>
+                                <option value="Purva Ashadha">Purva Ashadha</option>
+                                <option value="Uttara Ashadha">Uttara Ashadha</option>
+                                <option value="Shravana">Shravana</option>
+                                <option value="Dhanishta">Dhanishta</option>
+                                <option value="Shatabhisha">Shatabhisha</option>
+                                <option value="Purva Bhadrapada">Purva Bhadrapada</option>
+                                <option value="Uttara Bhadrapada">Uttara Bhadrapada</option>
+                                <option value="Revati">Revati</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label for="admin-jyotisha-rashi">Rashi</label>
+                            <select id="admin-jyotisha-rashi">
+                                <option value="">Select Rashi</option>
+                                <option value="Mesha">Mesha</option>
+                                <option value="Vrishabha">Vrishabha</option>
+                                <option value="Mithuna">Mithuna</option>
+                                <option value="Karka">Karka</option>
+                                <option value="Simha">Simha</option>
+                                <option value="Kanya">Kanya</option>
+                                <option value="Tula">Tula</option>
+                                <option value="Vrischika">Vrischika</option>
+                                <option value="Dhanu">Dhanu</option>
+                                <option value="Makara">Makara</option>
+                                <option value="Kumbha">Kumbha</option>
+                                <option value="Meena">Meena</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="admin-grid-single" style="margin-top:10px;">
-                    <div class="admin-field">
-                        <label for="admin-photo-file">Select New Photo</label>
-                        <input id="admin-photo-file" type="file" accept="image/*">
+                    <div class="admin-note">Stored as <code>jyotisha: { gothra, nakshatra, rashi }</code> in persons.json.</div>
+                </details>
+            </section>
+
+            <section class="admin-section">
+                <details id="admin-photo-details">
+                    <summary class="admin-collapsible-summary">Photo</summary>
+                    <div class="admin-photo-wrap" style="margin-top:10px;">
+                        <img id="admin-photo-preview" class="admin-photo-preview" alt="Photo preview">
+                        <div class="admin-photo-meta">
+                            <div><strong>Current Path:</strong> <span id="admin-photo-path">-</span></div>
+                            <div class="admin-note">Expected format: <code>icons/Ixxxx.jpg</code> (or png/webp/jpeg).</div>
+                        </div>
                     </div>
-                </div>
-                <div class="admin-actions-row">
-                    <button id="admin-photo-apply" class="admin-btn secondary" type="button">Apply Photo Mapping</button>
-                    <button id="admin-photo-download" class="admin-btn muted" type="button">Download Renamed Image</button>
-                    <button id="admin-photo-remove" class="admin-btn warn" type="button">Remove Photo</button>
-                </div>
+                    <div class="admin-grid-single" style="margin-top:10px;">
+                        <div class="admin-field">
+                            <label for="admin-photo-file">Select New Photo</label>
+                            <input id="admin-photo-file" type="file" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="admin-actions-row">
+                        <button id="admin-photo-apply" class="admin-btn secondary" type="button">Apply Photo Mapping</button>
+                        <button id="admin-photo-download" class="admin-btn muted" type="button">Download Renamed Image</button>
+                        <button id="admin-photo-remove" class="admin-btn warn" type="button">Remove Photo</button>
+                    </div>
+                </details>
             </section>
 
             <section class="admin-section">
@@ -777,6 +872,20 @@
                     </div>
                     <button id="admin-add-spouse" class="admin-btn secondary" type="button">Add Spouse</button>
                 </div>
+                <div class="admin-grid" style="margin-top:10px;">
+                    <div class="admin-field">
+                        <label for="admin-divorce-spouse-id">Divorce Spouse ID</label>
+                        <input id="admin-divorce-spouse-id" list="admin-person-list" placeholder="I0010">
+                    </div>
+                    <div class="admin-field">
+                        <label for="admin-divorce-date">Divorce Date (dd-MMM-yyyy, optional)</label>
+                        <input id="admin-divorce-date" placeholder="07-Aug-2021">
+                    </div>
+                </div>
+                <div class="admin-actions-row">
+                    <button id="admin-record-divorce" class="admin-btn warn" type="button">Record Divorce</button>
+                </div>
+                <div id="admin-divorce-history-list" class="admin-chip-list"></div>
             </section>
 
             <section class="admin-section">
@@ -819,6 +928,7 @@
                 <div class="admin-actions-row">
                     <button id="admin-save-person" class="admin-btn primary" type="button">Save Person</button>
                     <button id="admin-refresh-tree" class="admin-btn secondary" type="button">Refresh Tree Now</button>
+                    <button id="admin-discard-changes" class="admin-btn warn" type="button">Discard Changes</button>
                     <button id="admin-export-persons" class="admin-btn muted" type="button">Download persons.json</button>
                     <button id="admin-export-families" class="admin-btn muted" type="button">Download families.json</button>
                     <button id="admin-export-contacts" class="admin-btn muted" type="button">Download contacts.json</button>

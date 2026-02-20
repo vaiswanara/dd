@@ -49,6 +49,75 @@
     return text === 'true' || text === '1' || text === 'yes' || text === 'y';
   }
 
+  function normalizeBirthDateType(value) {
+    const text = String(value || '').trim().toLowerCase();
+    return text === 'approximate' ? 'approximate' : 'exact';
+  }
+
+  function birthDateTypeForSave(birthDate, birthDateType) {
+    const hasBirthDate = !!String(birthDate || '').trim();
+    if (!hasBirthDate) return '';
+    return normalizeBirthDateType(birthDateType);
+  }
+
+  function sanitizeJyotisha(raw) {
+    const src = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+    return {
+      gothra: String(src.gothra || '').trim(),
+      nakshatra: String(src.nakshatra || '').trim(),
+      rashi: String(src.rashi || '').trim()
+    };
+  }
+
+  function sanitizeDivorces(raw) {
+    if (!Array.isArray(raw)) return [];
+    const map = new Map();
+    for (const item of raw) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+      const spouseId = normalizeId(item.spouse_id);
+      if (!spouseId) continue;
+      const divorceDate = String(item.divorce_date || '').trim();
+      map.set(spouseId, { spouse_id: spouseId, divorce_date: divorceDate });
+    }
+    return [...map.values()].sort((a, b) => a.spouse_id.localeCompare(b.spouse_id));
+  }
+
+  function inheritedGothraFromFather(fatherId) {
+    const fid = normalizeId(fatherId);
+    if (!fid) return '';
+    const father = getPerson(fid);
+    if (!father) return '';
+    const fatherJyotisha = sanitizeJyotisha(father.jyotisha || {});
+    return fatherJyotisha.gothra || '';
+  }
+
+  function gothraFromSpouse(spouseId) {
+    const sid = normalizeId(spouseId);
+    if (!sid) return '';
+    const spouse = getPerson(sid);
+    if (!spouse) return '';
+    const spouseJyotisha = sanitizeJyotisha(spouse.jyotisha || {});
+    return spouseJyotisha.gothra || '';
+  }
+
+  function upsertDivorceRecordForPerson(person, spouseId, divorceDate) {
+    if (!person) return;
+    const sid = normalizeId(spouseId);
+    if (!sid) return;
+    const entries = sanitizeDivorces(person.divorces || []);
+    const filtered = entries.filter(x => x.spouse_id !== sid);
+    filtered.push({ spouse_id: sid, divorce_date: String(divorceDate || '').trim() });
+    person.divorces = sanitizeDivorces(filtered);
+  }
+
+  function removeDivorceRecordForPerson(person, spouseId) {
+    if (!person) return;
+    const sid = normalizeId(spouseId);
+    if (!sid) return;
+    const entries = sanitizeDivorces(person.divorces || []).filter(x => x.spouse_id !== sid);
+    person.divorces = entries;
+  }
+
   function sanitizeCustomObject(raw) {
     const out = {};
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
@@ -477,6 +546,75 @@
     els.statusLine.style.color = isError ? '#b91c1c' : '#4b5563';
   }
 
+  function confirmDiscardToast(message) {
+    return new Promise((resolve) => {
+      const existing = qs('admin-confirm-toast');
+      if (existing) existing.remove();
+
+      const wrap = document.createElement('div');
+      wrap.id = 'admin-confirm-toast';
+      wrap.style.position = 'fixed';
+      wrap.style.left = '50%';
+      wrap.style.bottom = '28px';
+      wrap.style.transform = 'translateX(-50%)';
+      wrap.style.background = '#111827';
+      wrap.style.color = '#fff';
+      wrap.style.padding = '12px 14px';
+      wrap.style.borderRadius = '12px';
+      wrap.style.boxShadow = '0 10px 24px rgba(0,0,0,0.28)';
+      wrap.style.zIndex = '8200';
+      wrap.style.minWidth = '280px';
+      wrap.style.maxWidth = '92vw';
+      wrap.style.display = 'flex';
+      wrap.style.flexDirection = 'column';
+      wrap.style.gap = '10px';
+
+      const text = document.createElement('div');
+      text.textContent = message || 'Are you sure?';
+      text.style.fontSize = '13px';
+      text.style.lineHeight = '1.35';
+
+      const actions = document.createElement('div');
+      actions.style.display = 'flex';
+      actions.style.justifyContent = 'flex-end';
+      actions.style.gap = '8px';
+
+      const noBtn = document.createElement('button');
+      noBtn.type = 'button';
+      noBtn.textContent = 'No';
+      noBtn.style.border = '1px solid #4b5563';
+      noBtn.style.background = '#1f2937';
+      noBtn.style.color = '#fff';
+      noBtn.style.borderRadius = '8px';
+      noBtn.style.padding = '6px 10px';
+      noBtn.style.cursor = 'pointer';
+
+      const yesBtn = document.createElement('button');
+      yesBtn.type = 'button';
+      yesBtn.textContent = 'Yes';
+      yesBtn.style.border = '1px solid #ef4444';
+      yesBtn.style.background = '#ef4444';
+      yesBtn.style.color = '#fff';
+      yesBtn.style.borderRadius = '8px';
+      yesBtn.style.padding = '6px 10px';
+      yesBtn.style.cursor = 'pointer';
+
+      const close = (value) => {
+        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+        resolve(!!value);
+      };
+
+      noBtn.addEventListener('click', () => close(false));
+      yesBtn.addEventListener('click', () => close(true));
+
+      actions.appendChild(noBtn);
+      actions.appendChild(yesBtn);
+      wrap.appendChild(text);
+      wrap.appendChild(actions);
+      document.body.appendChild(wrap);
+    });
+  }
+
   function nowStamp() {
     return new Date().toLocaleString();
   }
@@ -613,14 +751,20 @@
       'admin-birth-date',
       'admin-death-date',
       'admin-birth-place-id',
+      'admin-birth-place-name',
       'admin-phone',
       'admin-email',
       'admin-note',
       'admin-custom-key',
       'admin-custom-value',
+      'admin-jyotisha-gothra',
+      'admin-jyotisha-nakshatra',
+      'admin-jyotisha-rashi',
       'admin-father-id',
       'admin-mother-id',
       'admin-spouse-id',
+      'admin-divorce-spouse-id',
+      'admin-divorce-date',
       'admin-children-input',
       'admin-coparent-id'
     ].forEach(id => {
@@ -636,6 +780,7 @@
     if (els.childrenChipList) els.childrenChipList.innerHTML = '';
     if (els.spouseChipList) els.spouseChipList.innerHTML = '';
     if (els.customFieldsList) els.customFieldsList.innerHTML = '';
+    if (qs('admin-divorce-history-list')) qs('admin-divorce-history-list').innerHTML = '';
     const fatherNameEl = qs('admin-parent-father-name');
     const motherNameEl = qs('admin-parent-mother-name');
     const fatherRemoveBtn = qs('admin-parent-father-remove');
@@ -653,6 +798,10 @@
     if (els.photoPath) els.photoPath.textContent = '-';
     const deceasedCheckbox = qs('admin-is-deceased');
     if (deceasedCheckbox) deceasedCheckbox.checked = false;
+    const birthDateExact = qs('admin-birth-date-type-exact');
+    const birthDateApprox = qs('admin-birth-date-type-approximate');
+    if (birthDateExact) birthDateExact.checked = true;
+    if (birthDateApprox) birthDateApprox.checked = false;
     toggleDeathDateField(false);
     state.pendingPhotoFile = null;
     state.pendingPhotoMeta = null;
@@ -802,6 +951,27 @@
     }
   }
 
+  function renderDivorceHistory(person) {
+    const host = qs('admin-divorce-history-list');
+    if (!host) return;
+    host.innerHTML = '';
+    const entries = sanitizeDivorces(person?.divorces || []);
+    if (!entries.length) {
+      const empty = document.createElement('div');
+      empty.className = 'admin-note';
+      empty.textContent = 'No divorce records.';
+      host.appendChild(empty);
+      return;
+    }
+
+    for (const entry of entries) {
+      const row = document.createElement('div');
+      row.className = 'admin-chip';
+      row.innerHTML = `<span>${shortPersonRef(entry.spouse_id)}${entry.divorce_date ? ` - Divorced: ${entry.divorce_date}` : ' - Divorced'}</span>`;
+      host.appendChild(row);
+    }
+  }
+
   async function compressPhotoFile(file) {
     if (!file) return null;
     if (!String(file.type || '').startsWith('image/')) {
@@ -911,12 +1081,22 @@
     qs('admin-surname').value = person.surname || '';
     qs('admin-sex').value = person.sex || 'M';
     qs('admin-birth-date').value = person.birth_date || '';
+    const birthDateType = normalizeBirthDateType(person.birth_date_type || '');
+    const birthDateExact = qs('admin-birth-date-type-exact');
+    const birthDateApprox = qs('admin-birth-date-type-approximate');
+    if (birthDateExact) birthDateExact.checked = birthDateType !== 'approximate';
+    if (birthDateApprox) birthDateApprox.checked = birthDateType === 'approximate';
     const isDeceased = normalizeDeceased(person.deceased) || !!String(person.death_date || '').trim();
     const deceasedCheckbox = qs('admin-is-deceased');
     if (deceasedCheckbox) deceasedCheckbox.checked = isDeceased;
     qs('admin-death-date').value = person.death_date || '';
     toggleDeathDateField(isDeceased);
     qs('admin-birth-place-id').value = person.birth_place_id || '';
+    qs('admin-birth-place-name').value = person.birth_place_name || '';
+    const jyotisha = sanitizeJyotisha(person.jyotisha || {});
+    qs('admin-jyotisha-gothra').value = jyotisha.gothra || '';
+    qs('admin-jyotisha-nakshatra').value = jyotisha.nakshatra || '';
+    qs('admin-jyotisha-rashi').value = jyotisha.rashi || '';
     qs('admin-phone').value = contact.phone || '';
     qs('admin-email').value = contact.email || '';
     qs('admin-note').value = contact.note || '';
@@ -938,6 +1118,7 @@
     updatePhotoPreview();
     renderRelationshipChips(person.person_id);
     renderCustomFields(person);
+    renderDivorceHistory(person);
     const deleteBtn = qs('admin-delete-person');
     if (deleteBtn) {
       deleteBtn.textContent = isArchived ? 'Restore Person' : 'Archive Person';
@@ -991,12 +1172,33 @@
     const surname = String(qs('admin-surname').value || '').trim();
     const sex = normalizeId(qs('admin-sex').value || 'M');
     const birthDate = String(qs('admin-birth-date').value || '').trim();
+    const birthDateType = qs('admin-birth-date-type-approximate')?.checked ? 'approximate' : 'exact';
     const isDeceased = !!qs('admin-is-deceased')?.checked;
     const deathDate = String(qs('admin-death-date').value || '').trim();
     const birthPlaceId = normalizeId(qs('admin-birth-place-id').value || '');
+    const birthPlaceName = String(qs('admin-birth-place-name').value || '').trim();
+    const jyotisha = sanitizeJyotisha({
+      gothra: qs('admin-jyotisha-gothra')?.value || '',
+      nakshatra: qs('admin-jyotisha-nakshatra')?.value || '',
+      rashi: qs('admin-jyotisha-rashi')?.value || ''
+    });
 
     const fatherId = normalizeId(qs('admin-father-id').value || '');
     const motherId = normalizeId(qs('admin-mother-id').value || '');
+    if (!jyotisha.gothra && fatherId) {
+      jyotisha.gothra = inheritedGothraFromFather(fatherId);
+    }
+    const spouseIdsForSave = [...state.spouseDraft].filter(spouseId => spouseId !== personId && !!getPerson(spouseId));
+    let activeSpouseId = normalizeId(person.active_spouse_id || '');
+    if (activeSpouseId && !spouseIdsForSave.includes(activeSpouseId)) activeSpouseId = '';
+    if (!activeSpouseId && fatherId && spouseIdsForSave.includes(fatherId)) activeSpouseId = fatherId;
+    if (!activeSpouseId && spouseIdsForSave.length === 1) {
+      activeSpouseId = spouseIdsForSave[0];
+    }
+    if ((sex === 'F') && spouseIdsForSave.length) {
+      const spouseGothra = gothraFromSpouse(activeSpouseId);
+      if (spouseGothra) jyotisha.gothra = spouseGothra;
+    }
 
     const saveErrors = validatePersonInputForSave({
       personId,
@@ -1030,15 +1232,19 @@
     person.surname = surname;
     person.sex = sex === 'F' ? 'F' : 'M';
     person.birth_date = birthDate;
+    person.birth_date_type = birthDateTypeForSave(birthDate, birthDateType);
     person.deceased = isDeceased;
     person.death_date = isDeceased ? deathDate : '';
     person.birth_place_id = birthPlaceId;
+    person.birth_place_name = birthPlaceName;
+    person.jyotisha = jyotisha;
+    person.active_spouse_id = activeSpouseId;
 
     const rel = ensureRelation(personId);
     rel.fid = fatherId;
     rel.mid = motherId;
 
-    rel.spouses = new Set([...state.spouseDraft].filter(spouseId => spouseId !== personId && !!getPerson(spouseId)));
+    rel.spouses = new Set(spouseIdsForSave);
     for (const sid of rel.spouses) {
       ensureRelation(sid).spouses.add(personId);
     }
@@ -1090,12 +1296,21 @@
       surname: '',
       sex: 'M',
       birth_date: '',
+      birth_date_type: '',
       deceased: false,
       death_date: '',
       archived: false,
       archived_at: '',
       custom: {},
-      birth_place_id: ''
+      birth_place_id: '',
+      birth_place_name: '',
+      active_spouse_id: '',
+      divorces: [],
+      jyotisha: {
+        gothra: '',
+        nakshatra: '',
+        rashi: ''
+      }
     });
     ensureRelation(id);
     state.selectedPersonId = id;
@@ -1141,6 +1356,32 @@
     addLog(`Archived person ${shortPersonRef(id)} (soft delete).`, true);
   }
 
+  async function discardDraftChanges() {
+    if (!state.dirty) {
+      setStatus('No unsaved draft changes to discard.', false);
+      return;
+    }
+
+    const ok = await confirmDiscardToast('Are you sure? Discard all unsaved draft changes and reload from source JSON files.');
+    if (!ok) return;
+
+    const prevSelectedId = normalizeId(state.selectedPersonId || '');
+    try {
+      await loadData();
+      const targetId = prevSelectedId && getPerson(prevSelectedId)
+        ? prevSelectedId
+        : (sortedPersons()[0]?.person_id || '');
+      state.selectedPersonId = targetId;
+      markDirty(false);
+      refreshTreeFromDraft(targetId);
+      renderEditor();
+      setStatus('Discarded unsaved draft changes and reloaded data.', false);
+      addLog('Discarded unsaved draft changes and reloaded from JSON files.', false);
+    } catch (err) {
+      setStatus(`Failed to discard changes: ${err.message}`, true);
+    }
+  }
+
   function addSpouseFromInput() {
     const person = getSelectedPerson();
     if (!person) return;
@@ -1161,12 +1402,97 @@
 
     state.spouseDraft.add(spouseId);
     addSpouseLink(person.person_id, spouseId);
+    removeDivorceRecordForPerson(person, spouseId);
+    removeDivorceRecordForPerson(getPerson(spouseId), person.person_id);
+    if (!normalizeId(person.active_spouse_id || '')) {
+      person.active_spouse_id = spouseId;
+    }
     qs('admin-spouse-id').value = '';
     markDirty(true);
     refreshTreeFromDraft(person.person_id);
     renderRelationshipChips(person.person_id);
     setStatus(`Added spouse relation: ${person.person_id} <-> ${spouseId}`, false);
     addLog(`Added spouse link ${shortPersonRef(person.person_id)} <-> ${shortPersonRef(spouseId)}.`, true);
+  }
+
+  function recordDivorceFromInput() {
+    const person = getSelectedPerson();
+    if (!person) return;
+
+    const rel = ensureRelation(person.person_id);
+    const linkedSpouses = [...rel.spouses].filter(id => !!getPerson(id));
+    const spouseDraftIds = [...state.spouseDraft].filter(id => !!getPerson(id));
+
+    let spouseId = normalizeId(qs('admin-divorce-spouse-id')?.value || '');
+    if (!spouseId) {
+      const activeSpouseId = normalizeId(person.active_spouse_id || '');
+      if (activeSpouseId && linkedSpouses.includes(activeSpouseId)) {
+        spouseId = activeSpouseId;
+      } else if (linkedSpouses.length === 1) {
+        spouseId = linkedSpouses[0];
+      } else if (spouseDraftIds.length === 1) {
+        spouseId = spouseDraftIds[0];
+      }
+    }
+    const divorceDate = String(qs('admin-divorce-date')?.value || '').trim();
+
+    if (!spouseId) {
+      setStatus('Enter Divorce Spouse ID (or keep one active spouse linked).', true);
+      return;
+    }
+    if (spouseId === person.person_id) {
+      setStatus('Person cannot be divorced from self.', true);
+      return;
+    }
+    if (!getPerson(spouseId)) {
+      setStatus(`Spouse not found: ${spouseId}`, true);
+      return;
+    }
+    if (divorceDate && !parseFlexibleDate(divorceDate)) {
+      setStatus(`Invalid divorce date format: "${divorceDate}" (expected dd-MMM-yyyy or dd-MMM-yy).`, true);
+      return;
+    }
+
+    if (!rel.spouses.has(spouseId)) {
+      const alreadyDivorced = sanitizeDivorces(person.divorces || []).some(d => d.spouse_id === spouseId);
+      if (alreadyDivorced) {
+        setStatus(`Divorce already recorded with ${spouseId}.`, false);
+      } else {
+        setStatus(`No active spouse link with ${spouseId} to mark as divorced.`, true);
+      }
+      return;
+    }
+
+    state.spouseDraft.delete(spouseId);
+    removeSpouseLink(person.person_id, spouseId);
+
+    const spouseObj = getPerson(spouseId);
+    if (spouseObj) {
+      const spouseRel = ensureRelation(spouseId);
+      const spouseRemaining = [...spouseRel.spouses].filter(id => !!getPerson(id));
+      if (normalizeId(spouseObj.active_spouse_id || '') === person.person_id) {
+        spouseObj.active_spouse_id = spouseRemaining.length === 1 ? spouseRemaining[0] : '';
+      }
+    }
+
+    const currentActive = normalizeId(person.active_spouse_id || '');
+    if (currentActive === spouseId) {
+      const remaining = [...state.spouseDraft].filter(id => !!getPerson(id));
+      person.active_spouse_id = remaining.length === 1 ? remaining[0] : '';
+    }
+
+    upsertDivorceRecordForPerson(person, spouseId, divorceDate);
+    upsertDivorceRecordForPerson(getPerson(spouseId), person.person_id, divorceDate);
+
+    if (qs('admin-divorce-spouse-id')) qs('admin-divorce-spouse-id').value = '';
+    if (qs('admin-divorce-date')) qs('admin-divorce-date').value = '';
+
+    markDirty(true);
+    refreshTreeFromDraft(person.person_id);
+    renderRelationshipChips(person.person_id);
+    renderDivorceHistory(person);
+    setStatus(`Recorded divorce: ${person.person_id} x ${spouseId}`, false);
+    addLog(`Recorded divorce ${shortPersonRef(person.person_id)} x ${shortPersonRef(spouseId)}${divorceDate ? ` (${divorceDate})` : ''}.`, true);
   }
 
   function addChildrenFromInput() {
@@ -1222,6 +1548,9 @@
     }
 
     if (success.length) {
+      if (coParentId && person.sex === 'F') {
+        person.active_spouse_id = coParentId;
+      }
       markDirty(true);
       refreshTreeFromDraft(person.person_id);
       renderRelationshipChips(person.person_id);
@@ -1267,6 +1596,19 @@
 
       state.spouseDraft.delete(sid);
       removeSpouseLink(person.person_id, sid);
+      const currentActive = normalizeId(person.active_spouse_id || '');
+      if (currentActive === sid) {
+        const remaining = [...state.spouseDraft].filter(spouseId => !!getPerson(spouseId));
+        person.active_spouse_id = remaining.length === 1 ? remaining[0] : '';
+      }
+      const spouseObj = getPerson(sid);
+      if (spouseObj) {
+        const spouseRel = ensureRelation(sid);
+        const spouseRemaining = [...spouseRel.spouses].filter(spouseId => !!getPerson(spouseId));
+        if (normalizeId(spouseObj.active_spouse_id || '') === person.person_id) {
+          spouseObj.active_spouse_id = spouseRemaining.length === 1 ? spouseRemaining[0] : '';
+        }
+      }
       markDirty(true);
       renderRelationshipChips(person.person_id);
       setStatus(`Removed spouse relation with ${sid}`, false);
@@ -1468,12 +1810,17 @@
         surname: String(p.surname || '').trim(),
         sex: String(p.sex || 'M').toUpperCase() === 'F' ? 'F' : 'M',
         birth_date: String(p.birth_date || '').trim(),
+        birth_date_type: birthDateTypeForSave(p.birth_date, p.birth_date_type),
         deceased: normalizeDeceased(p.deceased) || !!String(p.death_date || '').trim(),
         death_date: String(p.death_date || '').trim(),
         archived: isArchivedPerson(p),
         archived_at: String(p.archived_at || '').trim(),
         custom: sanitizeCustomObject(p.custom || {}),
-        birth_place_id: normalizeId(p.birth_place_id || '')
+        birth_place_id: normalizeId(p.birth_place_id || ''),
+        birth_place_name: String(p.birth_place_name || '').trim(),
+        active_spouse_id: normalizeId(p.active_spouse_id || ''),
+        divorces: sanitizeDivorces(p.divorces || []),
+        jyotisha: sanitizeJyotisha(p.jyotisha || {})
       }))
       .sort((a, b) => a.person_id.localeCompare(b.person_id));
   }
@@ -1538,6 +1885,7 @@
       },
       notes: [
         'persons.json includes deceased (boolean) and death_date (string, optional).',
+        'persons.json includes active_spouse_id and divorces (history of divorce records).',
         'Date format: dd-MMM-yyyy or dd-MMM-yy.'
       ]
     };
@@ -1698,10 +2046,26 @@
       if (p.custom != null && (typeof p.custom !== 'object' || Array.isArray(p.custom))) {
         issues.push({ level: 'warn', message: `${id} custom should be an object (custom: {}).` });
       }
+
+      const divorces = sanitizeDivorces(p.divorces || []);
+      for (const d of divorces) {
+        if (d.spouse_id === id) {
+          issues.push({ level: 'error', message: `${id} has invalid divorce record with self.` });
+        }
+      }
     }
 
     for (const id of dupIds) {
       issues.push({ level: 'error', message: `Duplicate person_id detected: ${id}` });
+    }
+
+    for (const [id, p] of peopleById.entries()) {
+      const divorces = sanitizeDivorces(p.divorces || []);
+      for (const d of divorces) {
+        if (!peopleIds.has(d.spouse_id)) {
+          issues.push({ level: 'error', message: `${id} has divorce record with missing spouse: ${d.spouse_id}` });
+        }
+      }
     }
 
     for (const [id, rel] of state.relations.entries()) {
@@ -1739,6 +2103,20 @@
         const other = ensureRelation(sid);
         if (!other.spouses.has(id)) {
           issues.push({ level: 'warn', message: `Spouse link not reciprocal: ${id} -> ${sid}` });
+        }
+      }
+
+      const divorces = sanitizeDivorces(peopleById.get(id)?.divorces || []);
+      for (const d of divorces) {
+        if (rel.spouses.has(d.spouse_id)) {
+          issues.push({ level: 'warn', message: `${id} is marked divorced from ${d.spouse_id} but still has active spouse link.` });
+        }
+        const spouseObj = peopleById.get(d.spouse_id);
+        if (spouseObj) {
+          const spouseDivorces = sanitizeDivorces(spouseObj.divorces || []);
+          if (!spouseDivorces.some(x => x.spouse_id === id)) {
+            issues.push({ level: 'warn', message: `Divorce record not reciprocal: ${id} -> ${d.spouse_id}` });
+          }
         }
       }
     }
@@ -1856,7 +2234,7 @@
       const c = contactsById.get(id) || {};
       const fullName = `${String(p.given_name || '').trim()} ${String(p.surname || '').trim()}`.trim() || id;
       const placeObj = state.places && p.birth_place_id ? state.places[p.birth_place_id] : null;
-      const place = placeObj && placeObj.place ? placeObj.place : '';
+      const place = String((placeObj && placeObj.place) || p.birth_place_name || '').trim();
 
       out.set(id, {
         id,
@@ -2301,9 +2679,13 @@
       refreshTreeFromDraft(state.selectedPersonId);
       setStatus('Tree refreshed from current admin draft.', false);
     });
+    qs('admin-discard-changes')?.addEventListener('click', function () {
+      discardDraftChanges();
+    });
     qs('admin-delete-person')?.addEventListener('click', removeSelectedPerson);
 
     qs('admin-add-spouse')?.addEventListener('click', addSpouseFromInput);
+    qs('admin-record-divorce')?.addEventListener('click', recordDivorceFromInput);
     qs('admin-add-children')?.addEventListener('click', addChildrenFromInput);
 
     qs('admin-clear-father')?.addEventListener('click', clearFather);

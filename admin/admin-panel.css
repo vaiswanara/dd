@@ -247,6 +247,19 @@
   height: 16px;
 }
 
+.admin-check-inline input[type="radio"] {
+  width: 16px;
+  height: 16px;
+}
+
+.admin-radio-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  min-height: 36px;
+}
+
 .admin-inline {
   display: flex;
   gap: 8px;

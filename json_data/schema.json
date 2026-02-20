@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.1.0",
+  "generated_at": "2026-02-20T06:28:54.983Z",
+  "files": {
+    "persons": "persons.json",
+    "families": "families.json",
+    "contacts": "contacts.json",
+    "photos": "photos.json"
+  },
+  "notes": [
+    "persons.json includes deceased (boolean) and death_date (string, optional).",
+    "persons.json includes active_spouse_id and divorces (history of divorce records).",
+    "Date format: dd-MMM-yyyy or dd-MMM-yy."
+  ]
+}
