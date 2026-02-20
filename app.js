@@ -59,14 +59,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const personModalBody = document.getElementById('person-modal-body');
     const personHomeBtn = document.getElementById('person-home-btn');
     const personShareBtn = document.getElementById('person-share-btn');
+    const quickEditWrap = document.getElementById('person-modal-quick-edit');
+    const quickCurrentParents = document.getElementById('quick-current-parents');
+    const quickCurrentSpouses = document.getElementById('quick-current-spouses');
+    const quickCurrentChildren = document.getElementById('quick-current-children');
+    const quickFatherInput = document.getElementById('quick-father-id');
+    const quickMotherInput = document.getElementById('quick-mother-id');
+    const quickSpouseInput = document.getElementById('quick-spouse-id');
+    const quickChildInput = document.getElementById('quick-child-id');
+    const quickChildRole = document.getElementById('quick-child-role');
+    const quickStatus = document.getElementById('quick-edit-status');
+    const quickSaveDraftBtn = document.getElementById('quick-save-draft');
+    const quickDiscardDraftBtn = document.getElementById('quick-discard-draft');
+    const quickUnsavedTag = document.getElementById('quick-unsaved-tag');
     let activeModalPersonId = null;
+    let quickRelDraft = null;
+    let quickRelUndoStack = [];
     let activePersonId = null;  // Currently centered person in the tree (used by profile button)
+    const brokenImageUrls = new Set();
+    const checkedImageUrls = new Set();
+    let brokenImageRedrawTimer = null;
     const relationshipModalOverlay = document.getElementById('relationship-modal-overlay');
     const relationshipModalBody = document.getElementById('relationship-modal-body');
     const relationshipModalClose = document.getElementById('relationship-modal-close');
     let HOME_PERSON_ID = null;
     let APP_CONFIG = null;
-    const IS_ADM_PAGE = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/adm/');
+    const IS_ADM_PAGE = /\/(?:adm|admin)(?:\/|$)/.test(window.location.pathname.replace(/\\/g, '/').toLowerCase());
     const APP_BASE_PREFIX = IS_ADM_PAGE ? '../' : '';
 
     function toAppPath(path) {
@@ -74,6 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!raw) return raw;
         if (/^(?:[a-z]+:|\/\/|\/)/i.test(raw)) return raw;
         return APP_BASE_PREFIX + raw.replace(/^\.?\//, '');
+    }
+
+    function scheduleBrokenImageRedraw() {
+        if (brokenImageRedrawTimer) return;
+        brokenImageRedrawTimer = setTimeout(() => {
+            brokenImageRedrawTimer = null;
+            if (activePersonId) drawTree(activePersonId);
+        }, 120);
+    }
+
+    function probeImageUrl(url) {
+        const u = String(url || '').trim();
+        if (!u) return;
+        if (checkedImageUrls.has(u) || brokenImageUrls.has(u)) return;
+        checkedImageUrls.add(u);
+
+        const img = new Image();
+        img.onload = () => {};
+        img.onerror = () => {
+            brokenImageUrls.add(u);
+            console.warn('[Photos] Broken image detected:', u);
+            scheduleBrokenImageRedraw();
+        };
+        img.src = u;
     }
 
     // --- Dashboard Elements ---
@@ -452,6 +494,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Precompute display fields for stable nodeBinding rendering.
             const fullName = (node.name || "").trim();
             const parts = fullName ? fullName.split(/\s+/) : [];
+            const nodeImageUrl = String(node.image_url || "").trim();
+            if (nodeImageUrl) {
+                if (brokenImageUrls.has(nodeImageUrl)) {
+                    node.image_url = "";
+                } else {
+                    probeImageUrl(nodeImageUrl);
+                }
+            }
             const hasImage = !!(node.image_url && node.image_url.trim() !== "");
             const gender = getGender(node.id);
 
@@ -474,6 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            const isDeceased = node.deceased === true || String(node.deceased || '').toLowerCase() === 'true' || !!String(node.death_date || node.Death || '').trim();
+
             // Keep multi-word first names intact and use only surname initial.
             // Example: "NARAYANA RAO DHARMAVARAM" -> "NARAYANA RAO.D"
             if (parts.length <= 1) {
@@ -482,6 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const firstNameFull = parts.slice(0, -1).join(" ");
                 const surnameInitial = parts[parts.length - 1].charAt(0).toUpperCase();
                 node._label = `${firstNameFull}.${surnameInitial}`;
+            }
+            if (isDeceased) {
+                node._label = `● ${node._label}`;
             }
 
             node._relation = "";
@@ -679,7 +734,115 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>`;
     }
 
+    function getCustomFieldsRows(custom) {
+        if (!custom || typeof custom !== 'object' || Array.isArray(custom)) return [];
+        const entries = Object.entries(custom)
+            .map(([k, v]) => [String(k || '').trim(), String(v == null ? '' : v).trim()])
+            .filter(([k, v]) => !!k && !!v)
+            .sort((a, b) => a[0].localeCompare(b[0]));
+        return entries.map(([key, value]) => rowHtml(key, value));
+    }
+
+    function cloneQuickRelDraft(draft) {
+        if (!draft) return null;
+        return {
+            id: draft.id,
+            parents: {
+                fid: draft.parents && draft.parents.fid ? draft.parents.fid : '',
+                mid: draft.parents && draft.parents.mid ? draft.parents.mid : ''
+            },
+            spouses: Array.isArray(draft.spouses) ? [...new Set(draft.spouses)] : [],
+            children: Array.isArray(draft.children) ? [...new Set(draft.children)] : [],
+            childRoles: { ...(draft.childRoles || {}) }
+        };
+    }
+
+    function markQuickDraftDirty(flag) {
+        if (quickUnsavedTag) quickUnsavedTag.style.display = flag ? 'inline-block' : 'none';
+    }
+
+    function setQuickStatus(message, isError) {
+        if (!quickStatus) return;
+        quickStatus.textContent = message || '';
+        quickStatus.style.color = isError ? '#b91c1c' : '#4b5563';
+    }
+
+    function resolveQuickRef(raw, label) {
+        if (!window.adminQuickRel || typeof window.adminQuickRel.resolveRef !== 'function') {
+            return { ok: false, message: 'Quick editor API is not ready.' };
+        }
+        return window.adminQuickRel.resolveRef(raw, label);
+    }
+
+    function renderQuickDraftSummary() {
+        if (!quickRelDraft || !window.adminQuickRel) return;
+        const label = (id) => window.adminQuickRel.label(id);
+        if (quickCurrentParents) {
+            const parts = [];
+            if (quickRelDraft.parents.fid) parts.push(`Father: ${label(quickRelDraft.parents.fid)}`);
+            if (quickRelDraft.parents.mid) parts.push(`Mother: ${label(quickRelDraft.parents.mid)}`);
+            quickCurrentParents.textContent = parts.length ? parts.join(' | ') : '-';
+        }
+        if (quickCurrentSpouses) {
+            quickCurrentSpouses.textContent = quickRelDraft.spouses.length ? quickRelDraft.spouses.map(label).join(', ') : '-';
+        }
+        if (quickCurrentChildren) {
+            quickCurrentChildren.textContent = quickRelDraft.children.length ? quickRelDraft.children.map(label).join(', ') : '-';
+        }
+    }
+
+    function stageQuickDraftChange(mutator, successMessage) {
+        if (!IS_ADM_PAGE || !window.adminQuickRel || !quickRelDraft) return;
+        const before = cloneQuickRelDraft(quickRelDraft);
+        const result = mutator();
+        if (result && result.ok === false) {
+            setQuickStatus(result.message || 'Update failed.', true);
+            if (typeof window.showToast === 'function') window.showToast(result.message || 'Update failed.', 3200);
+            return;
+        }
+        quickRelUndoStack.push(before);
+        if (quickRelUndoStack.length > 80) quickRelUndoStack.shift();
+        markQuickDraftDirty(true);
+        renderQuickDraftSummary();
+        setQuickStatus(successMessage || 'Staged.', false);
+        if (typeof window.showToast === 'function') window.showToast(successMessage || 'Staged.', 2200);
+    }
+
+    function renderQuickEditPanel(personId) {
+        if (!quickEditWrap) return;
+        if (!IS_ADM_PAGE || !window.adminQuickRel || !personId) {
+            quickEditWrap.style.display = 'none';
+            quickRelDraft = null;
+            quickRelUndoStack = [];
+            return;
+        }
+
+        const snap = window.adminQuickRel.get(personId);
+        if (!snap) {
+            quickEditWrap.style.display = 'none';
+            quickRelDraft = null;
+            quickRelUndoStack = [];
+            return;
+        }
+
+        quickRelDraft = cloneQuickRelDraft(snap);
+        quickRelUndoStack = [];
+        quickEditWrap.style.display = 'block';
+        if (quickFatherInput) quickFatherInput.value = quickRelDraft.parents.fid || '';
+        if (quickMotherInput) quickMotherInput.value = quickRelDraft.parents.mid || '';
+        if (quickSpouseInput) quickSpouseInput.value = '';
+        if (quickChildInput) quickChildInput.value = '';
+        if (quickChildRole) quickChildRole.value = 'auto';
+        markQuickDraftDirty(false);
+        renderQuickDraftSummary();
+        setQuickStatus('Stage edits, then click Save Changes.', false);
+    }
+
     function openPersonModal(personId) {
+        if (quickRelDraft && activeModalPersonId && personId !== activeModalPersonId && quickUnsavedTag && quickUnsavedTag.style.display !== 'none') {
+            const ok = window.confirm('Discard unsaved quick relationship changes?');
+            if (!ok) return;
+        }
         const p = peopleMap.get(personId);
         if (!p) return;
         activeModalPersonId = personId;
@@ -696,6 +859,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isDefaultHome || isSetHome) {
             idHtml += ` <span style="background-color: #4CAF50; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px; vertical-align: middle; font-weight: bold;">✓ Home Person</span>`;
         }
+        const isDeceased = p.deceased === true || String(p.deceased || '').toLowerCase() === 'true' || !!String(p.death_date || p.Death || '').trim();
+        if (isDeceased) {
+            idHtml += ` <span style="background-color: #6b7280; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px; vertical-align: middle; font-weight: bold;">✓ Deceased</span>`;
+        }
         personModalId.innerHTML = idHtml;
 
         // Update "Set as Home" Button Visibility
@@ -710,6 +877,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const imageUrl = (p.image_url || "").trim();
         if (imageUrl) {
+            personModalAvatar.onerror = () => {
+                brokenImageUrls.add(imageUrl);
+                personModalAvatar.removeAttribute("src");
+                personModalAvatar.style.display = "none";
+                personModalAvatarFallback.style.display = "flex";
+                personModalAvatarFallback.textContent = getInitials(fullName);
+                if (activePersonId) scheduleBrokenImageRedraw();
+            };
+            personModalAvatar.onload = () => {};
             personModalAvatar.src = imageUrl;
             personModalAvatar.style.display = "block";
             personModalAvatarFallback.style.display = "none";
@@ -739,18 +915,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const age = getAgeFromBirth(p.Birth || "");
         const birthWithAge = birthFormatted ? (birthFormatted + (age != null ? ` (${age})` : "")) : "";
 
+        const deathFormatted = formatDate(p.death_date || p.Death || "");
         const rows = [
-            rowHtml("Date of Birth", birthWithAge),
+            rowHtml("Date of Birth", birthWithAge)
+        ];
+        if (isDeceased) {
+            rows.push(rowHtml("Status", "Deceased"));
+            if (deathFormatted) {
+                rows.push(rowHtml("Date of Death", deathFormatted));
+            }
+        }
+        rows.push(
             rowHtml("Parents", collectNames(parents)),
             rowHtml("Spouse(s)", collectNames(spouses)),
             rowHtml("Children", collectNames(children)),
             rowHtml("Siblings", collectNames(siblings)),
             rowHtml("Address", p.Address || ""),
-            rowHtml("Email", p.email ? `<a href="mailto:${p.email}" style="color: #039BE5; text-decoration: none;">${p.email}</a>` : ""),
-            rowHtml("Phone", p.phone ? `<a href="tel:${p.phone}" style="color: #039BE5; text-decoration: none;">${p.phone}</a>` : ""),
+            rowHtml("Email", p.email ? `<a href=\"mailto:${p.email}\" style=\"color: #039BE5; text-decoration: none;\">${p.email}</a>` : ""),
+            rowHtml("Phone", p.phone ? `<a href=\"tel:${p.phone}\" style=\"color: #039BE5; text-decoration: none;\">${p.phone}</a>` : ""),
             rowHtml("Note", p.note || "")
-        ];
+        );
+        rows.push(...getCustomFieldsRows(p.custom));
         personModalBody.innerHTML = rows.join("");
+        renderQuickEditPanel(personId);
 
         personModalOverlay.classList.add("show");
         personModalOverlay.setAttribute("aria-hidden", "false");
@@ -769,9 +956,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function closePersonModal() {
+        if (quickUnsavedTag && quickUnsavedTag.style.display !== 'none') {
+            const ok = window.confirm('Discard unsaved quick relationship changes?');
+            if (!ok) return;
+        }
         personModalOverlay.classList.remove("show");
         personModalOverlay.setAttribute("aria-hidden", "true");
         activeModalPersonId = null;
+        quickRelDraft = null;
+        quickRelUndoStack = [];
+        markQuickDraftDirty(false);
     }
 
     // --- Modal Actions ---
@@ -853,6 +1047,144 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback for browsers that don't support navigator.share
             alert(`Share functionality is not supported on this browser. Details:\n\n${shareText}`);
         }
+    });
+
+    const quickSetParentsBtn = document.getElementById('quick-set-parents');
+    const quickClearFatherBtn = document.getElementById('quick-clear-father');
+    const quickClearMotherBtn = document.getElementById('quick-clear-mother');
+    const quickAddSpouseBtn = document.getElementById('quick-add-spouse');
+    const quickRemoveSpouseBtn = document.getElementById('quick-remove-spouse');
+    const quickAddChildBtn = document.getElementById('quick-add-child');
+    const quickRemoveChildBtn = document.getElementById('quick-remove-child');
+    const quickUndoLastBtn = document.getElementById('quick-undo-last');
+    quickSetParentsBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            const fatherRes = resolveQuickRef(quickFatherInput ? quickFatherInput.value : '', 'Father');
+            if (!fatherRes.ok) return fatherRes;
+            const motherRes = resolveQuickRef(quickMotherInput ? quickMotherInput.value : '', 'Mother');
+            if (!motherRes.ok) return motherRes;
+            if (fatherRes.id && fatherRes.id === activeModalPersonId) return { ok: false, message: 'Father cannot be same as person.' };
+            if (motherRes.id && motherRes.id === activeModalPersonId) return { ok: false, message: 'Mother cannot be same as person.' };
+            quickRelDraft.parents.fid = fatherRes.id || '';
+            quickRelDraft.parents.mid = motherRes.id || '';
+            if (quickFatherInput) quickFatherInput.value = quickRelDraft.parents.fid;
+            if (quickMotherInput) quickMotherInput.value = quickRelDraft.parents.mid;
+            return { ok: true };
+        }, 'Parents staged.');
+    });
+
+    quickClearFatherBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            quickRelDraft.parents.fid = '';
+            if (quickFatherInput) quickFatherInput.value = '';
+            return { ok: true };
+        }, 'Father cleared (staged).');
+    });
+
+    quickClearMotherBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            quickRelDraft.parents.mid = '';
+            if (quickMotherInput) quickMotherInput.value = '';
+            return { ok: true };
+        }, 'Mother cleared (staged).');
+    });
+
+    quickAddSpouseBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            const res = resolveQuickRef(quickSpouseInput ? quickSpouseInput.value : '', 'Spouse');
+            if (!res.ok) return res;
+            const sid = res.id;
+            if (!sid) return { ok: false, message: 'Enter spouse ID or name.' };
+            if (sid === activeModalPersonId) return { ok: false, message: 'Person cannot be spouse of self.' };
+            if (!quickRelDraft.spouses.includes(sid)) quickRelDraft.spouses.push(sid);
+            if (quickSpouseInput) quickSpouseInput.value = '';
+            return { ok: true };
+        }, 'Spouse link staged.');
+    });
+
+    quickRemoveSpouseBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            const res = resolveQuickRef(quickSpouseInput ? quickSpouseInput.value : '', 'Spouse');
+            if (!res.ok) return res;
+            const sid = res.id;
+            if (!sid) return { ok: false, message: 'Enter spouse ID or name.' };
+            if (!quickRelDraft.spouses.includes(sid)) return { ok: false, message: 'Spouse is not linked in staged draft.' };
+            quickRelDraft.spouses = quickRelDraft.spouses.filter(id => id !== sid);
+            if (quickSpouseInput) quickSpouseInput.value = '';
+            return { ok: true };
+        }, 'Spouse removal staged.');
+    });
+
+    quickAddChildBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            const res = resolveQuickRef(quickChildInput ? quickChildInput.value : '', 'Child');
+            if (!res.ok) return res;
+            const cid = res.id;
+            if (!cid) return { ok: false, message: 'Enter child ID or name.' };
+            if (cid === activeModalPersonId) return { ok: false, message: 'Person cannot be own child.' };
+            if (!quickRelDraft.children.includes(cid)) quickRelDraft.children.push(cid);
+            const role = quickChildRole ? quickChildRole.value : 'auto';
+            if (role === 'father' || role === 'mother') quickRelDraft.childRoles[cid] = role;
+            else delete quickRelDraft.childRoles[cid];
+            if (quickChildInput) quickChildInput.value = '';
+            return { ok: true };
+        }, 'Child link staged.');
+    });
+
+    quickRemoveChildBtn?.addEventListener('click', () => {
+        stageQuickDraftChange(() => {
+            if (!quickRelDraft) return { ok: false, message: 'Open a person first.' };
+            const res = resolveQuickRef(quickChildInput ? quickChildInput.value : '', 'Child');
+            if (!res.ok) return res;
+            const cid = res.id;
+            if (!cid) return { ok: false, message: 'Enter child ID or name.' };
+            if (!quickRelDraft.children.includes(cid)) return { ok: false, message: 'Child is not linked in staged draft.' };
+            quickRelDraft.children = quickRelDraft.children.filter(id => id !== cid);
+            delete quickRelDraft.childRoles[cid];
+            if (quickChildInput) quickChildInput.value = '';
+            return { ok: true };
+        }, 'Child removal staged.');
+    });
+
+    quickUndoLastBtn?.addEventListener('click', () => {
+        if (!quickRelUndoStack.length) {
+            setQuickStatus('No staged step to undo.', true);
+            if (typeof window.showToast === 'function') window.showToast('No staged step to undo.', 2600);
+            return;
+        }
+        quickRelDraft = quickRelUndoStack.pop();
+        markQuickDraftDirty(true);
+        renderQuickDraftSummary();
+        setQuickStatus('Last staged step undone.', false);
+        if (typeof window.showToast === 'function') window.showToast('Last staged step undone.', 2200);
+    });
+
+    quickSaveDraftBtn?.addEventListener('click', () => {
+        if (!quickRelDraft || !activeModalPersonId || !window.adminQuickRel) return;
+        const result = window.adminQuickRel.saveDraft(activeModalPersonId, quickRelDraft);
+        const msg = result && result.message ? result.message : (result && result.ok ? 'Quick relationship changes saved.' : 'Save failed.');
+        setQuickStatus(msg, !(result && result.ok));
+        if (typeof window.showToast === 'function') window.showToast(msg, result && result.ok ? 2300 : 3200);
+        if (result && result.ok) {
+            quickRelUndoStack = [];
+            markQuickDraftDirty(false);
+            openPersonModal(activeModalPersonId);
+        }
+    });
+
+    quickDiscardDraftBtn?.addEventListener('click', () => {
+        if (!quickRelDraft) return;
+        const ok = !quickUnsavedTag || quickUnsavedTag.style.display === 'none' || window.confirm('Discard staged quick relationship changes?');
+        if (!ok) return;
+        renderQuickEditPanel(activeModalPersonId);
+        setQuickStatus('Staged changes discarded.', false);
+        if (typeof window.showToast === 'function') window.showToast('Staged changes discarded.', 2200);
     });
 
     const relationBtn = document.getElementById('relation-btn');
@@ -2024,8 +2356,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newPeopleMap = new Map();
 
+        const isArchivedPerson = (p) => {
+            if (!p) return false;
+            if (p.archived === true) return true;
+            const t = String(p.archived || '').trim().toLowerCase();
+            return t === 'true' || t === '1' || t === 'yes' || t === 'y';
+        };
+
         // 1. Create initial person objects from persons.json
         for (const p of persons) {
+            if (isArchivedPerson(p)) continue;
             const givenName = (p.given_name || '').trim();
             const surname = (p.surname || '').trim();
             let fullName = (givenName + ' ' + surname).trim();
@@ -2042,6 +2382,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const birthPlace = p.birth_place_id && places[p.birth_place_id] ? places[p.birth_place_id].place : '';
 
+            const isDeceased = p.deceased === true || String(p.deceased || '').toLowerCase() === 'true' || !!String(p.death_date || '').trim();
+            const custom = (p.custom && typeof p.custom === 'object' && !Array.isArray(p.custom)) ? p.custom : {};
+
             newPeopleMap.set(p.person_id, {
                 id: p.person_id,
                 name: fullName,
@@ -2049,11 +2392,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 mid: "",
                 pids: [],
                 Birth: p.birth_date || "",
-                Death: "", // Not available in new format
+                Death: p.death_date || "",
+                deceased: isDeceased,
+                death_date: p.death_date || "",
                 Address: birthPlace,
                 email: contactInfo.email || "",
                 phone: contactInfo.phone || "",
                 note: contactInfo.note || "",
+                custom,
                 image_url: "" // Populated later by photos.json
             });
         }
