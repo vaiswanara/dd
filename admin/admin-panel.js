@@ -2,6 +2,7 @@
   const ACTION_LOGS_STORAGE_KEY = 'adminActionLogs_v1';
   const ACTION_LOG_SEQ_STORAGE_KEY = 'adminActionLogSeq_v1';
   const DATA_SCHEMA_VERSION = '1.1.0';
+  const IMPORT_HELP_TEXT = 'Upload a JSON or CSV file, preview impact, then apply.';
 
   const state = {
     config: null,
@@ -202,6 +203,239 @@
     return JSON.parse(text);
   }
 
+  function normalizeCsvHeader(value) {
+    return String(value == null ? '' : value)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_');
+  }
+
+  function parseCsvRows(rawText) {
+    const text = String(rawText == null ? '' : rawText);
+    if (!text.trim()) throw new Error('Import file is empty.');
+
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i += 1) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (inQuotes) {
+        if (ch === '"' && next === '"') {
+          cell += '"';
+          i += 1;
+        } else if (ch === '"') {
+          inQuotes = false;
+        } else {
+          cell += ch;
+        }
+        continue;
+      }
+
+      if (ch === '"') {
+        inQuotes = true;
+        continue;
+      }
+      if (ch === ',') {
+        row.push(cell);
+        cell = '';
+        continue;
+      }
+      if (ch === '\n' || ch === '\r') {
+        row.push(cell);
+        cell = '';
+        rows.push(row);
+        row = [];
+        if (ch === '\r' && next === '\n') i += 1;
+        continue;
+      }
+      cell += ch;
+    }
+
+    if (cell.length > 0 || row.length > 0) {
+      row.push(cell);
+      rows.push(row);
+    }
+
+    return rows;
+  }
+
+  function parseCsvTable(rawText) {
+    const rows = parseCsvRows(rawText);
+    if (!rows.length) throw new Error('CSV has no rows.');
+
+    const firstRow = rows[0].map((x, idx) => idx === 0 ? String(x || '').replace(/^\uFEFF/, '') : String(x || ''));
+    const headers = firstRow.map(normalizeCsvHeader);
+    if (!headers.some(Boolean)) throw new Error('CSV header row is empty.');
+
+    const objects = [];
+    for (let i = 1; i < rows.length; i += 1) {
+      const cols = rows[i] || [];
+      const obj = {};
+      let hasValue = false;
+      for (let c = 0; c < headers.length; c += 1) {
+        const key = headers[c];
+        if (!key) continue;
+        const val = String(cols[c] == null ? '' : cols[c]).trim();
+        if (val) hasValue = true;
+        obj[key] = val;
+      }
+      if (hasValue) objects.push(obj);
+    }
+
+    return { headers, rows: objects };
+  }
+
+  function pickCsvValue(row, keys) {
+    for (const key of keys) {
+      if (Object.prototype.hasOwnProperty.call(row, key)) {
+        return String(row[key] == null ? '' : row[key]).trim();
+      }
+    }
+    return '';
+  }
+
+  function parseCsvJsonObjectCell(value, label, rowNo) {
+    const raw = String(value || '').trim();
+    if (!raw) return {};
+    try {
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error(`${label} must be a JSON object`);
+      }
+      return parsed;
+    } catch (err) {
+      throw new Error(`Invalid ${label} in CSV row ${rowNo}: ${err.message}`);
+    }
+  }
+
+  function parseCsvIdArrayCell(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return [];
+    let items = [];
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) items = parsed;
+      else items = raw.split(/[|;]/);
+    } catch (_) {
+      items = raw.split(/[|;]/);
+    }
+    return items.map(x => normalizeId(x)).filter(Boolean);
+  }
+
+  function detectImportTypeFromCsvHeaders(headers) {
+    const set = new Set((headers || []).map(normalizeCsvHeader));
+    const has = (h) => set.has(normalizeCsvHeader(h));
+    const hasAny = (list) => list.some(has);
+
+    if (has('person_id') && hasAny(['given_name', 'surname', 'sex', 'birth_date', 'deceased', 'death_date', 'custom_json', 'jyotisha_json', 'divorces_json', 'active_spouse_id'])) {
+      return 'persons';
+    }
+    if (has('family_id') && hasAny(['husband_id', 'wife_id', 'children', 'children_json'])) {
+      return 'families';
+    }
+    if (has('person_id') && hasAny(['phone', 'email', 'note'])) {
+      return 'contacts';
+    }
+    if (has('person_id') && hasAny(['photo_path', 'path', 'photo', 'file', 'photo_file'])) {
+      return 'photos';
+    }
+
+    return 'unknown';
+  }
+
+  function payloadFromCsvRows(rows, detectedType) {
+    if (detectedType === 'persons') {
+      return rows.map((row, idx) => {
+        const rowNo = idx + 2;
+        const divorcesRaw = pickCsvValue(row, ['divorces_json', 'divorces']);
+        let divorces = [];
+        if (divorcesRaw) {
+          try {
+            const parsed = JSON.parse(divorcesRaw);
+            if (!Array.isArray(parsed)) throw new Error('divorces_json must be an array');
+            divorces = sanitizeDivorces(parsed);
+          } catch (err) {
+            throw new Error(`Invalid divorces_json in CSV row ${rowNo}: ${err.message}`);
+          }
+        }
+
+        return {
+          person_id: normalizeId(pickCsvValue(row, ['person_id', 'id'])),
+          given_name: pickCsvValue(row, ['given_name', 'first_name', 'firstname']),
+          surname: pickCsvValue(row, ['surname', 'last_name', 'family_name']),
+          sex: pickCsvValue(row, ['sex', 'gender']),
+          birth_date: pickCsvValue(row, ['birth_date']),
+          birth_date_type: pickCsvValue(row, ['birth_date_type']),
+          deceased: normalizeDeceased(pickCsvValue(row, ['deceased'])),
+          death_date: pickCsvValue(row, ['death_date']),
+          archived: normalizeDeceased(pickCsvValue(row, ['archived'])),
+          archived_at: pickCsvValue(row, ['archived_at']),
+          birth_place_id: normalizeId(pickCsvValue(row, ['birth_place_id'])),
+          birth_place_name: pickCsvValue(row, ['birth_place_name']),
+          active_spouse_id: normalizeId(pickCsvValue(row, ['active_spouse_id'])),
+          divorces,
+          jyotisha: sanitizeJyotisha(parseCsvJsonObjectCell(pickCsvValue(row, ['jyotisha_json', 'jyotisha']), 'jyotisha_json', rowNo)),
+          custom: sanitizeCustomObject(parseCsvJsonObjectCell(pickCsvValue(row, ['custom_json', 'custom']), 'custom_json', rowNo))
+        };
+      });
+    }
+
+    if (detectedType === 'families') {
+      return rows.map(row => ({
+        family_id: normalizeId(pickCsvValue(row, ['family_id', 'id'])),
+        husband_id: normalizeId(pickCsvValue(row, ['husband_id'])),
+        wife_id: normalizeId(pickCsvValue(row, ['wife_id'])),
+        children: parseCsvIdArrayCell(pickCsvValue(row, ['children_json', 'children']))
+      }));
+    }
+
+    if (detectedType === 'contacts') {
+      return rows.map(row => ({
+        person_id: normalizeId(pickCsvValue(row, ['person_id', 'id'])),
+        phone: pickCsvValue(row, ['phone']),
+        email: pickCsvValue(row, ['email']),
+        note: pickCsvValue(row, ['note'])
+      }));
+    }
+
+    if (detectedType === 'photos') {
+      const out = {};
+      for (const row of rows) {
+        const id = normalizeId(pickCsvValue(row, ['person_id', 'id']));
+        const path = pickCsvValue(row, ['photo_path', 'path', 'photo', 'file', 'photo_file']);
+        if (!id || !path) continue;
+        out[id] = path;
+      }
+      return out;
+    }
+
+    return null;
+  }
+
+  function parseImportFile(file, rawText) {
+    const filename = String(file?.name || '').toLowerCase();
+    const mime = String(file?.type || '').toLowerCase();
+    const csvByName = filename.endsWith('.csv');
+    const csvByMime = mime.includes('csv');
+
+    if (csvByName || csvByMime) {
+      const table = parseCsvTable(rawText);
+      const detectedType = detectImportTypeFromCsvHeaders(table.headers);
+      return {
+        parsed: payloadFromCsvRows(table.rows, detectedType),
+        detectedType,
+        format: 'csv'
+      };
+    }
+
+    const parsed = parseImportJson(rawText);
+    return { parsed, detectedType: detectImportType(parsed), format: 'json' };
+  }
+
   function detectImportType(payload) {
     if (Array.isArray(payload)) {
       if (!payload.length) return 'unknown';
@@ -393,7 +627,7 @@
     state.importDraft = null;
     if (qs('admin-import-file')) qs('admin-import-file').value = '';
     if (qs('admin-import-target')) qs('admin-import-target').value = '';
-    if (qs('admin-import-summary')) qs('admin-import-summary').textContent = 'Upload a JSON file, preview impact, then apply.';
+    if (qs('admin-import-summary')) qs('admin-import-summary').textContent = IMPORT_HELP_TEXT;
     if (qs('admin-import-preview-box')) qs('admin-import-preview-box').textContent = '';
   }
 
@@ -682,22 +916,30 @@
     return `"${escaped}"`;
   }
 
+  function downloadCsv(filename, rows) {
+    const csv = csvFromRows(rows);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function csvFromRows(rows) {
+    return (rows || []).map(cols => (cols || []).map(toCsvCell).join(',')).join('\r\n');
+  }
+
   function exportLogsCsv() {
     const rows = [['Timestamp', 'Status', 'Message']];
     for (const log of state.actionLogs) {
       rows.push([log.time, log.status === 'unsaved' ? 'Unsaved' : 'Saved', log.message]);
     }
 
-    const csv = rows.map(cols => cols.map(toCsvCell).join(',')).join('\r\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'admin-action-logs.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    downloadCsv('admin-action-logs.csv', rows);
     setStatus('Exported action logs CSV.', false);
     addLog('Exported action logs as CSV.', false);
   }
@@ -1861,6 +2103,77 @@
     URL.revokeObjectURL(url);
   }
 
+  function personsCsvRows() {
+    const rows = [[
+      'person_id',
+      'given_name',
+      'surname',
+      'sex',
+      'birth_date',
+      'birth_date_type',
+      'deceased',
+      'death_date',
+      'archived',
+      'archived_at',
+      'birth_place_id',
+      'birth_place_name',
+      'active_spouse_id',
+      'divorces_json',
+      'jyotisha_json',
+      'custom_json'
+    ]];
+    for (const p of sanitizePersons()) {
+      rows.push([
+        p.person_id,
+        p.given_name,
+        p.surname,
+        p.sex,
+        p.birth_date,
+        p.birth_date_type,
+        p.deceased ? 'true' : 'false',
+        p.death_date,
+        p.archived ? 'true' : 'false',
+        p.archived_at,
+        p.birth_place_id,
+        p.birth_place_name,
+        p.active_spouse_id,
+        JSON.stringify(sanitizeDivorces(p.divorces || [])),
+        JSON.stringify(sanitizeJyotisha(p.jyotisha || {})),
+        JSON.stringify(sanitizeCustomObject(p.custom || {}))
+      ]);
+    }
+    return rows;
+  }
+
+  function familiesCsvRows() {
+    const rows = [['family_id', 'husband_id', 'wife_id', 'children_json']];
+    for (const f of generateFamiliesFromRelations()) {
+      rows.push([
+        String(f.family_id || ''),
+        String(f.husband_id || ''),
+        String(f.wife_id || ''),
+        JSON.stringify(Array.isArray(f.children) ? f.children : [])
+      ]);
+    }
+    return rows;
+  }
+
+  function contactsCsvRows() {
+    const rows = [['person_id', 'phone', 'email', 'note']];
+    for (const c of sanitizeContacts()) {
+      rows.push([c.person_id, c.phone, c.email, c.note]);
+    }
+    return rows;
+  }
+
+  function photosCsvRows() {
+    const rows = [['person_id', 'photo_path']];
+    for (const [id, path] of Object.entries(sanitizePhotos())) {
+      rows.push([id, path]);
+    }
+    return rows;
+  }
+
   function buildZipTimestamp() {
     const d = new Date();
     const pad = (n) => String(n).padStart(2, '0');
@@ -1899,12 +2212,28 @@
     markUnsavedLogsAsSaved('Marked unsaved actions as saved after persons.json export.');
   }
 
+  function exportPersonsCsv() {
+    if (!validateBeforeExport()) return;
+    downloadCsv('persons.csv', personsCsvRows());
+    setStatus('Downloaded persons.csv', false);
+    addLog('Downloaded persons.csv.', false);
+    markUnsavedLogsAsSaved('Marked unsaved actions as saved after persons.csv export.');
+  }
+
   function exportFamilies() {
     if (!validateBeforeExport()) return;
     downloadJson('families.json', generateFamiliesFromRelations());
     setStatus('Downloaded families.json', false);
     addLog('Downloaded families.json.', false);
     markUnsavedLogsAsSaved('Marked unsaved actions as saved after families.json export.');
+  }
+
+  function exportFamiliesCsv() {
+    if (!validateBeforeExport()) return;
+    downloadCsv('families.csv', familiesCsvRows());
+    setStatus('Downloaded families.csv', false);
+    addLog('Downloaded families.csv.', false);
+    markUnsavedLogsAsSaved('Marked unsaved actions as saved after families.csv export.');
   }
 
   function exportContacts() {
@@ -1915,12 +2244,28 @@
     markUnsavedLogsAsSaved('Marked unsaved actions as saved after contacts.json export.');
   }
 
+  function exportContactsCsv() {
+    if (!validateBeforeExport()) return;
+    downloadCsv('contacts.csv', contactsCsvRows());
+    setStatus('Downloaded contacts.csv', false);
+    addLog('Downloaded contacts.csv.', false);
+    markUnsavedLogsAsSaved('Marked unsaved actions as saved after contacts.csv export.');
+  }
+
   function exportPhotos() {
     if (!validateBeforeExport()) return;
     downloadJson('photos.json', sanitizePhotos());
     setStatus('Downloaded photos.json', false);
     addLog('Downloaded photos.json.', false);
     markUnsavedLogsAsSaved('Marked unsaved actions as saved after photos.json export.');
+  }
+
+  function exportPhotosCsv() {
+    if (!validateBeforeExport()) return;
+    downloadCsv('photos.csv', photosCsvRows());
+    setStatus('Downloaded photos.csv', false);
+    addLog('Downloaded photos.csv.', false);
+    markUnsavedLogsAsSaved('Marked unsaved actions as saved after photos.csv export.');
   }
 
   function exportSchema() {
@@ -1958,6 +2303,36 @@
     setStatus(`Downloaded ${filename}`, false);
     addLog(`Downloaded ${filename} (persons, families, contacts, photos, schema).`, false);
     markUnsavedLogsAsSaved('Marked unsaved actions as saved after ZIP export.');
+  }
+
+  async function exportAllCsv() {
+    if (!validateBeforeExport()) return;
+    if (typeof window.JSZip === 'undefined') {
+      setStatus('ZIP library not loaded. Please refresh and try again.', true);
+      return;
+    }
+
+    const zip = new window.JSZip();
+    zip.file('persons.csv', csvFromRows(personsCsvRows()));
+    zip.file('families.csv', csvFromRows(familiesCsvRows()));
+    zip.file('contacts.csv', csvFromRows(contactsCsvRows()));
+    zip.file('photos.csv', csvFromRows(photosCsvRows()));
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const stamp = buildZipTimestamp();
+    const filename = `VAMSHA-CSV-${stamp}.zip`;
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    setStatus(`Downloaded ${filename}`, false);
+    addLog(`Downloaded ${filename} (persons, families, contacts, photos CSV).`, false);
+    markUnsavedLogsAsSaved('Marked unsaved actions as saved after CSV ZIP export.');
   }
 
   function showAdminPanel() {
@@ -2700,48 +3075,52 @@
     });
 
     qs('admin-export-persons')?.addEventListener('click', exportPersons);
+    qs('admin-export-persons-csv')?.addEventListener('click', exportPersonsCsv);
     qs('admin-export-families')?.addEventListener('click', exportFamilies);
+    qs('admin-export-families-csv')?.addEventListener('click', exportFamiliesCsv);
     qs('admin-export-contacts')?.addEventListener('click', exportContacts);
+    qs('admin-export-contacts-csv')?.addEventListener('click', exportContactsCsv);
     qs('admin-export-photos')?.addEventListener('click', exportPhotos);
+    qs('admin-export-photos-csv')?.addEventListener('click', exportPhotosCsv);
     qs('admin-export-schema')?.addEventListener('click', exportSchema);
     qs('admin-export-all')?.addEventListener('click', exportAll);
+    qs('admin-export-all-csv')?.addEventListener('click', exportAllCsv);
     qs('admin-import-file')?.addEventListener('change', async function (e) {
       const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
       if (!file) {
         state.importDraft = null;
         if (qs('admin-import-target')) qs('admin-import-target').value = '';
-        if (qs('admin-import-summary')) qs('admin-import-summary').textContent = 'Upload a JSON file, preview impact, then apply.';
+        if (qs('admin-import-summary')) qs('admin-import-summary').textContent = IMPORT_HELP_TEXT;
         if (qs('admin-import-preview-box')) qs('admin-import-preview-box').textContent = '';
         return;
       }
       try {
         const text = await file.text();
-        const parsed = parseImportJson(text);
-        const detectedType = detectImportType(parsed);
-        state.importDraft = { filename: file.name, parsed, detectedType, preview: null };
-        if (qs('admin-import-target')) qs('admin-import-target').value = detectedType;
+        const parsedResult = parseImportFile(file, text);
+        state.importDraft = { filename: file.name, parsed: parsedResult.parsed, detectedType: parsedResult.detectedType, format: parsedResult.format, preview: null };
+        if (qs('admin-import-target')) qs('admin-import-target').value = parsedResult.detectedType;
         if (qs('admin-import-summary')) {
-          qs('admin-import-summary').textContent = detectedType === 'unknown'
-            ? `Could not detect JSON type for ${file.name}.`
-            : `Detected ${detectedType} from ${file.name}.`;
+          qs('admin-import-summary').textContent = parsedResult.detectedType === 'unknown'
+            ? `Could not detect import type for ${file.name}.`
+            : `Detected ${parsedResult.detectedType} from ${file.name} (${parsedResult.format.toUpperCase()}).`;
         }
         if (qs('admin-import-preview-box')) qs('admin-import-preview-box').textContent = '';
       } catch (err) {
         state.importDraft = null;
         if (qs('admin-import-target')) qs('admin-import-target').value = 'invalid';
-        if (qs('admin-import-summary')) qs('admin-import-summary').textContent = `Invalid JSON: ${err.message}`;
+        if (qs('admin-import-summary')) qs('admin-import-summary').textContent = `Invalid import file: ${err.message}`;
         if (qs('admin-import-preview-box')) qs('admin-import-preview-box').textContent = '';
       }
     });
     qs('admin-import-preview')?.addEventListener('click', function () {
-      if (!state.importDraft || !state.importDraft.parsed) {
-        setStatus('Select a JSON file first.', true);
+      if (!state.importDraft) {
+        setStatus('Select a JSON or CSV file first.', true);
         return;
       }
       const mode = String(qs('admin-import-mode')?.value || 'merge');
       const type = state.importDraft.detectedType;
       if (!type || type === 'unknown' || type === 'invalid' || type === 'schema') {
-        setStatus('Unsupported import type. Use persons/families/contacts/photos JSON.', true);
+        setStatus('Unsupported import type. Use persons/families/contacts/photos JSON or CSV.', true);
         return;
       }
       const preview = previewImport(state.importDraft.parsed, type, mode);
@@ -2751,14 +3130,14 @@
       setStatus('Import preview generated.', false);
     });
     qs('admin-import-apply')?.addEventListener('click', function () {
-      if (!state.importDraft || !state.importDraft.parsed) {
-        setStatus('Select and preview a JSON import first.', true);
+      if (!state.importDraft) {
+        setStatus('Select and preview a JSON or CSV import first.', true);
         return;
       }
       const mode = String(qs('admin-import-mode')?.value || 'merge');
       const type = state.importDraft.detectedType;
       if (!type || type === 'unknown' || type === 'invalid' || type === 'schema') {
-        setStatus('Unsupported import type. Use persons/families/contacts/photos JSON.', true);
+        setStatus('Unsupported import type. Use persons/families/contacts/photos JSON or CSV.', true);
         return;
       }
       const stats = applyImport(state.importDraft.parsed, type, mode);

@@ -6,3 +6,7 @@ Implimented  displaying
 - Nakshatra
 - Rashi
 - Divorce (if applicable)
+
+v-6.0.3 
+
+CSV import and export added

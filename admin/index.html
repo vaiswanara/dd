@@ -614,7 +614,7 @@
         <div class="admin-panel-header">
             <div class="admin-title-wrap">
                 <h3>Admin Editor</h3>
-                <p>Edit members and relationships, then export JSON files.</p>
+                <p>Edit members and relationships, then export JSON or CSV files.</p>
                 <span id="admin-dirty-tag" class="admin-dirty-pill" style="display:none;">Unsaved draft changes</span>
             </div>
             <button id="admin-close-panel" class="admin-close-btn" type="button">Close</button>
@@ -924,19 +924,42 @@
             </section>
 
             <section class="admin-section">
-                <h4>Apply + Export</h4>
-                <div class="admin-actions-row">
-                    <button id="admin-save-person" class="admin-btn primary" type="button">Save Person</button>
-                    <button id="admin-refresh-tree" class="admin-btn secondary" type="button">Refresh Tree Now</button>
-                    <button id="admin-discard-changes" class="admin-btn warn" type="button">Discard Changes</button>
-                    <button id="admin-export-persons" class="admin-btn muted" type="button">Download persons.json</button>
-                    <button id="admin-export-families" class="admin-btn muted" type="button">Download families.json</button>
-                    <button id="admin-export-contacts" class="admin-btn muted" type="button">Download contacts.json</button>
-                    <button id="admin-export-photos" class="admin-btn muted" type="button">Download photos.json</button>
-                    <button id="admin-export-schema" class="admin-btn muted" type="button">Download schema.json</button>
-                    <button id="admin-export-all" class="admin-btn warn" type="button">Download All 4</button>
-                </div>
-                <div id="admin-status-line"></div>
+                <details id="admin-apply-details" open>
+                    <summary class="admin-collapsible-summary">Apply</summary>
+                    <div class="admin-actions-row" style="margin-top:10px;">
+                        <button id="admin-save-person" class="admin-btn primary" type="button">Save Person</button>
+                        <button id="admin-refresh-tree" class="admin-btn secondary" type="button">Refresh Tree Now</button>
+                        <button id="admin-discard-changes" class="admin-btn warn" type="button">Discard Changes</button>
+                    </div>
+                    <div id="admin-status-line"></div>
+                </details>
+            </section>
+
+            <section class="admin-section">
+                <details id="admin-export-json-details">
+                    <summary class="admin-collapsible-summary">Export JSON</summary>
+                    <div class="admin-actions-row" style="margin-top:10px;">
+                        <button id="admin-export-persons" class="admin-btn muted" type="button">Download persons.json</button>
+                        <button id="admin-export-families" class="admin-btn muted" type="button">Download families.json</button>
+                        <button id="admin-export-contacts" class="admin-btn muted" type="button">Download contacts.json</button>
+                        <button id="admin-export-photos" class="admin-btn muted" type="button">Download photos.json</button>
+                        <button id="admin-export-schema" class="admin-btn muted" type="button">Download schema.json</button>
+                        <button id="admin-export-all" class="admin-btn warn" type="button">Download All JSON</button>
+                    </div>
+                </details>
+            </section>
+
+            <section class="admin-section">
+                <details id="admin-export-csv-details">
+                    <summary class="admin-collapsible-summary">Export CSV</summary>
+                    <div class="admin-actions-row" style="margin-top:10px;">
+                        <button id="admin-export-persons-csv" class="admin-btn muted" type="button">Download persons.csv</button>
+                        <button id="admin-export-families-csv" class="admin-btn muted" type="button">Download families.csv</button>
+                        <button id="admin-export-contacts-csv" class="admin-btn muted" type="button">Download contacts.csv</button>
+                        <button id="admin-export-photos-csv" class="admin-btn muted" type="button">Download photos.csv</button>
+                        <button id="admin-export-all-csv" class="admin-btn warn" type="button">Download All CSV</button>
+                    </div>
+                </details>
             </section>
 
             <section class="admin-section">
@@ -944,8 +967,8 @@
                     <summary class="admin-collapsible-summary">Import + Merge</summary>
                     <div class="admin-grid-single" style="margin-top:10px;">
                         <div class="admin-field">
-                            <label for="admin-import-file">Upload JSON File</label>
-                            <input id="admin-import-file" type="file" accept=".json,application/json">
+                            <label for="admin-import-file">Upload JSON/CSV File</label>
+                            <input id="admin-import-file" type="file" accept=".json,.csv,application/json,text/csv">
                         </div>
                     </div>
                     <div class="admin-grid" style="margin-top:10px;">
@@ -967,7 +990,7 @@
                         <button id="admin-import-apply" class="admin-btn primary" type="button">Apply Import</button>
                         <button id="admin-import-clear" class="admin-btn warn" type="button">Clear Import</button>
                     </div>
-                    <div id="admin-import-summary" class="admin-note" style="margin-top:10px;">Upload a JSON file, preview impact, then apply.</div>
+                    <div id="admin-import-summary" class="admin-note" style="margin-top:10px;">Upload a JSON or CSV file, preview impact, then apply.</div>
                     <pre id="admin-import-preview-box" class="admin-import-preview-box"></pre>
                 </details>
             </section>
