@@ -153,6 +153,23 @@
         .report-link-item:hover { background: #f9f9f9; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .report-link-item.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
 
+        /* --- Jyotisha Page --- */
+        #jyotisha-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .jyotisha-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
+        .jyotisha-back { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; color: #333; }
+        .jyotisha-content { padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        
+        .jyotisha-search-box { position: relative; margin-bottom: 25px; }
+        .jyotisha-search-input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        .jyotisha-search-input:focus { border-color: var(--primary-color); }
+        .jyotisha-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        .jyotisha-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid #9C27B0; }
+        .jyotisha-person-name { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+        .jyotisha-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px; }
+        .jyotisha-label { color: #666; font-weight: 500; }
+        .jyotisha-value { font-weight: bold; color: #9C27B0; }
+
         /* --- Relationship Report Page --- */
         #relationship-report-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; flex-direction: column; overflow-y: auto; animation: fadeIn 0.3s ease; }
         .report-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; background: #fff; position: sticky; top: 0; z-index: 1; }
@@ -244,7 +261,7 @@
             #person-modal-overlay, #relationship-modal-overlay, 
             #app-toast, #birthdays-page, #form-page, #help-page, 
             #install-page, #about-page, #feedback-page, #updates-page,
-            #reports-page,
+            #reports-page, #jyotisha-page,
             header {
                 display: none !important;
             }
@@ -545,6 +562,7 @@
             <li><a href="#" id="nav-updates" onclick="window.showUpdatesPage(); closeSidebar();">📰 UPDATES</a></li>
             <li><a href="#" id="nav-birthdays" onclick="showBirthdays(); closeSidebar();">🎂 BIRTHDAYs</a></li>
             <li><a href="#" id="nav-reports" onclick="window.showReportsPage(); closeSidebar();">📊 REPORTS</a></li>
+            <li><a href="#" id="nav-jyotisha" onclick="window.showJyotishaPage(); closeSidebar();">🔮 JYOTISHA</a></li>
             <li><a href="#" id="nav-update-data" onclick="showFormPage(); closeSidebar();">📝 UPDATE DATA</a></li>
             <li><a href="#" id="nav-help" onclick="showHelp(); closeSidebar();">❓ HELP</a></li>
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
@@ -694,6 +712,52 @@
         </div>
         <div id="birthdays-content" class="birthdays-content">
             <!-- Content injected by app.js -->
+        </div>
+    </div>
+
+    <!-- Jyotisha Page -->
+    <div id="jyotisha-page">
+        <div class="jyotisha-header">
+            <button id="jyotisha-page-close" class="jyotisha-back">&larr;</button>
+            <h3 style="margin:0; font-size: 18px;">Jyotisha Details</h3>
+        </div>
+        <div class="jyotisha-content">
+            <div class="jyotisha-search-box">
+                <label for="jyotisha-search-input" style="display:block; margin-bottom:8px; color:#555; font-weight:500;">Select person:</label>
+                <input type="text" id="jyotisha-search-input" class="jyotisha-search-input" placeholder="Search person...">
+                <div id="jyotisha-search-suggestions" class="jyotisha-suggestions"></div>
+            </div>
+
+            <div id="jyotisha-details-card" class="jyotisha-card" style="display:none;">
+                <div class="jyotisha-person-name" id="jyotisha-name"></div>
+                <div class="jyotisha-row">
+                    <span class="jyotisha-label">Janma Nakshatra :</span>
+                    <span class="jyotisha-value" id="jyotisha-nakshatra">-</span>
+                </div>
+                <div class="jyotisha-row">
+                    <span class="jyotisha-label">Janma Rashi :</span>
+                    <span class="jyotisha-value" id="jyotisha-rashi">-</span>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #eee;">
+                    <h4 style="margin: 0 0 10px; color: #4A90E2;">Tara Bhala (Daily)</h4>
+                    <div id="jyotisha-tara-result" style="font-size: 15px; line-height: 1.5;">-</div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #eee;">
+                    <h4 style="margin: 0 0 10px; color: #4A90E2;">Chandra Bhala (Daily)</h4>
+                    <div id="jyotisha-chandra-result" style="font-size: 15px; line-height: 1.5;">-</div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #eee;">
+                    <h4 style="margin: 0 0 10px; color: #4A90E2;">Guru Bhala</h4>
+                    <div id="jyotisha-guru-result" style="font-size: 15px; line-height: 1.5;">-</div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #eee;">
+                    <h4 style="margin: 0 0 10px; color: #4A90E2;">Shani Bhala</h4>
+                    <div id="jyotisha-shani-result" style="font-size: 15px; line-height: 1.5;">-</div>
+                </div>
+            </div>
+            <div id="jyotisha-empty-msg" style="text-align:center; color:#666; margin-top:20px;">
+                Select a person to view details.
+            </div>
         </div>
     </div>
 
@@ -1055,7 +1119,9 @@
 
     <!-- Scripts -->
     <script src="https://balkan.app/js/FamilyTree.js"></script>
+    <script src="dateUtils.js"></script>
     <script src="relationship.js"></script>
+    <script src="jyotisha.js"></script>
     <script src="app.js"></script>
     <script>
         // Sidebar toggle and close (expose closeSidebar for menu onclick)

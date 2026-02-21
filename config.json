@@ -9,7 +9,9 @@
     "manifest": "manifest.json",
     "photos": "json_data/photos.json",
     "updates": "updates.json",
-    "relationshipDictionary": "relationshipDictionary.json"
+    "relationshipDictionary": "relationshipDictionary.json",
+    "transit": "json_data/transit.json",
+    "transit_moon": "json_data/transit_moon.json"
   },
   "features": {
     "dashboard": true,

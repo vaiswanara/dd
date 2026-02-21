@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v6.0.4';
+const CACHE_NAME = 'family-tree-cache-v6.0.6';
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
@@ -28,6 +28,7 @@ const URLS_TO_CACHE = [
     './icon-512.png',
     './ftree.jpg',
     './logo.png',
+    './dateUtils.js',
     './relationship.js'
 ];
 
@@ -61,7 +62,9 @@ self.addEventListener('install', event => {
                         config.data_files.manifest,
                         config.data_files.photos,
                         config.data_files.updates,
-                        config.data_files.relationshipDictionary
+                        config.data_files.relationshipDictionary,
+                        config.data_files.transit,
+                        config.data_files.transit_moon
                     ].filter(path => path) // Filter out undefined paths to prevent errors
                      .map(path => './' + path);
                     

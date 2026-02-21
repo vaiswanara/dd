@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activePersonId = null;  // Currently centered person in the tree (used by profile button)
     const brokenImageUrls = new Set();
     const checkedImageUrls = new Set();
+    const attemptedAlternateImageKeys = new Set();
     let brokenImageRedrawTimer = null;
     const relationshipModalOverlay = document.getElementById('relationship-modal-overlay');
     const relationshipModalBody = document.getElementById('relationship-modal-body');
@@ -94,6 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return APP_BASE_PREFIX + raw.replace(/^\.?\//, '');
     }
 
+    function escapeHtml(text) {
+        if (text == null) return "";
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     function scheduleBrokenImageRedraw() {
         if (brokenImageRedrawTimer) return;
         brokenImageRedrawTimer = setTimeout(() => {
@@ -102,7 +113,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 120);
     }
 
-    function probeImageUrl(url) {
+    function buildAlternateImageUrls(url) {
+        const original = String(url || '').trim();
+        if (!original) return [];
+        const match = original.match(/^(.*)\.([a-z0-9]+)([?#].*)?$/i);
+        if (!match) return [];
+        const base = match[1];
+        const currentExt = String(match[2] || '').toLowerCase();
+        const suffix = match[3] || '';
+        const preferred = ['jpg', 'jpeg', 'png'];
+        const out = [];
+        for (const ext of preferred) {
+            if (ext === currentExt) continue;
+            out.push(`${base}.${ext}${suffix}`);
+        }
+        return out;
+    }
+
+    function tryResolveAlternateImage(personId, failedUrl) {
+        const pid = String(personId || '').trim();
+        const failed = String(failedUrl || '').trim();
+        if (!pid || !failed) return;
+        const key = `${pid}|${failed}`;
+        if (attemptedAlternateImageKeys.has(key)) return;
+        attemptedAlternateImageKeys.add(key);
+
+        const candidates = buildAlternateImageUrls(failed).filter(u => !brokenImageUrls.has(u));
+        if (!candidates.length) return;
+
+        const tryNext = (index) => {
+            if (index >= candidates.length) return;
+            const candidate = candidates[index];
+            if (checkedImageUrls.has(candidate)) {
+                if (peopleMap.has(pid)) {
+                    peopleMap.get(pid).image_url = candidate;
+                    scheduleBrokenImageRedraw();
+                }
+                return;
+            }
+
+            const img = new Image();
+            img.onload = () => {
+                checkedImageUrls.add(candidate);
+                if (peopleMap.has(pid)) {
+                    peopleMap.get(pid).image_url = candidate;
+                    scheduleBrokenImageRedraw();
+                }
+            };
+            img.onerror = () => {
+                brokenImageUrls.add(candidate);
+                tryNext(index + 1);
+            };
+            img.src = candidate;
+        };
+
+        tryNext(0);
+    }
+
+    function probeImageUrl(url, personId) {
         const u = String(url || '').trim();
         if (!u) return;
         if (checkedImageUrls.has(u) || brokenImageUrls.has(u)) return;
@@ -112,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.onload = () => {};
         img.onerror = () => {
             brokenImageUrls.add(u);
+            tryResolveAlternateImage(personId, u);
             console.warn('[Photos] Broken image detected:', u);
             scheduleBrokenImageRedraw();
         };
@@ -301,36 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (person.mid) addChild(person.mid, person.id);
         });
 
-        // Helper to parse date for sorting (returns timestamp or null)
-        const parseSortDate = (dateStr) => {
-            if (!dateStr || !String(dateStr).trim()) return null;
-            // Handle separators -, /, ., or space
-            const parts = String(dateStr).trim().split(/[\-\/\.\s]+/);
-            if (parts.length !== 3) return null;
-            const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
-            const day = parseInt(parts[0], 10);
-            const p1 = parts[1].toUpperCase().slice(0, 3);
-            let month = months[p1];
-            
-            // Fallback for numeric month (e.g. 01, 12)
-            if (month === undefined) {
-                const mVal = parseInt(parts[1], 10);
-                if (!isNaN(mVal) && mVal >= 1 && mVal <= 12) month = mVal - 1;
-            }
-            
-            let year = parseInt(parts[2], 10);
-            
-            if (month === undefined || isNaN(day) || isNaN(year)) return null;
-            
-            // Handle 2-digit years consistent with other app logic
-            if (year < 100) {
-                const currentYear = new Date().getFullYear() % 100;
-                const pivot = currentYear + 10;
-                year = year > pivot ? 1900 + year : 2000 + year;
-            }
-            return new Date(year, month, day).getTime();
-        };
-
         // After populating, sort all children arrays.
         for (const children of childrenMap.values()) {
             // 1. Default sort by ID (stable baseline)
@@ -341,8 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const pA = peopleMap.get(a);
                 const pB = peopleMap.get(b);
                 
-                const dateA = pA && pA.Birth ? parseSortDate(pA.Birth) : null;
-                const dateB = pB && pB.Birth ? parseSortDate(pB.Birth) : null;
+                const dateA = pA && pA.Birth && window.DateUtils ? window.DateUtils.parse(pA.Birth) : null;
+                const dateB = pB && pB.Birth && window.DateUtils ? window.DateUtils.parse(pB.Birth) : null;
 
                 if (dateA !== null && dateB !== null) return dateA - dateB;
                 if (dateA !== null) return -1; // Has date -> comes first
@@ -506,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (brokenImageUrls.has(nodeImageUrl)) {
                     node.image_url = "";
                 } else {
-                    probeImageUrl(nodeImageUrl);
+                    probeImageUrl(nodeImageUrl, node.id);
                 }
             }
             const hasImage = !!(node.image_url && node.image_url.trim() !== "");
@@ -566,90 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SECTION 4: TREE RENDERING
     // =================================================================================
     
-    /**
-     * Helper to format date from dd-MMM-yy to dd-MMM-yyyy.
-     * Handles 2-digit years (e.g., 80 -> 1980, 22 -> 2022).
-     */
-    function formatDate(dateStr) {
-        if (!dateStr) return "";
-        
-        // Check for format like 10-May-80
-        const parts = dateStr.split('-');
-        if (parts.length === 3) {
-            const day = parts[0];
-            const month = parts[1];
-            let year = parseInt(parts[2], 10);
-            
-            // Pivot logic: Assume 20th century if year > current year + 10
-            if (year < 100) {
-                const currentYear = new Date().getFullYear() % 100;
-                const pivot = currentYear + 10;
-                year = year > pivot ? 1900 + year : 2000 + year;
-            }
-            return `${day}-${month}-${year}`;
-        }
-        return dateStr;
-    }
-
-    /**
-     * Parse birth date string (dd-MMM-yy or dd-MMM-yyyy) and return age in years, or null.
-     */
-    function getAgeFromBirth(birthStr) {
-        if (!birthStr || !String(birthStr).trim()) return null;
-        const parts = String(birthStr).trim().split('-');
-        if (parts.length !== 3) return null;
-        const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
-        const day = parseInt(parts[0], 10);
-        const monthKey = parts[1].toUpperCase().slice(0, 3);
-        const month = months[monthKey];
-        if (month === undefined || isNaN(day)) return null;
-        let year = parseInt(parts[2], 10);
-        if (year < 100) {
-            const currentYear = new Date().getFullYear() % 100;
-            const pivot = currentYear + 10;
-            year = year > pivot ? 1900 + year : 2000 + year;
-        }
-        const birth = new Date(year, month, day);
-        if (isNaN(birth.getTime())) return null;
-        const today = new Date();
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-        return age < 0 || age > 150 ? null : age;
-    }
-
-    /**
-     * Parse birth date string to { month: 0-11, day: 1-31 } for matching month-day.
-     */
-    function getMonthDayFromBirth(birthStr) {
-        if (!birthStr || !String(birthStr).trim()) return null;
-        const parts = String(birthStr).trim().split('-');
-        if (parts.length !== 3) return null;
-        const months = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
-        const day = parseInt(parts[0], 10);
-        const monthKey = parts[1].toUpperCase().slice(0, 3);
-        const month = months[monthKey];
-        if (month === undefined || isNaN(day) || day < 1 || day > 31) return null;
-        return { month, day };
-    }
-
     const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-    const MONTH_ABBR = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
-    /** Parse birth string and return 4-digit year, or null. */
-    function getBirthYearFromBirth(birthStr) {
-        if (!birthStr || !String(birthStr).trim()) return null;
-        const parts = String(birthStr).trim().split('-');
-        if (parts.length !== 3) return null;
-        let year = parseInt(parts[2], 10);
-        if (isNaN(year)) return null;
-        if (year < 100) {
-            const currentYear = new Date().getFullYear() % 100;
-            const pivot = currentYear + 10;
-            year = year > pivot ? 1900 + year : 2000 + year;
-        }
-        return year;
-    }
 
     /**
      * Build WhatsApp chat URL for a phone number. Strips non-digits; opens chat only (no pre-filled text).
@@ -674,8 +630,8 @@ document.addEventListener('DOMContentLoaded', () => {
             d.setDate(d.getDate() + i);
             const day = d.getDate();
             const month = d.getMonth();
-            const year = d.getFullYear();
-            const dateStr = String(day) + '-' + MONTH_ABBR[month] + '-' + year;
+            const year = d.getFullYear(); // Current year for display
+            const dateStr = window.DateUtils ? window.DateUtils.formatDisplay(d) : d.toDateString();
             const weekday = WEEKDAYS[d.getDay()];
             
             const dayEntry = { date: d, dateStr, weekday, persons: [] };
@@ -684,9 +640,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (p.deceased) return;
                 if (p.birth_date_type !== 'exact') return;
 
-                const md = getMonthDayFromBirth(p.Birth || '');
+                const md = window.DateUtils ? window.DateUtils.getMonthDay(p.Birth || '') : null;
                 if (!md || md.month !== month || md.day !== day) return;
-                const birthYear = getBirthYearFromBirth(p.Birth || '');
+                const birthYear = window.DateUtils ? window.DateUtils.getYear(p.Birth || '') : null;
                 const ageAtDisplay = birthYear != null ? year - birthYear : null;
                 dayEntry.persons.push({
                     id: p.id,
@@ -732,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = personName(id);
             if (!name) return "";
             // Return a clickable div for the relative
-            return `<div class="modal-link" data-id="${id}" style="color: #039BE5; cursor: pointer; margin-bottom: 4px; font-weight: 500;">${name}</div>`;
+            return `<div class="modal-link" data-id="${id}" style="color: #039BE5; cursor: pointer; margin-bottom: 4px; font-weight: 500;">${escapeHtml(name)}</div>`;
         }).join("");
     }
 
@@ -748,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getCustomFieldsRows(custom) {
         if (!custom || typeof custom !== 'object' || Array.isArray(custom)) return [];
         const entries = Object.entries(custom)
-            .map(([k, v]) => [String(k || '').trim(), String(v == null ? '' : v).trim()])
+            .map(([k, v]) => [escapeHtml(String(k || '').trim()), escapeHtml(String(v == null ? '' : v).trim())])
             .filter(([k, v]) => !!k && !!v)
             .sort((a, b) => a[0].localeCompare(b[0]));
         return entries.map(([key, value]) => rowHtml(key, value));
@@ -859,7 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeModalPersonId = personId;
 
         const fullName = (p.name || "").trim() || "Unknown";
-        personModalName.textContent = fullName;
+        personModalName.textContent = fullName; // textContent is safe
         
         // ID and Optional Badge for Home Person
         let idHtml = `ID: ${p.id}`;
@@ -922,11 +878,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const spouses = Array.isArray(p.pids) ? p.pids : [];
         const children = childrenMap.get(p.id) || [];
 
-        const birthFormatted = formatDate(p.Birth || "");
-        const age = getAgeFromBirth(p.Birth || "");
+        const birthFormatted = window.DateUtils ? window.DateUtils.formatDisplay(p.Birth || "") : (p.Birth || "");
+        const age = window.DateUtils ? window.DateUtils.getAge(p.Birth || "") : null;
         const birthWithAge = birthFormatted ? (birthFormatted + (age != null ? ` (${age})` : "")) : "";
 
-        const deathFormatted = formatDate(p.death_date || p.Death || "");
+        const deathFormatted = window.DateUtils ? window.DateUtils.formatDisplay(p.death_date || p.Death || "") : (p.death_date || p.Death || "");
         const rows = [
             rowHtml("Date of Birth", birthWithAge)
         ];
@@ -964,10 +920,10 @@ document.addEventListener('DOMContentLoaded', () => {
         rows.push(
             rowHtml("Children", collectNames(children)),
             rowHtml("Siblings", collectNames(siblings)),
-            rowHtml("Address", p.Address || ""),
-            rowHtml("Email", p.email ? `<a href=\"mailto:${p.email}\" style=\"color: #039BE5; text-decoration: none;\">${p.email}</a>` : ""),
-            rowHtml("Phone", p.phone ? `<a href=\"tel:${p.phone}\" style=\"color: #039BE5; text-decoration: none;\">${p.phone}</a>` : ""),
-            rowHtml("Note", p.note || "")
+            rowHtml("Birth Place", escapeHtml(p.Address || "")),
+            rowHtml("Email", p.email ? `<a href=\"mailto:${escapeHtml(p.email)}\" style=\"color: #039BE5; text-decoration: none;\">${escapeHtml(p.email)}</a>` : ""),
+            rowHtml("Phone", p.phone ? `<a href=\"tel:${escapeHtml(p.phone)}\" style=\"color: #039BE5; text-decoration: none;\">${escapeHtml(p.phone)}</a>` : ""),
+            rowHtml("Note", escapeHtml(p.note || ""))
         );
         rows.push(...getCustomFieldsRows(p.custom));
         personModalBody.innerHTML = rows.join("");
@@ -1050,8 +1006,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const spouses = Array.isArray(p.pids) ? p.pids : [];
         const children = childrenMap.get(p.id) || [];
 
-        const birthFormatted = formatDate(p.Birth || "");
-        const age = getAgeFromBirth(p.Birth || "");
+        const birthFormatted = window.DateUtils ? window.DateUtils.formatDisplay(p.Birth || "") : (p.Birth || "");
+        const age = window.DateUtils ? window.DateUtils.getAge(p.Birth || "") : null;
         const birthWithAge = birthFormatted ? (birthFormatted + (age != null ? ` (Age: ${age})` : "")) : "Not available";
 
         // --- Construct the text to share ---
@@ -1241,15 +1197,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (homeId === activeModalPersonId) {
                 relationshipHtml = `
                     <p style="margin-bottom: 10px;">This is the currently set Home Person:</p>
-                    <strong style="font-size: 1.2em; color: var(--primary-color);">${homePerson.name}</strong>
+                    <strong style="font-size: 1.2em; color: var(--primary-color);">${escapeHtml(homePerson.name)}</strong>
                 `;
             } else {
                 const relation = findRelationship(homeId, activeModalPersonId);
                 relationshipHtml = `
                     <p style="margin:0 0 5px;">Relationship between:</p>
-                    <strong style="font-size: 1.1em; display: block; margin-bottom: 15px;">${homePerson.name} (Home)</strong>
+                    <strong style="font-size: 1.1em; display: block; margin-bottom: 15px;">${escapeHtml(homePerson.name)} (Home)</strong>
                     <span style="font-size: 1.5em; color: #888;">&</span>
-                    <strong style="font-size: 1.1em; display: block; margin-top: 15px;">${modalPerson.name} (Profile)</strong>
+                    <strong style="font-size: 1.1em; display: block; margin-top: 15px;">${escapeHtml(modalPerson.name)} (Profile)</strong>
                     <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
                     <p style="font-size: 1.4em; color: var(--primary-color); font-weight: bold; margin:0;">${relation}</p>
                 `;
@@ -1415,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
         matches.forEach(person => {
             const item = document.createElement('div');
             item.className = 'suggestion-item';
-            item.innerHTML = `<strong>${person.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${person.id}</span>`;
+            item.innerHTML = `<strong>${escapeHtml(person.name)}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${person.id}</span>`;
             item.dataset.id = person.id;
             item.addEventListener('click', () => {
                 drawTree(person.id);
@@ -1631,8 +1587,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const message = cols[1];
                     const expiryStr = cols[2];
 
-                    const itemDate = parseCustomDate(dateStr);
-                    const expiryDate = parseCustomDate(expiryStr);
+                    const itemDate = window.DateUtils ? window.DateUtils.parse(dateStr) : null;
+                    const expiryDate = window.DateUtils ? window.DateUtils.parse(expiryStr) : null;
 
                     // Check expiry
                     if (expiryDate && today > expiryDate) {
@@ -1655,7 +1611,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="update-number">${index + 1})</div>
                             <div class="update-details">
                                 <div class="update-date">📅 ${item.dateStr}</div>
-                                <div class="update-text">${item.message}</div>
+                                <div class="update-text">${escapeHtml(item.message)}</div>
                             </div>
                         </div>
                     `).join('');
@@ -1716,10 +1672,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const phoneHtml = p.phone
-                        ? `<div class="birthday-phone"><a href="${getWhatsAppUrl(p.phone)}" target="_blank" rel="noopener" class="birthday-whatsapp-link" title="Open WhatsApp">${p.phone}</a></div>`
+                        ? `<div class="birthday-phone"><a href="${getWhatsAppUrl(p.phone)}" target="_blank" rel="noopener" class="birthday-whatsapp-link" title="Open WhatsApp">${escapeHtml(p.phone)}</a></div>`
                         : '';
                     return `<div class="birthday-person-block">
-                        <div class="birthday-name"><a href="#" data-person-id="${p.id}">${p.name}${ageStr}</a></div>
+                        <div class="birthday-name"><a href="#" data-person-id="${p.id}">${escapeHtml(p.name)}${ageStr}</a></div>
                         ${jyotishaHtml}
                         ${relationHtml}
                         ${phoneHtml}
@@ -1867,7 +1823,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             reportSuggestions.innerHTML = matches.map(p => `
                 <div class="suggestion-item" data-id="${p.id}">
-                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                    <strong>${escapeHtml(p.name)}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
                 </div>
             `).join('');
             reportSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
@@ -1908,7 +1864,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const matches = PEOPLE.filter(p => p.name.toLowerCase().includes(query)).slice(0, 10);
             relSuggestions.innerHTML = matches.map(p => `
                 <div class="suggestion-item" data-id="${p.id}">
-                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                    <strong>${escapeHtml(p.name)}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
                 </div>
             `).join('');
             relSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
@@ -2076,6 +2032,150 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
+    // SECTION 5.12: JYOTISHA PAGE
+    // =================================================================================
+
+    window.showJyotishaPage = function() {
+        const page = document.getElementById('jyotisha-page');
+        if (page) {
+            page.style.display = 'flex';
+            
+            // Default to Home Person
+            const homeId = getHomePersonId();
+
+            if (window.Jyotisha && typeof window.Jyotisha.init === 'function') {
+                const transitUrl = (APP_CONFIG && APP_CONFIG.data_files && APP_CONFIG.data_files.transit) 
+                                   ? toAppPath(APP_CONFIG.data_files.transit) 
+                                   : 'json_data/transit.json';
+                const moonUrl = (APP_CONFIG && APP_CONFIG.data_files && APP_CONFIG.data_files.transit_moon) 
+                                   ? toAppPath(APP_CONFIG.data_files.transit_moon) 
+                                   : 'json_data/transit_moon.json';
+                
+                window.Jyotisha.init(transitUrl, moonUrl, () => {
+                    // Data loaded: refresh the current view if we are still on this page
+                    if (currentJyotishaId && document.getElementById('jyotisha-page').style.display !== 'none') {
+                        loadJyotishaDetails(currentJyotishaId);
+                    }
+                });
+            }
+
+            if (homeId) {
+                loadJyotishaDetails(homeId);
+            }
+            
+            setTimeout(() => {
+                const input = document.getElementById('jyotisha-search-input');
+                if(input) input.focus();
+            }, 100);
+        }
+    };
+
+    const jyotishaPageClose = document.getElementById('jyotisha-page-close');
+    if (jyotishaPageClose) {
+        jyotishaPageClose.addEventListener('click', () => {
+            document.getElementById('jyotisha-page').style.display = 'none';
+        });
+    }
+
+    let currentJyotishaId = null;
+
+    function loadJyotishaDetails(personId) {
+        currentJyotishaId = personId;
+        const p = peopleMap.get(personId);
+        const card = document.getElementById('jyotisha-details-card');
+        const emptyMsg = document.getElementById('jyotisha-empty-msg');
+        const nameEl = document.getElementById('jyotisha-name');
+        const nakshatraEl = document.getElementById('jyotisha-nakshatra');
+        const rashiEl = document.getElementById('jyotisha-rashi');
+        const guruEl = document.getElementById('jyotisha-guru-result');
+        const shaniEl = document.getElementById('jyotisha-shani-result');
+        const taraEl = document.getElementById('jyotisha-tara-result');
+        const chandraEl = document.getElementById('jyotisha-chandra-result');
+        const searchInput = document.getElementById('jyotisha-search-input');
+
+        if (!p) {
+            if(card) card.style.display = 'none';
+            if(emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
+        if(card) card.style.display = 'block';
+        if(emptyMsg) emptyMsg.style.display = 'none';
+        
+        if(nameEl) nameEl.textContent = p.name;
+        if(searchInput) searchInput.value = p.name;
+
+        const j = p.jyotisha || {};
+        if(nakshatraEl) nakshatraEl.textContent = j.nakshatra || '-';
+        if(rashiEl) rashiEl.textContent = j.rashi || '-';
+
+        if (p.deceased) {
+            const msg = '<span style="color: #666;">Person not alive</span>';
+            if(guruEl) guruEl.innerHTML = msg;
+            if(shaniEl) shaniEl.innerHTML = msg;
+            if(taraEl) taraEl.innerHTML = msg;
+            if(chandraEl) chandraEl.innerHTML = msg;
+        } else if (window.Jyotisha) {
+            const details = window.Jyotisha.getDetails(j.rashi, j.nakshatra);
+            if (details) {
+                if(guruEl) guruEl.innerHTML = details.guru;
+                if(shaniEl) shaniEl.innerHTML = details.shani;
+                if(taraEl) taraEl.innerHTML = details.tara;
+                if(chandraEl) chandraEl.innerHTML = details.chandra;
+            } else {
+                if(guruEl) guruEl.textContent = "Data unavailable";
+                if(shaniEl) shaniEl.textContent = "Data unavailable";
+            }
+        } else {
+            if(guruEl) guruEl.textContent = "Jyotisha module not loaded";
+            if(shaniEl) shaniEl.textContent = "Jyotisha module not loaded";
+            if(taraEl) taraEl.textContent = "Jyotisha module not loaded";
+            if(chandraEl) chandraEl.textContent = "Jyotisha module not loaded";
+        }
+    }
+
+    const jyotishaInput = document.getElementById('jyotisha-search-input');
+    const jyotishaSuggestions = document.getElementById('jyotisha-search-suggestions');
+
+    if (jyotishaInput && jyotishaSuggestions) {
+        jyotishaInput.addEventListener('input', () => {
+            const query = jyotishaInput.value.toLowerCase().trim();
+            if (query.length < 1) {
+                jyotishaSuggestions.style.display = 'none';
+                return;
+            }
+            const matches = [];
+            for (const person of PEOPLE) {
+                if (person.name.toLowerCase().includes(query)) {
+                    matches.push(person);
+                    if (matches.length >= 10) break;
+                }
+            }
+            jyotishaSuggestions.innerHTML = matches.map(p => `
+                <div class="suggestion-item" data-id="${p.id}">
+                    <strong>${escapeHtml(p.name)}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                </div>
+            `).join('');
+            jyotishaSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+
+        jyotishaSuggestions.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (item) {
+                const id = item.dataset.id;
+                loadJyotishaDetails(id);
+                jyotishaSuggestions.style.display = 'none';
+            }
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!jyotishaInput.contains(e.target) && !jyotishaSuggestions.contains(e.target)) {
+                jyotishaSuggestions.style.display = 'none';
+            }
+        });
+    }
+
+    // =================================================================================
     // SECTION 5.9: DASHBOARD LOGIC
     // =================================================================================
 
@@ -2161,7 +2261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             dashSearchSuggestions.innerHTML = matches.map(p => `
                 <div class="suggestion-item" data-id="${p.id}">
-                    <strong>${p.name}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
+                    <strong>${escapeHtml(p.name)}</strong> <span style="font-size: 0.85em; color: #888; float: right;">${p.id}</span>
                 </div>
             `).join('');
             dashSearchSuggestions.style.display = matches.length > 0 ? 'block' : 'none';
@@ -2272,9 +2372,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (cols.length < 3) continue;
 
-                    const startDate = parseCustomDate(cols[0]);
+                    const startDate = window.DateUtils ? window.DateUtils.parse(cols[0]) : null;
                     const message = cols[1];
-                    const expiryDate = parseCustomDate(cols[2]);
+                    const expiryDate = window.DateUtils ? window.DateUtils.parse(cols[2]) : null;
 
                     if (startDate && expiryDate && message) {
                         if (today >= startDate && today <= expiryDate) {
@@ -2299,34 +2399,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error("Error fetching welcome message:", err));
     }
 
-    function parseCustomDate(dateStr) {
-        if (!dateStr) return null;
-        // Normalize separators: replace / and space with -
-        const normalized = dateStr.trim().replace(/[\/\s]/g, '-');
-        const parts = normalized.split('-');
-        
-        if (parts.length !== 3) return null;
-        
-        const day = parseInt(parts[0], 10);
-        const monthStr = parts[1].toLowerCase();
-        let year = parseInt(parts[2], 10);
-        
-        // Handle 2-digit year (e.g. 26 -> 2026)
-        if (year < 100) year += 2000;
-        
-        const months = {jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11};
-        let month = months[monthStr];
-        
-        // Fallback: if month is a number (e.g. 02)
-        if (month === undefined) {
-            const mVal = parseInt(monthStr, 10);
-            if (!isNaN(mVal)) month = mVal - 1; // 0-indexed
-        }
-        
-        if (month === undefined || isNaN(month) || isNaN(day) || isNaN(year)) return null;
-        return new Date(year, months[monthStr], day);
-    }
-
     function applyFeatureVisibility() {
         if (!APP_CONFIG || !APP_CONFIG.features) {
             console.log("Config features not found, showing all defaults.");
@@ -2344,6 +2416,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setVisible('nav-birthdays', f.birthdays !== false);
         setVisible('nav-updates', f.updates !== false);
         setVisible('nav-reports', f.reports !== false);
+        setVisible('nav-jyotisha', f.jyotisha !== false);
         setVisible('nav-install', f.install !== false);
         setVisible('nav-help', f.help !== false);
         setVisible('nav-about', f.about !== false);
@@ -2388,7 +2461,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use ONLY first name
             const firstName = (p.name || '').trim().split(' ')[0];
             const className = isCurrent ? 'lineage-item current' : 'lineage-item';
-            return `<div class="${className}" onclick="window.lineageClick('${p.id}')">${firstName}</div>`;
+            return `<div class="${className}" onclick="window.lineageClick('${p.id}')">${escapeHtml(firstName)}</div>`;
         };
 
         const arrow = `<div class="lineage-arrow">→</div>`;
@@ -2544,6 +2617,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
+    // SECTION 5.13: LANGUAGE SWITCHER
+    // =================================================================================
+
+    window.toggleLanguage = function() {
+        const toast = document.getElementById('language-selection-toast');
+        if (toast) {
+            toast.classList.add('show');
+        }
+    };
+
+    window.setLanguage = function(lang) {
+        localStorage.setItem('relation_language', lang);
+        if (typeof window.RELATION_LANGUAGE !== 'undefined') {
+            window.RELATION_LANGUAGE = lang;
+        }
+        
+        const display = document.getElementById('lang-display');
+        if (display) display.textContent = lang.toUpperCase();
+
+        const toast = document.getElementById('language-selection-toast');
+        if (toast) {
+            toast.classList.remove('show');
+        }
+
+        if (activePersonId) {
+            drawTree(activePersonId);
+        }
+        
+        if (window.showToast) window.showToast(`Language set to ${lang.toUpperCase()}`);
+    };
+
+    // Initialize language display
+    const initLang = localStorage.getItem('relation_language') || 'kn';
+    const initLangDisplay = document.getElementById('lang-display');
+    if (initLangDisplay) initLangDisplay.textContent = initLang.toUpperCase();
+
+    // =================================================================================
     // SECTION 6: INITIAL APPLICATION START
     // =================================================================================
     
@@ -2579,50 +2689,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     window.showDashboard();
                 }
-
-                const initialPersonId = getHomePersonId();
-                console.log("Initializing tree with person ID:", initialPersonId);
-                if (initialPersonId) {
-                    drawTree(initialPersonId);
-                    // Hide tree container immediately after drawing (since dashboard is default)
-                    // The showDashboard() call above sets display styles, but drawTree might reset container styles in some libs.
-                    // We reinforce the view state:
-                    if (dashboardPage.style.display !== 'none') {
-                        treeContainer.style.display = 'none';
-                    }
-                }
-            } catch (err) {
-                console.error("Error drawing tree:", err);
-                document.getElementById('tree').innerHTML = `<div style="color: red; text-align: center;">Error drawing tree: ${err.message}</div>`;
+            } catch (e) {
+                console.error("Error during initial draw:", e);
             }
         });
-
-    // =================================================================================
-    // SECTION 7: LANGUAGE TOGGLE
-    // =================================================================================
-    window.toggleLanguage = function() {
-        const toast = document.getElementById('language-selection-toast');
-        if (toast) {
-            toast.classList.add('show');
-        }
-    };
-
-    window.setLanguage = function(lang) {
-        localStorage.setItem('relation_language', lang);
-        const toast = document.getElementById('language-selection-toast');
-        if (toast) toast.classList.remove('show');
-        
-        // Reload to apply changes
-        setTimeout(() => location.reload(), 300);
-    };
-
-    // Update Language Display on Load
-    const lang = localStorage.getItem('relation_language') || 'kn';
-    const langDisplay = document.getElementById('lang-display');
-    if(langDisplay) {
-        if (lang === 'te') langDisplay.textContent = "Telugu";
-        else if (lang === 'kn') langDisplay.textContent = "Kannada";
-        else if (lang === 'en') langDisplay.textContent = "Eng Script";
-        else langDisplay.textContent = "Kannada";
-    }
 });

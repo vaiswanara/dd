@@ -4,6 +4,19 @@
   const DATA_SCHEMA_VERSION = '1.1.0';
   const IMPORT_HELP_TEXT = 'Upload a JSON or CSV file, preview impact, then apply.';
 
+  const RASHI_LIST = [
+    "Mesha", "Vrishabha", "Mithuna", "Karka", "Simha", "Kanya",
+    "Tula", "Vrischika", "Dhanu", "Makara", "Kumbha", "Meena"
+  ];
+
+  const NAKSHATRA_LIST = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni",
+    "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana",
+    "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+  ];
+
   const state = {
     config: null,
     persons: [],
@@ -28,6 +41,16 @@
   const els = {};
   const IS_ADM_PAGE = /\/(?:adm|admin)(?:\/|$)/.test(window.location.pathname.replace(/\\/g, '/').toLowerCase());
   const BASE_PREFIX = IS_ADM_PAGE ? '../' : '';
+
+  function escapeHtml(text) {
+    if (text == null) return "";
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
   function qs(id) {
     return document.getElementById(id);
@@ -1079,7 +1102,7 @@
     if (!rel) return;
 
     const personRefHtml = (id) => {
-      const ref = shortPersonRef(id);
+      const ref = escapeHtml(shortPersonRef(id));
       return `<span class="admin-chip-link" data-open-person="${id}">${ref}</span>`;
     };
 
@@ -1209,7 +1232,7 @@
     for (const entry of entries) {
       const row = document.createElement('div');
       row.className = 'admin-chip';
-      row.innerHTML = `<span>${shortPersonRef(entry.spouse_id)}${entry.divorce_date ? ` - Divorced: ${entry.divorce_date}` : ' - Divorced'}</span>`;
+      row.innerHTML = `<span>${escapeHtml(shortPersonRef(entry.spouse_id))}${entry.divorce_date ? ` - Divorced: ${escapeHtml(entry.divorce_date)}` : ' - Divorced'}</span>`;
       host.appendChild(row);
     }
   }
@@ -2999,7 +3022,7 @@
       for (const p of matches) {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
-        item.innerHTML = `<strong>${personLabel(p.person_id).replace(` (${p.person_id})`, '') || p.person_id}</strong><span style="font-size: 0.85em; color: #888; float: right;">${p.person_id}</span>`;
+        item.innerHTML = `<strong>${escapeHtml(personLabel(p.person_id).replace(` (${p.person_id})`, '') || p.person_id)}</strong><span style="font-size: 0.85em; color: #888; float: right;">${p.person_id}</span>`;
         item.addEventListener('click', function () {
           state.selectedPersonId = p.person_id;
           refreshTreeFromDraft(p.person_id);
@@ -3324,10 +3347,38 @@
     }
   }
 
+  function populateJyotishaSelects() {
+    const rashiSel = qs('admin-jyotisha-rashi');
+    const nakSel = qs('admin-jyotisha-nakshatra');
+
+    if (rashiSel && rashiSel.tagName === 'SELECT') {
+      const current = rashiSel.value;
+      rashiSel.innerHTML = '<option value="">- Select Rashi -</option>';
+      RASHI_LIST.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r;
+        opt.textContent = r;
+        rashiSel.appendChild(opt);
+      });
+    }
+
+    if (nakSel && nakSel.tagName === 'SELECT') {
+      const current = nakSel.value;
+      nakSel.innerHTML = '<option value="">- Select Nakshatra -</option>';
+      NAKSHATRA_LIST.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        nakSel.appendChild(opt);
+      });
+    }
+  }
+
   function init() {
     cacheElements();
     bindEvents();
     hydrateLogsFromStorage();
+    populateJyotishaSelects();
 
     loadData()
       .then(() => {

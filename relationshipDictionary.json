@@ -106,5 +106,8 @@
   "SWZ": { "name": { "te": "కోడలు", "kn": "ಸೊಸೆ", "en": "Kodalu/Sose" } },
   "SWB": { "name": { "te": "వియ్యంకుడు", "kn": "ಬೀಗ", "en": "Viyyankudu/Beega" } },
   "DHZ": { "name": { "te": "వియ్యంకురాలు", "kn": "ಬೀಗತಿ", "en": "Viyyankuralu/Beegati" } },
-  "DH": { "name": { "te": "అల్లుడు", "kn": "ಅಳಿಯ", "en": "Alludu/Aliya" } }
+  "DH": { "name": { "te": "అల్లుడు", "kn": "ಅಳಿಯ", "en": "Alludu/Aliya" } },
+  "SDS": { "name": { "te": "మునిమనుమడు", "kn": "ಮರಿಮೊಮ್ಮಗ", "en": "Munimanumadu/Marimommaga" } },
+  "SDD": { "name": { "te": "మునిమనుమరాలు", "kn": "ಮರಿಮೊಮ್ಮಗಳು", "en": "Munimanumaralu/Marimommagalu" } },
+  "SDH": { "name": { "te": "మనుమరాలి భర్త", "kn": "ಮೊಮ್ಮಗಳ ಗಂಡ", "en": "Manumarali Bharta/Mommagala Ganda" } }
 }
