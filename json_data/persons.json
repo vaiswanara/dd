@@ -1,0 +1,6602 @@
+[
+    {
+        "person_id": "I0311",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0326",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0329",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0374",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0459",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0451",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0462",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0469",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0501",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0502",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0541",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0560",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0621",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0635",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0637",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0639",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0646",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0649",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0652",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0650",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0651",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0663",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0664",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0691",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0692",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0724",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0743",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0742",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0765",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0769",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0781",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0786",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0782",
+        "given_name": "",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0797",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0833",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0796",
+        "given_name": "AADYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0792",
+        "given_name": "AARNA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0805",
+        "given_name": "AARUSH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0317",
+        "given_name": "ABHINAYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "27-Sep-91",
+        "birth_place_id": "P0036"
+    },
+    {
+        "person_id": "I0827",
+        "given_name": "AMRUTHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0424",
+        "given_name": "BADRI NARAYANA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0545",
+        "given_name": "BHAGEERATHAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0817",
+        "given_name": "BHANUPRAKASH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0056",
+        "given_name": "BHARATAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0426",
+        "given_name": "BHARATHI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": "P0044"
+    },
+    {
+        "person_id": "I0450",
+        "given_name": "BINDU",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0834",
+        "given_name": "BINDU",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0795",
+        "given_name": "DARSHAN",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0403",
+        "given_name": "DHARMAVARAM",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0425",
+        "given_name": "DHATRI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0821",
+        "given_name": "DHEEMANTH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0373",
+        "given_name": "GEETHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0822",
+        "given_name": "GEETHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0758",
+        "given_name": "GIRISH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0820",
+        "given_name": "GIRISH KUMAR",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0558",
+        "given_name": "GODAVARAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0689",
+        "given_name": "GODAVARAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0717",
+        "given_name": "GURURAJA RAO",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0480",
+        "given_name": "HARI RAGHAVENDRAN",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0828",
+        "given_name": "HARISH RAO",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0335",
+        "given_name": "HEMAVATHI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0136",
+        "given_name": "INDIRA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "28-Dec-82",
+        "birth_place_id": "P0006"
+    },
+    {
+        "person_id": "I0666",
+        "given_name": "JAYAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0738",
+        "given_name": "JAYAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0092",
+        "given_name": "JNANAPRASOONA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "19-Dec-53",
+        "birth_place_id": "P0019"
+    },
+    {
+        "person_id": "I0475",
+        "given_name": "JYOTHIKA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500004",
+        "given_name": "Janaki",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0401",
+        "given_name": "KAMALA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0665",
+        "given_name": "KAMALAMMA(KAAKANI)",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0766",
+        "given_name": "KARTIK",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0499",
+        "given_name": "KRISHNA KUMAR",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0704",
+        "given_name": "KRISHNAVENAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0042",
+        "given_name": "LAKSHMAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0354",
+        "given_name": "LAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0046",
+        "given_name": "LAKSHMI DEVAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0338",
+        "given_name": "LAKSHMI PRASANNA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0693",
+        "given_name": "LAKSHMIDEVAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0125",
+        "given_name": "LALITHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "12-May-73",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0431",
+        "given_name": "LALITHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0487",
+        "given_name": "LALITHYA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0270",
+        "given_name": "LATHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0132",
+        "given_name": "MADHURI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "09-Nov-82",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0534",
+        "given_name": "MAHA LAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0294",
+        "given_name": "MALLIKA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0733",
+        "given_name": "MANJULA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0134",
+        "given_name": "MEENAKSHI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0486",
+        "given_name": "MEGHANA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0091",
+        "given_name": "NAGACHANDRIKA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "03-Jan-76",
+        "birth_place_id": "P0018"
+    },
+    {
+        "person_id": "I0120",
+        "given_name": "NAGAMANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "10-Jun-67",
+        "birth_place_id": "P0025"
+    },
+    {
+        "person_id": "I0439",
+        "given_name": "NAGAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0757",
+        "given_name": "NAGASHAYANA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0619",
+        "given_name": "NAMGIRAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0759",
+        "given_name": "NARMADA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0392",
+        "given_name": "NIRMALA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0481",
+        "given_name": "NITYASHREE",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0123",
+        "given_name": "PADMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0711",
+        "given_name": "PADMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0412",
+        "given_name": "PADMAJA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0285",
+        "given_name": "PADMAVATHAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0506",
+        "given_name": "PADMINI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0485",
+        "given_name": "PHANIRAJ",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0308",
+        "given_name": "POORNIMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0829",
+        "given_name": "PRACHI RAO",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0309",
+        "given_name": "PRAHLADARAO",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0826",
+        "given_name": "PRAKASH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0804",
+        "given_name": "PRATYUSH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0491",
+        "given_name": "PRAVEEN",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0456",
+        "given_name": "PREETI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0815",
+        "given_name": "PUSHPA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500017",
+        "given_name": "Padma",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0659",
+        "given_name": "RAJAMANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0411",
+        "given_name": "RAJANNA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0830",
+        "given_name": "RAJESH",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0788",
+        "given_name": "RAJESH BHAT",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0658",
+        "given_name": "RAMADEVAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0106",
+        "given_name": "RAMAMANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "19-May-54",
+        "birth_place_id": "P0024"
+    },
+    {
+        "person_id": "I0241",
+        "given_name": "RAMAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0569",
+        "given_name": "RAMAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0430",
+        "given_name": "RAMARAO",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0081",
+        "given_name": "RANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "31-Aug-91",
+        "birth_place_id": "P0015"
+    },
+    {
+        "person_id": "I0096",
+        "given_name": "ROHINI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "30-Jun-54",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0306",
+        "given_name": "ROHINI (CHITTI)",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0049",
+        "given_name": "RUKMANEMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0556",
+        "given_name": "RUKMANEMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500009",
+        "given_name": "Raviprasad",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0266",
+        "given_name": "SARAOJAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0063",
+        "given_name": "SARASWATAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "01-Aug-28",
+        "birth_place_id": "P0006"
+    },
+    {
+        "person_id": "I0254",
+        "given_name": "SARASWATAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0530",
+        "given_name": "SARASWATAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0383",
+        "given_name": "SARASWATHAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0348",
+        "given_name": "SAROJAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0483",
+        "given_name": "SATVIK",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0484",
+        "given_name": "SATVIK",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0800",
+        "given_name": "SEETALAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0295",
+        "given_name": "SEETHAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0369",
+        "given_name": "SHANTA BAI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0304",
+        "given_name": "SHILPA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0816",
+        "given_name": "SHILPA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0818",
+        "given_name": "SHIVAKUMAR",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0819",
+        "given_name": "SHRAVANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0699",
+        "given_name": "SHUBADRAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0130",
+        "given_name": "SHUBHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "06-Oct-78",
+        "birth_place_id": "P0031"
+    },
+    {
+        "person_id": "I0102",
+        "given_name": "SITALAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0465",
+        "given_name": "SITALAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0746",
+        "given_name": "SITAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0281",
+        "given_name": "SOUMYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0382",
+        "given_name": "SRIDHAR",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0584",
+        "given_name": "SRIDHEVI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0814",
+        "given_name": "SRINIVAS",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0482",
+        "given_name": "SRINIVAS KALYAN",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0583",
+        "given_name": "SRIPADA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0702",
+        "given_name": "SRIVANI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0832",
+        "given_name": "SRIYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0831",
+        "given_name": "SRUSHTI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0072",
+        "given_name": "SUBADRAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0261",
+        "given_name": "SUBADRAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0045",
+        "given_name": "SUBBAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0082",
+        "given_name": "SUBHALAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0275",
+        "given_name": "SUBHASHINI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0798",
+        "given_name": "SUHAASINI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0139",
+        "given_name": "SUJATHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0803",
+        "given_name": "SUJATHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0616",
+        "given_name": "SUNDARAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0675",
+        "given_name": "SUNDARAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0492",
+        "given_name": "SURABHI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0429",
+        "given_name": "SUREKHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0300",
+        "given_name": "SUSHEELA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0754",
+        "given_name": "SWARNALATHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0767",
+        "given_name": "THANISHKA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0449",
+        "given_name": "TIMMOJI RAO",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0077",
+        "given_name": "TULASI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "14-Mar-61",
+        "birth_place_id": "P0012"
+    },
+    {
+        "person_id": "I0756",
+        "given_name": "TULASI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0113",
+        "given_name": "USHA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "03-Oct-62",
+        "birth_place_id": "P0027"
+    },
+    {
+        "person_id": "I0116",
+        "given_name": "VASANTI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": "P0029"
+    },
+    {
+        "person_id": "I0271",
+        "given_name": "VASUNDARA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0248",
+        "given_name": "VENAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0582",
+        "given_name": "VENKANNA",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0500",
+        "given_name": "VIDYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0776",
+        "given_name": "VIJAYA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0283",
+        "given_name": "VIJAYA KUMARI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0088",
+        "given_name": "VIJAYA LAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "15-Jun-51",
+        "birth_place_id": "P0016"
+    },
+    {
+        "person_id": "I0277",
+        "given_name": "VIJAYA LAKSHMI",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0622",
+        "given_name": "VIJAYAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0642",
+        "given_name": "VIJAYAMMA",
+        "surname": "",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0625",
+        "given_name": "",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0626",
+        "given_name": "",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0647",
+        "given_name": "",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0764",
+        "given_name": "",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0630",
+        "given_name": "BAABU",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0631",
+        "given_name": "BALAJI",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0655",
+        "given_name": "BHAGYALAKSHMI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0386",
+        "given_name": "DEVANNA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0043"
+    },
+    {
+        "person_id": "I0606",
+        "given_name": "KRISHNA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0643",
+        "given_name": "KRISHNA MURHTY",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0389",
+        "given_name": "KRISHNA MURTHY RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0586",
+        "given_name": "KRISHNA SHYAMACHAR",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0572",
+        "given_name": "KRISHNA VENAMMA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0391",
+        "given_name": "KUPPI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0573",
+        "given_name": "LAKSHMI DEVAMMA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0623",
+        "given_name": "LEELI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0607",
+        "given_name": "MUKUNDA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0624",
+        "given_name": "NAGARAJA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0385",
+        "given_name": "NAGARAJA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0042"
+    },
+    {
+        "person_id": "I0653",
+        "given_name": "NAGARATNA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0755",
+        "given_name": "NAGASHREE",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0390",
+        "given_name": "PADDU",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0629",
+        "given_name": "PADHA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0645",
+        "given_name": "PADMA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0570",
+        "given_name": "PADMANABHA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0654",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0751",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0568",
+        "given_name": "RAM RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0567",
+        "given_name": "RAMA MURTHY",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0644",
+        "given_name": "RAMA MURTHY",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0333",
+        "given_name": "RAMADEVAMMA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0715",
+        "given_name": "RAMAKRISHNA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0716",
+        "given_name": "RAVI",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0571",
+        "given_name": "SAROJAMMA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0648",
+        "given_name": "SATYANARAYANA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0627",
+        "given_name": "SESHA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0628",
+        "given_name": "SETHU",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0605",
+        "given_name": "SREENIVASA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0387",
+        "given_name": "SRINIVASA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0604",
+        "given_name": "SUBBA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0384",
+        "given_name": "SUBBARAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0016"
+    },
+    {
+        "person_id": "I0394",
+        "given_name": "SUBBARAYA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0603",
+        "given_name": "SUBHALAKSHMI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0395",
+        "given_name": "SUBHASHENI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0753",
+        "given_name": "SUNANDA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0763",
+        "given_name": "SUNANDA",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0752",
+        "given_name": "VENKATARAMANA",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0393",
+        "given_name": "VIJAYALAKSHMI",
+        "surname": "ADAVANI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0388",
+        "given_name": "VIJENDRA RAO",
+        "surname": "ADAVANI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0806",
+        "given_name": "JALAJA",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0802",
+        "given_name": "KIRAN",
+        "surname": "AN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0813",
+        "given_name": "MANGALA",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0808",
+        "given_name": "NAGALAKSHMI",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0801",
+        "given_name": "NARASIMHA MURTHY",
+        "surname": "AN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0810",
+        "given_name": "NARAYANA",
+        "surname": "AN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0809",
+        "given_name": "RANGALAKSHMI",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0807",
+        "given_name": "RAVI",
+        "surname": "AN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0811",
+        "given_name": "SRINIVAS",
+        "surname": "AN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0365",
+        "given_name": "SUJATHA",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0812",
+        "given_name": "SUMA",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0823",
+        "given_name": "VIBHA R",
+        "surname": "AN",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0787",
+        "given_name": "",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0799",
+        "given_name": "",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0358",
+        "given_name": "BHARATHI",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0336",
+        "given_name": "BHAVADEEPA",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "17-Jul-83",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0379",
+        "given_name": "GIRIDHAR",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0378",
+        "given_name": "GURU",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0362",
+        "given_name": "GURURAJA",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0380",
+        "given_name": "HARISH",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0353",
+        "given_name": "KRISHNA RAO",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0355",
+        "given_name": "LAKSHMI",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0356",
+        "given_name": "MANI",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0361",
+        "given_name": "MURALIDHAR",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0377",
+        "given_name": "PRABHA",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0381",
+        "given_name": "PRAHLADA",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0372",
+        "given_name": "RAGHAVENDRA",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0371",
+        "given_name": "RAMYASHREE",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0359",
+        "given_name": "RUKMINI",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0793",
+        "given_name": "SHILPA",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0145",
+        "given_name": "SHRUTHI",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "15-Oct-86",
+        "birth_place_id": "P0035"
+    },
+    {
+        "person_id": "I0376",
+        "given_name": "SHYAM",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0794",
+        "given_name": "SNEHA",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0370",
+        "given_name": "SOUMYA SHREE",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0340",
+        "given_name": "SREYAS",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0339",
+        "given_name": "SRIKARA",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0337",
+        "given_name": "SRINATH",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "29-Oct-89",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0357",
+        "given_name": "TULASI",
+        "surname": "BADELUDUKU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0334",
+        "given_name": "VIJAYA VITTALACHAR",
+        "surname": "BADELUDUKU",
+        "sex": "M",
+        "birth_date": "29-Jan-52",
+        "birth_place_id": "P0041"
+    },
+    {
+        "person_id": "I0790",
+        "given_name": "ADITHI",
+        "surname": "BATNI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0791",
+        "given_name": "AVANI",
+        "surname": "BATNI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0789",
+        "given_name": "GIRISH",
+        "surname": "BATNI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0495",
+        "given_name": "RAM MOHAN",
+        "surname": "BHADADHA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0496",
+        "given_name": "SRI LEKHA",
+        "surname": "BHADADHA",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0748",
+        "given_name": "JAGANNATH",
+        "surname": "BOJJI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0745",
+        "given_name": "PRAHALADACHAR",
+        "surname": "BOJJI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0744",
+        "given_name": "RAMACHAR",
+        "surname": "BOJJI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0747",
+        "given_name": "SUDHA",
+        "surname": "BOJJI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0463",
+        "given_name": "",
+        "surname": "BS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0464",
+        "given_name": "",
+        "surname": "BS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0461",
+        "given_name": "BHARATHI",
+        "surname": "BS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0457",
+        "given_name": "GOPAL",
+        "surname": "BS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0460",
+        "given_name": "JYOTHI",
+        "surname": "BS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0458",
+        "given_name": "RAGINI",
+        "surname": "BS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0576",
+        "given_name": "NAGAMANI",
+        "surname": "CHAMBAKURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0574",
+        "given_name": "RAMACHANDRA RAO",
+        "surname": "CHAMBAKURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0575",
+        "given_name": "VENKATA RAMANA",
+        "surname": "CHAMBAKURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0364",
+        "given_name": "SAANVI",
+        "surname": "DESAI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0363",
+        "given_name": "SATISH",
+        "surname": "DESAI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0222",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0229",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0328",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0327",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0414",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0507",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0774",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0773",
+        "given_name": "",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0330",
+        "given_name": "ABHIRAM",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0214",
+        "given_name": "ADI NARAYANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0321",
+        "given_name": "ADITI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "18-Aug-15",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0015",
+        "given_name": "ADPD NARAYANA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0016",
+        "given_name": "ADPD RAMAIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0235",
+        "given_name": "ADPD. SUBARAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0064",
+        "given_name": "ANANDA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "12-May-42",
+        "birth_place_id": "P0006"
+    },
+    {
+        "person_id": "I0255",
+        "given_name": "ANANDA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0133",
+        "given_name": "ANANTA PADMANABHA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "20-Jul-10",
+        "birth_place_id": "P0049"
+    },
+    {
+        "person_id": "I0129",
+        "given_name": "ANANYA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "11-Nov-06",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0176",
+        "given_name": "ANOGI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0315",
+        "given_name": "ANUHYA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "11-Jun-11",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0003",
+        "given_name": "ASHWATHNARAYANA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0310",
+        "given_name": "ASHWATHNARAYANA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0423",
+        "given_name": "ASHWINI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0296",
+        "given_name": "BADRINATH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0087",
+        "given_name": "BHARATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0090",
+        "given_name": "BHARATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "01-Sep-74",
+        "birth_place_id": "P0017"
+    },
+    {
+        "person_id": "I0095",
+        "given_name": "BHARATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "27-Aug-77",
+        "birth_place_id": "P0020"
+    },
+    {
+        "person_id": "I0303",
+        "given_name": "BHARATI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0408",
+        "given_name": "BHASKARA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0318",
+        "given_name": "BHAVISYASHRI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "27-Mar-11",
+        "birth_place_id": "P0037"
+    },
+    {
+        "person_id": "I0155",
+        "given_name": "BHEEMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0040",
+        "given_name": "BHIMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0126",
+        "given_name": "CHANDRA HAS",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "21-Nov-91",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0067",
+        "given_name": "CHANDRA SEKHARA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "20-Aug-53",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0200",
+        "given_name": "CHATHRAM KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0019",
+        "given_name": "CHEVURU KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0059",
+        "given_name": "DEVARAJA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "02-Jun-48",
+        "birth_place_id": "P0003"
+    },
+    {
+        "person_id": "I0259",
+        "given_name": "DRAUPADAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0135",
+        "given_name": "GANESH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "19-Jan-98",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0086",
+        "given_name": "GAYATRI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "13-Aug-75",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0291",
+        "given_name": "GAYATRI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0012",
+        "given_name": "GIRAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0265",
+        "given_name": "GIRIJAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0252",
+        "given_name": "GOPALA KRISHNA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0013",
+        "given_name": "GOPALA KRISHNAIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0169",
+        "given_name": "GOPALA KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0164",
+        "given_name": "GOPALA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0159",
+        "given_name": "GOPALAKRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0029",
+        "given_name": "GOPALYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0413",
+        "given_name": "GOUTHAMI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0242",
+        "given_name": "GOVINDA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0068",
+        "given_name": "GURU RAJA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "19-Jun-56",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0178",
+        "given_name": "HANUMANTH RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0245",
+        "given_name": "HANUMANTHA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0153",
+        "given_name": "HARI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0024",
+        "given_name": "HARIDASAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0202",
+        "given_name": "HARIDASAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0422",
+        "given_name": "HARITHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0121",
+        "given_name": "HEMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "07-Mar-90",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0203",
+        "given_name": "HOTURU KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0062",
+        "given_name": "INDIRAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "22-Feb-41",
+        "birth_place_id": "P0004"
+    },
+    {
+        "person_id": "I0620",
+        "given_name": "JAYA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0071",
+        "given_name": "JAYALAKSHMI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "30-Jan-49",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0264",
+        "given_name": "JAYAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0114",
+        "given_name": "JYOTHI PRAKASH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "02-Jan-87",
+        "birth_place_id": "P0028"
+    },
+    {
+        "person_id": "I0301",
+        "given_name": "KEDARNATH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0278",
+        "given_name": "KESAVARAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0298",
+        "given_name": "KOUNDINYA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0299",
+        "given_name": "KOUSHIK",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0293",
+        "given_name": "KRANTI BABU",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0166",
+        "given_name": "KRISHNA MURTHY",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0400",
+        "given_name": "KRISHNA MURTHY RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0035",
+        "given_name": "KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0151",
+        "given_name": "KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0172",
+        "given_name": "KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0198",
+        "given_name": "KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0238",
+        "given_name": "KRISHNA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0243",
+        "given_name": "KRISHNAMOORTHY RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0052",
+        "given_name": "KRISHNAMURTHY RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0316",
+        "given_name": "KRISHNATEJA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "09-Jul-11",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0210",
+        "given_name": "KRISHNAYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0224",
+        "given_name": "KRISHNAYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0184",
+        "given_name": "KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0219",
+        "given_name": "KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0406",
+        "given_name": "KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0215",
+        "given_name": "KUPPYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0190",
+        "given_name": "KUPYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0216",
+        "given_name": "KUPYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0227",
+        "given_name": "LAKSHMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0279",
+        "given_name": "LAKSHMI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0289",
+        "given_name": "LAKSHMI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0161",
+        "given_name": "LAXMAN RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0188",
+        "given_name": "LAXMAN RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0253",
+        "given_name": "LEELAVATAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0078",
+        "given_name": "MADAN MOHAN",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "12-Jul-86",
+        "birth_place_id": "P0013"
+    },
+    {
+        "person_id": "I0009",
+        "given_name": "MADHAVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0772",
+        "given_name": "MADHU ARANI",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0065",
+        "given_name": "MADHUSUDHANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "06-Jul-44",
+        "birth_place_id": "P0006"
+    },
+    {
+        "person_id": "I0032",
+        "given_name": "MADHVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0041",
+        "given_name": "MADHVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0148",
+        "given_name": "MADHVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0158",
+        "given_name": "MADHVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0297",
+        "given_name": "MALATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0280",
+        "given_name": "MEERA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0775",
+        "given_name": "MOHAN RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0061",
+        "given_name": "MOHANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "14-Jun-53",
+        "birth_place_id": "P0003"
+    },
+    {
+        "person_id": "I0325",
+        "given_name": "MUKUNDA RAGHAVENDRA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "13-Mar-16",
+        "birth_place_id": "P0014"
+    },
+    {
+        "person_id": "I0069",
+        "given_name": "MURALIDHARA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "28-Aug-58",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0162",
+        "given_name": "NAGARAJA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0267",
+        "given_name": "NAGARAJA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0074",
+        "given_name": "NAGARAJA RAO (NAGAIAH)",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0011"
+    },
+    {
+        "person_id": "I0108",
+        "given_name": "NAGARATNA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0038",
+        "given_name": "NARASINGIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0152",
+        "given_name": "NARAYAN RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0779",
+        "given_name": "NARAYANA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0051",
+        "given_name": "NARAYANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0103",
+        "given_name": "NARAYANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "21-Mar-69",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0194",
+        "given_name": "NARAYANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0244",
+        "given_name": "NARAYANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0014",
+        "given_name": "NARAYANAIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0221",
+        "given_name": "NARAYANRAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0183",
+        "given_name": "NARAYANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0223",
+        "given_name": "NARAYANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0182",
+        "given_name": "NARAYANYAYYA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0080",
+        "given_name": "PADMA LATHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "08-Mar-81",
+        "birth_place_id": "P0013"
+    },
+    {
+        "person_id": "I0076",
+        "given_name": "PADMAJA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0274",
+        "given_name": "PADMAJA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0157",
+        "given_name": "PADMANABHA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0258",
+        "given_name": "PADMAVATAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0170",
+        "given_name": "PALADUM RANGYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0263",
+        "given_name": "PRABHAKAR RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0073",
+        "given_name": "PRABHAKARA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "20-Mar-57",
+        "birth_place_id": "P0011"
+    },
+    {
+        "person_id": "I0405",
+        "given_name": "PRABHAVATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0307",
+        "given_name": "PRADEEP",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0256",
+        "given_name": "PRAKASH RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0286",
+        "given_name": "PRASAD",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0402",
+        "given_name": "PRASAD",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0302",
+        "given_name": "PRASHANT",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0020",
+        "given_name": "PUUYAMBATU RAMAYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0168",
+        "given_name": "RAGAVENDER RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0149",
+        "given_name": "RAGHAVENDER RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0057",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "03-Sep-43",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0097",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "07-Aug-77",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0191",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0251",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0034",
+        "given_name": "RAGHAVENDRAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0079",
+        "given_name": "RAGHU KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "30-Oct-88",
+        "birth_place_id": "P0013"
+    },
+    {
+        "person_id": "I0237",
+        "given_name": "RAJAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0288",
+        "given_name": "RAJASEKHAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0529",
+        "given_name": "RAM RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0122",
+        "given_name": "RAMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "01-Jun-92",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0407",
+        "given_name": "RAMA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0165",
+        "given_name": "RAMA MURTHY",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0036",
+        "given_name": "RAMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0154",
+        "given_name": "RAMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0160",
+        "given_name": "RAMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0195",
+        "given_name": "RAMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0174",
+        "given_name": "RAMACHANDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0211",
+        "given_name": "RAMACHANDRYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0236",
+        "given_name": "RAMACHANDRYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0007",
+        "given_name": "RAMAIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0226",
+        "given_name": "RAMAIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0199",
+        "given_name": "RAMAKRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0209",
+        "given_name": "RAMAKRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0233",
+        "given_name": "RAMAYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0124",
+        "given_name": "RAMYA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "18-Aug-90",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0054",
+        "given_name": "RANGAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0047",
+        "given_name": "RANGANATHA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0192",
+        "given_name": "RANGOON RANGANATHA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0225",
+        "given_name": "RANGOON SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0004",
+        "given_name": "RANGYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0018",
+        "given_name": "RANGYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0260",
+        "given_name": "SAKUNTALAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0305",
+        "given_name": "SANDYA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0284",
+        "given_name": "SANTOSH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0118",
+        "given_name": "SANTOSH DEEPA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "01-Jan-86",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0117",
+        "given_name": "SANTOSH KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "05-Sep-88",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0119",
+        "given_name": "SANTOSH SRAVANI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "22-Oct-90",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0085",
+        "given_name": "SARADHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "22-Jun-73",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0247",
+        "given_name": "SARASWATAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0269",
+        "given_name": "SARASWATAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0404",
+        "given_name": "SARASWATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0273",
+        "given_name": "SAROJA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0055",
+        "given_name": "SAROJAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0109",
+        "given_name": "SASHIKALA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "08-Aug-81",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0144",
+        "given_name": "SATHYA KRISHNA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "14-Jun-09",
+        "birth_place_id": "P0033"
+    },
+    {
+        "person_id": "I0143",
+        "given_name": "SATHYA RAGHAVENDRA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "07-Jan-07",
+        "birth_place_id": "P0033"
+    },
+    {
+        "person_id": "I0268",
+        "given_name": "SEETAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0246",
+        "given_name": "SEETHAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0257",
+        "given_name": "SESHA SHARMA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0177",
+        "given_name": "SESHAGIRI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0240",
+        "given_name": "SESHAGIRI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0249",
+        "given_name": "SESHAGIRI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0212",
+        "given_name": "SETHU MADHAV RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0197",
+        "given_name": "SETHU RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0044",
+        "given_name": "SHAMA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0262",
+        "given_name": "SHASHIDHAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0323",
+        "given_name": "SHRAVANI RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "24-Sep-15",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0101",
+        "given_name": "SOUMYA BHARATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "07-Jul-83",
+        "birth_place_id": "P0021"
+    },
+    {
+        "person_id": "I0272",
+        "given_name": "SREE GURURAJ",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0105",
+        "given_name": "SREE LAKSHMI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "10-Oct-75",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0409",
+        "given_name": "SRI DEVI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0137",
+        "given_name": "SRI HARI",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "19-Sep-05",
+        "birth_place_id": "P0006"
+    },
+    {
+        "person_id": "I0282",
+        "given_name": "SRI KRISHNA PRAKASH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0313",
+        "given_name": "SRI SWETHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "13-Oct-11",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0312",
+        "given_name": "SRI VISHNU",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "29-Mar-09",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0100",
+        "given_name": "SRIDHAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "20-Aug-87",
+        "birth_place_id": "P0023"
+    },
+    {
+        "person_id": "I0112",
+        "given_name": "SRIKANTH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "16-Feb-82",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0320",
+        "given_name": "SRIKRISHNA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "30-Apr-13",
+        "birth_place_id": "P0074"
+    },
+    {
+        "person_id": "I0083",
+        "given_name": "SRINATH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "17-Mar-82",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0089",
+        "given_name": "SRINIVAS GANESH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "14-Oct-72",
+        "birth_place_id": "P0017"
+    },
+    {
+        "person_id": "I0287",
+        "given_name": "SRINIVAS MURTHY",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0093",
+        "given_name": "SRINIVAS PRASAD",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "27-Jan-73",
+        "birth_place_id": "P0020"
+    },
+    {
+        "person_id": "I0111",
+        "given_name": "SRINIVAS RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "10-May-80",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0150",
+        "given_name": "SRINIVAS RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0173",
+        "given_name": "SRINIVAS RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0043",
+        "given_name": "SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0048",
+        "given_name": "SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0167",
+        "given_name": "SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0186",
+        "given_name": "SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0239",
+        "given_name": "SRINIVASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0171",
+        "given_name": "SUB RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0180",
+        "given_name": "SUB RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0231",
+        "given_name": "SUBAA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0232",
+        "given_name": "SUBAA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0218",
+        "given_name": "SUBAARAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0053",
+        "given_name": "SUBADRAMMA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0026",
+        "given_name": "SUBAYYA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0039",
+        "given_name": "SUBBA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0156",
+        "given_name": "SUBBA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0204",
+        "given_name": "SUBBA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0208",
+        "given_name": "SUBBA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0115",
+        "given_name": "SUBHASHINI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "05-Feb-84",
+        "birth_place_id": "P0028"
+    },
+    {
+        "person_id": "I0324",
+        "given_name": "SUBHASREE",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "22-Jun-14",
+        "birth_place_id": "P0040"
+    },
+    {
+        "person_id": "I0276",
+        "given_name": "SUDEENDRA KIRAN",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0066",
+        "given_name": "SUDHAKARA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "21-Aug-51",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0098",
+        "given_name": "SUDHINDRA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "27-Nov-84",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0410",
+        "given_name": "SUJATHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0250",
+        "given_name": "SUNDAR RAJAN",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0094",
+        "given_name": "SURESH KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "24-Jan-75",
+        "birth_place_id": "P0020"
+    },
+    {
+        "person_id": "I0780",
+        "given_name": "SURYA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0213",
+        "given_name": "SURYA NARAYAN RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0127",
+        "given_name": "SWATHI",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "02-Nov-05",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0217",
+        "given_name": "TAMYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0070",
+        "given_name": "TRIVIKRAMA RAO (MANI)",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "09-Mar-61",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0107",
+        "given_name": "UDHAYA BHASKAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "28-Jul-75",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0075",
+        "given_name": "VANAJA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0060",
+        "given_name": "VARADARAJA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "24-Aug-50",
+        "birth_place_id": "P0003"
+    },
+    {
+        "person_id": "I0228",
+        "given_name": "VARADARAJYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0037",
+        "given_name": "VARADENDRA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0181",
+        "given_name": "VENKATA GIRYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0193",
+        "given_name": "VENKATA KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0205",
+        "given_name": "VENKATA KRISHNYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0187",
+        "given_name": "VENKATA RAMANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0179",
+        "given_name": "VENKATA RAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0206",
+        "given_name": "VENKATA RAMAYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0163",
+        "given_name": "VENKATA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0001",
+        "given_name": "VENKATAGIRIYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0017",
+        "given_name": "VENKATAPATHIAH",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0033",
+        "given_name": "VENKATAPPA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0196",
+        "given_name": "VENKATARAMANA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0050",
+        "given_name": "VENKATARAMANA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0027",
+        "given_name": "VENKATARAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0230",
+        "given_name": "VENKATARAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0006",
+        "given_name": "VENKATARAMANYYA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0131",
+        "given_name": "VENKATESH KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "26-Aug-08",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I0207",
+        "given_name": "VENKATESHYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0005",
+        "given_name": "VENKATESYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0025",
+        "given_name": "VENKATESYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0028",
+        "given_name": "VENKATRAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0175",
+        "given_name": "VENKATRAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0201",
+        "given_name": "VENKATRAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0220",
+        "given_name": "VENKATRAMANYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0031",
+        "given_name": "VENKATYAA",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0058",
+        "given_name": "VENUMADHAVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "21-Jan-46",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0104",
+        "given_name": "VIJAYA KUMAR",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "12-Feb-73",
+        "birth_place_id": "P0001"
+    },
+    {
+        "person_id": "I0084",
+        "given_name": "VIJAYASHREE",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "01-Jul-71",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0189",
+        "given_name": "VYASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0185",
+        "given_name": "VYASA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0140",
+        "given_name": "YUKTHA",
+        "surname": "DHARMAVARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0520",
+        "given_name": "INDIRAMMA",
+        "surname": "DHARMAVARAM YAJAMANYAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0522",
+        "given_name": "JAY RAO",
+        "surname": "DHARMAVARAM YAJAMANYAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0521",
+        "given_name": "MURALIDHAR RAO",
+        "surname": "DHARMAVARAM YAJAMANYAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0519",
+        "given_name": "RAMACHANDRA RAO",
+        "surname": "DHARMAVARAM YAJAMANYAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0523",
+        "given_name": "UDAYA",
+        "surname": "DHARMAVARAM YAJAMANYAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0634",
+        "given_name": "",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0771",
+        "given_name": "",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0770",
+        "given_name": "",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0467",
+        "given_name": "ABHILASH",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0641",
+        "given_name": "ABHIRAM",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0468",
+        "given_name": "AKHILESH",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0466",
+        "given_name": "ANUSH KUMAR",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0636",
+        "given_name": "ASHOKA",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0638",
+        "given_name": "BHARANI",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0718",
+        "given_name": "CHAKRAPANRAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0610",
+        "given_name": "DEVI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0614",
+        "given_name": "GIRIJA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0600",
+        "given_name": "GOVINDA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0432",
+        "given_name": "HEMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0719",
+        "given_name": "JANAKI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0415",
+        "given_name": "JAYALAKSHMI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0608",
+        "given_name": "KRISHNA MURHTY",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0601",
+        "given_name": "MAHA LAKSHMI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0760",
+        "given_name": "MOHANA(CM)",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0602",
+        "given_name": "NAGAMANEMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0611",
+        "given_name": "NAGAMANI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0633",
+        "given_name": "NAGESWARA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0332",
+        "given_name": "NARAYANA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0612",
+        "given_name": "PADMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0399",
+        "given_name": "PADMAVATAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0762",
+        "given_name": "RAGANNA",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0599",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0433",
+        "given_name": "RAMKUMAR",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0761",
+        "given_name": "ROHINI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0342",
+        "given_name": "RUKKAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0398",
+        "given_name": "RUKKAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0509",
+        "given_name": "RUKMANAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0640",
+        "given_name": "SAMYUKTA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0345",
+        "given_name": "SARADHA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0110",
+        "given_name": "SAVITRI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "30-Jan-55",
+        "birth_place_id": "P0025"
+    },
+    {
+        "person_id": "I0721",
+        "given_name": "SESHA",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0397",
+        "given_name": "SESHAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0344",
+        "given_name": "SHANTA KUMARI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0609",
+        "given_name": "SHANTAMMA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0341",
+        "given_name": "SITA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0343",
+        "given_name": "SRINIVASA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0396",
+        "given_name": "SRINIVASA RAO",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0434",
+        "given_name": "SRIVIDYA(Kutti)",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0346",
+        "given_name": "SUBRAMANYAM",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0632",
+        "given_name": "SWATHI",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0613",
+        "given_name": "VANAJA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0615",
+        "given_name": "VENKATA RAMANA(RAJANNA)",
+        "surname": "HOTURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0720",
+        "given_name": "VIJAYA",
+        "surname": "HOTURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0142",
+        "given_name": "SWATHI",
+        "surname": "HULLUR",
+        "sex": "F",
+        "birth_date": "29-Aug-87",
+        "birth_place_id": "P0032"
+    },
+    {
+        "person_id": "I0740",
+        "given_name": "MADHUSUDHANA RAO",
+        "surname": "KADIRI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0739",
+        "given_name": "NARASIMHACHAR",
+        "surname": "KADIRI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0741",
+        "given_name": "SRIDHAR",
+        "surname": "KADIRI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0479",
+        "given_name": "HYNDAVI",
+        "surname": "KARNAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0331",
+        "given_name": "SHRAVYA",
+        "surname": "KARNAM",
+        "sex": "F",
+        "birth_date": "20-Mar-94",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0735",
+        "given_name": "DEEPA",
+        "surname": "KOLAR",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0731",
+        "given_name": "KRISHNA KUMAR",
+        "surname": "KOLAR",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0734",
+        "given_name": "ROOPA",
+        "surname": "KOLAR",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0732",
+        "given_name": "SRINIVAS IYER",
+        "surname": "KOLAR",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0525",
+        "given_name": "JAYCHANDRA",
+        "surname": "M",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0526",
+        "given_name": "KUMAR",
+        "surname": "M",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0524",
+        "given_name": "PADMANABHARAO",
+        "surname": "M",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0527",
+        "given_name": "RAMESH",
+        "surname": "M",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0528",
+        "given_name": "USHA",
+        "surname": "M",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0488",
+        "given_name": "NAGARAJA",
+        "surname": "MAMANDI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0477",
+        "given_name": "PRANAV",
+        "surname": "MAMANDI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0476",
+        "given_name": "SAMEERA SIMHA",
+        "surname": "MAMANDI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0478",
+        "given_name": "SRUJANA",
+        "surname": "MAMANDI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0504",
+        "given_name": "RATHNAMALA",
+        "surname": "MOSALAKANTI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0505",
+        "given_name": "VENKATA RAMANA",
+        "surname": "MOSALAKANTI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0322",
+        "given_name": "Chaitra",
+        "surname": "Maniyal",
+        "sex": "F",
+        "birth_date": "01-May-89",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I500018",
+        "given_name": "Sridhara",
+        "surname": "Maniyal",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0347",
+        "given_name": "GOPALA RAO",
+        "surname": "NADIG",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0768",
+        "given_name": "GURURAJ",
+        "surname": "NADIG",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0368",
+        "given_name": "HARINI",
+        "surname": "NADIG",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0366",
+        "given_name": "HARSHINI",
+        "surname": "NADIG",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0352",
+        "given_name": "MANJULA",
+        "surname": "NADIG",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0367",
+        "given_name": "SAMANA",
+        "surname": "NADIG",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0351",
+        "given_name": "SEETARAMA",
+        "surname": "NADIG",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0349",
+        "given_name": "VENKATESH",
+        "surname": "NADIG",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0350",
+        "given_name": "VIJAYA",
+        "surname": "NADIG",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0825",
+        "given_name": "SRI HARSHA",
+        "surname": "NH",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0824",
+        "given_name": "SRIDHAR",
+        "surname": "NH",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500005",
+        "given_name": "Ramarao",
+        "surname": "P C",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0437",
+        "given_name": "",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0453",
+        "given_name": "",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0452",
+        "given_name": "",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0539",
+        "given_name": "AMBUJAMMA",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0444",
+        "given_name": "BHARGAVI",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0540",
+        "given_name": "BHEEMACHAR",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0435",
+        "given_name": "BHEEMSEN RAO",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0438",
+        "given_name": "BUVARAHA MURTHY",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0441",
+        "given_name": "GIRIJA",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0542",
+        "given_name": "GODAVARAMMA",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0445",
+        "given_name": "JANAKIRAM",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0543",
+        "given_name": "JAYALAKSHMI",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0436",
+        "given_name": "KRISHNA CHAITANYA",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0443",
+        "given_name": "MOHAN KRISHNA",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0442",
+        "given_name": "SRINIVASAMURTHY",
+        "surname": "PALURU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0440",
+        "given_name": "TUNGAMMA",
+        "surname": "PALURU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0566",
+        "given_name": "GIRIJA",
+        "surname": "PALVADI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0565",
+        "given_name": "JAYALAKSHMI",
+        "surname": "PALVADI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0559",
+        "given_name": "KRISHNA MURTHY RAO",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0561",
+        "given_name": "PADMANABHA RAO",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0562",
+        "given_name": "RAGHAVENDRA RAO",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0564",
+        "given_name": "RAMA MURTHY",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0497",
+        "given_name": "SUBRAO",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0563",
+        "given_name": "VENKATA RAMANA",
+        "surname": "PALVADI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0597",
+        "given_name": "",
+        "surname": "PATNAPALLI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0598",
+        "given_name": "",
+        "surname": "PATNAPALLI",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0596",
+        "given_name": "BUJJI",
+        "surname": "PATNAPALLI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0595",
+        "given_name": "NARAYANA RAO",
+        "surname": "PATNAPALLI",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0454",
+        "given_name": "NARAYANA RAO",
+        "surname": "PEDDIRAJULA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0455",
+        "given_name": "RAGHAVENDRA",
+        "surname": "PEDDIRAJULA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500010",
+        "given_name": "Divya",
+        "surname": "R",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500011",
+        "given_name": "Jayabharathi",
+        "surname": "R",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0593",
+        "given_name": "BHANU",
+        "surname": "RS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0594",
+        "given_name": "JAYANTHI",
+        "surname": "RS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0591",
+        "given_name": "KALAVATI",
+        "surname": "RS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0592",
+        "given_name": "LEELAVATHI",
+        "surname": "RS",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0587",
+        "given_name": "NARAYANA RAO",
+        "surname": "RS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0590",
+        "given_name": "RAMANA",
+        "surname": "RS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0588",
+        "given_name": "SRINIVASA",
+        "surname": "RS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0589",
+        "given_name": "VIJAY KUMAR",
+        "surname": "RS",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0707",
+        "given_name": "",
+        "surname": "SHIKARIPURAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0706",
+        "given_name": "",
+        "surname": "SHIKARIPURAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0705",
+        "given_name": "RAMESH",
+        "surname": "SHIKARIPURAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0703",
+        "given_name": "SRINIVASA RAO",
+        "surname": "SHIKARIPURAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0494",
+        "given_name": "",
+        "surname": "SOUNDARAJAN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0493",
+        "given_name": "PARTHASARATHI",
+        "surname": "SOUNDARAJAN",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0472",
+        "given_name": "GOPINATHA RAO",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0580",
+        "given_name": "GURURAJA",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0578",
+        "given_name": "KRISHNA MURTHY",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0581",
+        "given_name": "LAKSHMI",
+        "surname": "SUNDARPALYA",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0577",
+        "given_name": "MADHAVARAO",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0473",
+        "given_name": "PARIMALA",
+        "surname": "SUNDARPALYA",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0489",
+        "given_name": "RAMARAO",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0474",
+        "given_name": "SATYA PRASAD",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0579",
+        "given_name": "SRINIVASA MURTHY",
+        "surname": "SUNDARPALYA",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0585",
+        "given_name": "VIJAYASHREE",
+        "surname": "SUNDARPALYA",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0680",
+        "given_name": "",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0681",
+        "given_name": "",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0723",
+        "given_name": "",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0750",
+        "given_name": "",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0784",
+        "given_name": "",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0678",
+        "given_name": "ANANDA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0674",
+        "given_name": "ANANTHACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0660",
+        "given_name": "BADRINARAYANA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0515",
+        "given_name": "BHAGYALAKSHMI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0555",
+        "given_name": "BHARGAVI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0546",
+        "given_name": "BHEEMA RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0471",
+        "given_name": "BUJJI",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0099",
+        "given_name": "GIRIJA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "04-Dec-59",
+        "birth_place_id": "P0009"
+    },
+    {
+        "person_id": "I0785",
+        "given_name": "GOPALA KRISHNA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0511",
+        "given_name": "GOPALA KRISHNA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0551",
+        "given_name": "GOPINATHA RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0710",
+        "given_name": "GURURAJARAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0730",
+        "given_name": "HARI PRASAD",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0657",
+        "given_name": "HARISARVOTHAMACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0696",
+        "given_name": "JANAKI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0554",
+        "given_name": "JANARDHAN RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0550",
+        "given_name": "JAYABHARATHI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0694",
+        "given_name": "JAYATHEERTHACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0516",
+        "given_name": "KAMALAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0726",
+        "given_name": "KRISHNA MURTY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0679",
+        "given_name": "KRISHNAMURTHY(GIRI)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0708",
+        "given_name": "KRISHNAMURTHY(KITTAPPA)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0682",
+        "given_name": "KRISHNAVENAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0417",
+        "given_name": "LAKSHINDEVI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0617",
+        "given_name": "LINGACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0662",
+        "given_name": "MADHAVA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0700",
+        "given_name": "MADHAVI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0676",
+        "given_name": "MOHAN",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0783",
+        "given_name": "MURALIKRISHNA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0671",
+        "given_name": "NALINI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0673",
+        "given_name": "NARASIMHACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0688",
+        "given_name": "NARASIMHACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0698",
+        "given_name": "NARAYANARAO(NANI)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0419",
+        "given_name": "NARMADA(Naami)",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0427",
+        "given_name": "NAVEEN",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0513",
+        "given_name": "PADMANABHA RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0518",
+        "given_name": "PADMAVATAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0683",
+        "given_name": "PADMAVATAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0697",
+        "given_name": "PADMAVATHI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0421",
+        "given_name": "RAGHAVENDRA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0669",
+        "given_name": "RAGHAVENDRA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0713",
+        "given_name": "RAGHAVENDRA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0548",
+        "given_name": "RAGHU RAM",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0552",
+        "given_name": "RAGHUNATHA RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0536",
+        "given_name": "RAJ KUMAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0714",
+        "given_name": "RAJENDRA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0547",
+        "given_name": "RAM RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0618",
+        "given_name": "RAMA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0727",
+        "given_name": "RAMA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0512",
+        "given_name": "RAMACHANDRA RAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0709",
+        "given_name": "RAMAMURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0690",
+        "given_name": "RANGACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0498",
+        "given_name": "RANGANATH",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0701",
+        "given_name": "RAVI",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0537",
+        "given_name": "RAVI KUMAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0712",
+        "given_name": "ROOPA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0420",
+        "given_name": "SAROJA(Baby)",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0470",
+        "given_name": "SAVITHA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0670",
+        "given_name": "SAVITRI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0557",
+        "given_name": "SEETAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0549",
+        "given_name": "SESHU",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0514",
+        "given_name": "SETAMMA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0672",
+        "given_name": "SHUBADRA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0729",
+        "given_name": "SHYAM PRASAD",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0538",
+        "given_name": "SRI LAKSHMI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0533",
+        "given_name": "SRI LEKHA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0503",
+        "given_name": "SRIDHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0531",
+        "given_name": "SRIKANTH",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0532",
+        "given_name": "SRINATH",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0656",
+        "given_name": "SRINIVASA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0418",
+        "given_name": "SRINIVASA MURTHY(Cheeni)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0510",
+        "given_name": "SRINIVASARAO",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0661",
+        "given_name": "SRIRAMA MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0428",
+        "given_name": "SRIRAMANI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0517",
+        "given_name": "SUBADRAMMA TUTTIPATTU",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0508",
+        "given_name": "SUBBACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0535",
+        "given_name": "SUKHUMAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0749",
+        "given_name": "SUMADWA",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0668",
+        "given_name": "SUNANDA",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0677",
+        "given_name": "SUNDARAMURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0695",
+        "given_name": "SUNDARAMURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0722",
+        "given_name": "SUNDARAMURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0725",
+        "given_name": "SVRR MURTHY",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500001",
+        "given_name": "SWATHI",
+        "surname": "SUSWARAM",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0728",
+        "given_name": "VARADARAJAN",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0553",
+        "given_name": "VENAKTA MURALIKRISHNA (CHINNI)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0416",
+        "given_name": "VENKATARAMANACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0667",
+        "given_name": "VENKATARAMANACHAR(VENGUTU)",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0544",
+        "given_name": "VITTALACHAR",
+        "surname": "SUSWARAM",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500015",
+        "given_name": "Venkata Ramana Rao",
+        "surname": "Suswaram",
+        "sex": "M",
+        "birth_date": "09-Aug-33",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0128",
+        "given_name": "LATHA",
+        "surname": "TENGLI",
+        "sex": "F",
+        "birth_date": "15-Jul-78",
+        "birth_place_id": "P0020"
+    },
+    {
+        "person_id": "I0685",
+        "given_name": "",
+        "surname": "TUTTIPATTU",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0686",
+        "given_name": "",
+        "surname": "TUTTIPATTU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0687",
+        "given_name": "",
+        "surname": "TUTTIPATTU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0684",
+        "given_name": "RAM RAO",
+        "surname": "TUTTIPATTU",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0737",
+        "given_name": "HARSHITA",
+        "surname": "V",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0736",
+        "given_name": "VEERESH",
+        "surname": "V",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500016",
+        "given_name": "Gopinath Rao",
+        "surname": "Wuddi",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0448",
+        "given_name": "AMULYA RUKMANI",
+        "surname": "YETAGERE",
+        "sex": "F",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0446",
+        "given_name": "PARASHURAM",
+        "surname": "YETAGERE",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I0447",
+        "given_name": "VENKATA MADWESH",
+        "surname": "YETAGERE",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": ""
+    },
+    {
+        "person_id": "I500019",
+        "given_name": "ANVANSH",
+        "surname": "HOTHURU",
+        "sex": "M",
+        "birth_date": "01-OCT-2025",
+        "birth_place_id": "P0049"
+    },
+    {
+        "person_id": "I500020",
+        "given_name": "SANJEEVA RAO",
+        "surname": "DHARMAVARAM",
+        "sex": "M",
+        "birth_date": "12-APR-2024",
+        "birth_place_id": "P0002"
+    },
+    {
+        "person_id": "I500021",
+        "given_name": "",
+        "surname": "",
+        "sex": "M",
+        "birth_date": "",
+        "birth_place_id": "P0049"
+    }
+]

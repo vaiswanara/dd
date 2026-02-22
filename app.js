@@ -1568,37 +1568,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const fetchUrl = `${updatesUrl}&t=${Date.now()}`; // Bypass cache
 
         fetch(fetchUrl)
-            .then(res => res.text())
-            .then(csvText => {
-                const rows = csvText.split(/\r?\n/);
+            .then(res => res.json())
+            .then(data => {
+                const updates = Array.isArray(data) ? data : [data];
                 const validUpdates = [];
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                // Skip header row (index 0)
-                for (let i = 1; i < rows.length; i++) {
-                    // Split CSV line handling quoted commas
-                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
-                    
-                    // Expected columns: Date, Message, Expiry
-                    if (cols.length < 2) continue;
+                updates.forEach(item => {
+                    if (!item) return;
 
-                    const dateStr = cols[0];
-                    const message = cols[1];
-                    const expiryStr = cols[2];
+                    const dateStr = item.date;
+                    const message = item.message;
+                    const expiryStr = item.expiry;
 
                     const itemDate = window.DateUtils ? window.DateUtils.parse(dateStr) : null;
                     const expiryDate = window.DateUtils ? window.DateUtils.parse(expiryStr) : null;
 
                     // Check expiry
                     if (expiryDate && today > expiryDate) {
-                        continue; // Skip expired messages
+                        return; // Skip expired messages
                     }
 
                     if (itemDate && message) {
                         validUpdates.push({ dateObj: itemDate, dateStr: dateStr, message: message });
                     }
-                }
+                });
 
                 // Sort by date descending (newest first)
                 validUpdates.sort((a, b) => b.dateObj - a.dateObj);
@@ -2452,38 +2447,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `${sheetUrl}&t=${Date.now()}`;
 
         fetch(url)
-            .then(response => response.text())
-            .then(csvText => {
-                const rows = csvText.split(/\r?\n/);
-                console.log(`[Dashboard] Fetched ${rows.length} rows from sheet.`);
-                if (rows.length < 2) return;
-
-                // Headers: start_date, Message, expiry
-                // We assume column order: 0=start_date, 1=Message, 2=expiry
+            .then(response => response.json())
+            .then(data => {
+                // Handle both single object and array of objects
+                const messages = Array.isArray(data) ? data : [data];
+                console.log(`[Dashboard] Fetched ${messages.length} messages.`);
                 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
                 const validMessages = [];
 
-                for (let i = 1; i < rows.length; i++) {
-                    // Handle CSV splitting (regex handles quoted commas if any)
-                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
-                    
-                    if (cols.length < 3) continue;
+                messages.forEach(item => {
+                    if (!item || !item.message) return;
 
-                    const startDate = window.DateUtils ? window.DateUtils.parse(cols[0]) : null;
-                    const message = cols[1];
-                    const expiryDate = window.DateUtils ? window.DateUtils.parse(cols[2]) : null;
+                    const startDate = window.DateUtils ? window.DateUtils.parse(item.start_date) : null;
+                    const expiryDate = window.DateUtils ? window.DateUtils.parse(item.expiry) : null;
+                    const message = item.message;
 
                     if (startDate && expiryDate && message) {
                         if (today >= startDate && today <= expiryDate) {
                             validMessages.push({ start: startDate, msg: message });
-                        } else {
-                            // console.log("Skipping expired or future message:", message, startDate, expiryDate);
                         }
                     }
-                }
+                });
 
                 // Sort by start date descending (latest first)
                 validMessages.sort((a, b) => b.start - a.start);
@@ -2797,25 +2784,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const check = async () => {
             try {
-                // Fetch updates CSV to find the latest timestamp
+                // Fetch updates JSON to find the latest timestamp
                 const res = await fetch(APP_CONFIG.updates_url + '&t=' + Date.now());
                 if (!res.ok) return;
-                const text = await res.text();
-                
-                const rows = text.split(/\r?\n/);
+                const data = await res.json();
+                const updates = Array.isArray(data) ? data : [data];
                 let latestDate = 0;
                 
-                // Parse CSV (skip header)
-                for (let i = 1; i < rows.length; i++) {
-                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (cols.length > 0) {
-                        const dateStr = cols[0].replace(/^"|"$/g, '').trim();
-                        const d = window.DateUtils ? window.DateUtils.parse(dateStr) : null;
+                updates.forEach(item => {
+                    if (item && item.date) {
+                        const d = window.DateUtils ? window.DateUtils.parse(item.date) : null;
                         if (d && d.getTime() > latestDate) {
                             latestDate = d.getTime();
                         }
                     }
-                }
+                });
 
                 if (latestDate > 0) {
                     const lastKnown = localStorage.getItem('last_data_update');

@@ -8,7 +8,7 @@
     "contacts": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?=type=contacts",
     "manifest": "manifest.json",
     "photos": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=photos",
-    "updates": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=updates",
+    "updates": "",
     "relationshipDictionary": "json_data/relationshipDictionary.json",
     "transit": "json_data/transit.json",
     "transit_moon": "json_data/transit_moon.json"
