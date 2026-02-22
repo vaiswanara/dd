@@ -2754,6 +2754,114 @@ document.addEventListener('DOMContentLoaded', () => {
     if (initLangDisplay) initLangDisplay.textContent = initLang.toUpperCase();
 
     // =================================================================================
+    // SECTION 5.14: REFRESH DATA (Clear Cache & Reload)
+    // =================================================================================
+
+    window.refreshFamilyData = async function(skipConfirm = false) {
+        if (!skipConfirm) {
+            const confirmed = confirm("Refresh Family Data?\n\nThis will clear offline storage and fetch the latest data from the server.");
+            if (!confirmed) return;
+        }
+
+        if (window.showToast) window.showToast("Clearing cache and reloading...", 5000);
+
+        try {
+            // 1. Unregister Service Workers
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    await registration.unregister();
+                }
+            }
+
+            // 2. Clear Cache Storage
+            if ('caches' in window) {
+                const keys = await caches.keys();
+                await Promise.all(keys.map(key => caches.delete(key)));
+            }
+
+            // 3. Force Reload
+            window.location.reload(true);
+        } catch (error) {
+            console.error("Data refresh failed:", error);
+            window.location.reload();
+        }
+    };
+
+    // =================================================================================
+    // SECTION 5.15: AUTO UPDATE CHECK
+    // =================================================================================
+
+    function initAutoUpdateCheck() {
+        if (!APP_CONFIG || !APP_CONFIG.updates_url) return;
+
+        const check = async () => {
+            try {
+                // Fetch updates CSV to find the latest timestamp
+                const res = await fetch(APP_CONFIG.updates_url + '&t=' + Date.now());
+                if (!res.ok) return;
+                const text = await res.text();
+                
+                const rows = text.split(/\r?\n/);
+                let latestDate = 0;
+                
+                // Parse CSV (skip header)
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (cols.length > 0) {
+                        const dateStr = cols[0].replace(/^"|"$/g, '').trim();
+                        const d = window.DateUtils ? window.DateUtils.parse(dateStr) : null;
+                        if (d && d.getTime() > latestDate) {
+                            latestDate = d.getTime();
+                        }
+                    }
+                }
+
+                if (latestDate > 0) {
+                    const lastKnown = localStorage.getItem('last_data_update');
+                    if (lastKnown) {
+                        if (latestDate > parseInt(lastKnown, 10)) {
+                            showUpdateNotification(latestDate);
+                        }
+                    } else {
+                        // First run or missing local data: assume current is latest
+                        localStorage.setItem('last_data_update', latestDate);
+                    }
+                }
+            } catch (e) {
+                console.warn('[AutoUpdate] Check failed:', e);
+            }
+        };
+
+        // Initial check after 5 seconds
+        setTimeout(check, 5000);
+        // Poll every 10 minutes
+        setInterval(check, 600000);
+    }
+
+    function showUpdateNotification(newTimestamp) {
+        const bar = document.getElementById('update-notification');
+        if (!bar) return;
+        // Don't show if dismissed in this session
+        if (sessionStorage.getItem('update_dismissed') === String(newTimestamp)) return;
+
+        bar.style.display = 'flex';
+        
+        const btn = document.getElementById('update-now-btn');
+        btn.onclick = () => {
+            // Update local version before reloading so we don't notify again immediately
+            localStorage.setItem('last_data_update', newTimestamp);
+            window.refreshFamilyData(true); // true = skip confirm
+        };
+
+        const dismiss = document.getElementById('update-dismiss-btn');
+        dismiss.onclick = () => {
+            bar.style.display = 'none';
+            sessionStorage.setItem('update_dismissed', String(newTimestamp));
+        };
+    }
+
+    // =================================================================================
     // SECTION 6: INITIAL APPLICATION START
     // =================================================================================
     
@@ -2792,5 +2900,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.error("Error during initial draw:", e);
             }
+
+            // Start background update checker
+            initAutoUpdateCheck();
         });
 });

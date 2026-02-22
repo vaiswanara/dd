@@ -545,6 +545,29 @@
             .ca-sibling-container { gap: 20px; }
             .ca-sibling-container::before { width: 20px; }
         }
+
+        /* --- Update Notification Bar --- */
+        #update-notification {
+            display: none; position: fixed; top: 0; left: 0; width: 100%;
+            background-color: #323232; color: #fff; z-index: 9999;
+            padding: 12px 20px; justify-content: center; align-items: center;
+            gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: slideDown 0.4s ease; font-size: 14px;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        #update-notification span { font-weight: 500; letter-spacing: 0.3px; }
+        #update-now-btn {
+            background-color: #4CAF50; color: white; border: none;
+            padding: 6px 16px; border-radius: 4px; cursor: pointer;
+            font-weight: bold; font-size: 13px; text-transform: uppercase;
+            transition: background 0.2s;
+        }
+        #update-now-btn:hover { background-color: #43A047; }
+        #update-dismiss-btn {
+            background: none; border: none; color: #aaa; font-size: 24px;
+            cursor: pointer; padding: 0 8px; line-height: 1;
+        }
+        #update-dismiss-btn:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -568,8 +591,16 @@
             <li><a href="#" id="nav-install" onclick="window.showInstallPage(); closeSidebar();">⬇️ Install App</a></li>
             <li><a href="#" id="nav-about" onclick="window.showAboutPage(); closeSidebar();">ℹ️ ABOUT</a></li>
             <li><a href="#" id="nav-feedback" onclick="window.showFeedbackPage(); closeSidebar();">💬 FEEDBACK</a></li>
+            <li><a href="#" id="refreshDataBtn" onclick="window.refreshFamilyData(); closeSidebar();">🔄 Refresh Data</a></li>
         </ul>
     </nav>
+
+    <!-- Update Notification Bar -->
+    <div id="update-notification">
+        <span>New family data is available</span>
+        <button id="update-now-btn">Update Now</button>
+        <button id="update-dismiss-btn" title="Dismiss">&times;</button>
+    </div>
 
     <!-- Backdrop: tap/click outside sidebar to close it (mobile) -->
     <div id="sidebar-backdrop" aria-hidden="true"></div>
