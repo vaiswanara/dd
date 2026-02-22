@@ -647,6 +647,384 @@ function generateDescendantsReport(id) {
     return html;
 }
 
+function generateFullDescendantsReport(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 10px;"><img src="logo.png" style="width: 80px; height: auto; border: none;"></div>`;
+    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;">Full Descendants Report</h2>`;
+    html += `<p style="color: #666; text-align: center;">All descendants (including spouses) of: <strong>${escapeHtml(p.name)}</strong> (${p.id})</p>`;
+
+    let currentGenIds = getChildrenIds(id);
+    let genIndex = 1;
+
+    while (currentGenIds.length > 0) {
+        let genTitle = "";
+        if (genIndex === 1) genTitle = "Generation 1 (Children)";
+        else if (genIndex === 2) genTitle = "Generation 2 (Grandchildren)";
+        else genTitle = `Generation ${genIndex}`;
+
+        html += `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${genTitle}</h3>`;
+        html += `<ul style="list-style-type: none; padding-left: 10px; margin-top: 5px;">`;
+
+        let nextGenIds = [];
+        
+        currentGenIds.forEach(descId => {
+            const desc = getPerson(descId);
+            if (desc) {
+                // Calculate relationship to root
+                let displayRole = findRelationship(id, descId);
+
+                html += `<li style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+                    <div style="font-size: 15px;">
+                        <strong>${escapeHtml(desc.name)}</strong> 
+                        <span style="color:#E91E63; font-size:13px;"> — ${displayRole}</span>
+                    </div>`;
+                
+                // Add Spouses
+                if (desc.pids && desc.pids.length > 0) {
+                    html += `<div style="margin-left: 20px; margin-top: 4px; font-size: 14px; color: #555;">`;
+                    desc.pids.forEach(pid => {
+                        const spouse = getPerson(pid);
+                        if (spouse) {
+                            let spRel = findRelationship(id, pid);
+                            html += `<div style="margin-bottom: 2px;">+ Spouse: <strong>${escapeHtml(spouse.name)}</strong> <span style="font-size:12px; color:#888;">(${spRel})</span></div>`;
+                        }
+                    });
+                    html += `</div>`;
+                }
+
+                html += `</li>`;
+
+                const kids = getChildrenIds(descId);
+                if (kids) nextGenIds.push(...kids);
+            }
+        });
+
+        html += `</ul>`;
+        currentGenIds = nextGenIds;
+        genIndex++;
+        
+        if (genIndex > 20) break; // Safety break
+    }
+
+    if (genIndex === 1) {
+        html += `<p style="text-align:center; margin-top:20px; color:#666;">No descendants recorded for this person.</p>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+function generateFullDescendantsDiagram(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 20px; max-width: 100%; margin: 0 auto; font-family: 'Segoe UI', sans-serif; overflow-x: auto;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 30px;">
+                <img src="logo.png" style="width: 80px; height: auto; border: none;">
+                <h2 style="color: #4A90E2; margin: 10px 0 5px;">Full Descendants Diagram</h2>
+                <p style="color: #666;">Tree view for: <strong>${escapeHtml(p.name)}</strong> (${p.id})</p>
+             </div>`;
+
+    // CSS for the tree structure with Cards
+    html += `<style>
+        .tf-tree { display: inline-block; min-width: 100%; }
+        .tf-tree ul { padding-left: 40px; list-style: none; margin: 0; }
+        .tf-tree li { position: relative; margin-bottom: 20px; }
+        
+        /* Vertical line */
+        .tf-tree li::before { content: ''; position: absolute; top: 0; left: -25px; bottom: 0; width: 1px; background: #ccc; }
+        /* Horizontal line */
+        .tf-tree li::after { content: ''; position: absolute; top: 45px; left: -25px; width: 25px; height: 1px; background: #ccc; }
+        /* Stop vertical line for last child */
+        .tf-tree li:last-child::before { height: 46px; }
+        
+        .tf-node-content { display: inline-block; vertical-align: top; }
+        .tf-card-row { display: flex; gap: 15px; align-items: center; }
+        
+        .tf-card { 
+            border: 2px solid #4A90E2; border-radius: 12px; padding: 10px; text-align: center;
+            width: 140px; background: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            transition: transform 0.2s;
+        }
+        .tf-card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .tf-card.spouse { border-color: #E91E63; border-style: dashed; background: #fffbfd; }
+        .tf-card.root { border-color: #FF9800; background: #fff8e1; }
+        
+        .tf-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .tf-card-icon { width: 60px; height: 60px; margin-bottom: 8px; border-radius: 50%; border: 1px solid #eee; background: #fff; display: flex; align-items: center; justify-content: center; }
+        
+        .tf-name { font-weight: bold; font-size: 13px; color: #333; line-height: 1.3; margin-bottom: 2px; word-wrap: break-word; width: 100%; }
+        .tf-id { font-size: 10px; color: #999; margin-bottom: 4px; }
+        .tf-role { 
+            font-size: 10px; color: #E91E63; font-weight: bold; background: #fff0f5; 
+            padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; border: 1px solid #f8bbd0;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .tf-connector { font-size: 18px; color: #E91E63; }
+    </style>`;
+
+    html += `<div class="tf-tree"><ul>`;
+    
+    // Helper to render a single card
+    function renderCard(pid, role, isSpouse, isRoot) {
+        const person = getPerson(pid);
+        if (!person) return "";
+        
+        let mediaHtml = '';
+        if (person.image_url) {
+            mediaHtml = `<img src="${person.image_url}">`;
+        } else {
+            const g = getGender(pid);
+            const MALE_ICON = '<svg width="40" height="40" viewBox="0 0 24 24" fill="#4A90E2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            const FEMALE_ICON = '<svg width="40" height="40" viewBox="0 0 24 24" fill="#E91E63"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            const svg = (g === 'F') ? FEMALE_ICON : MALE_ICON;
+            mediaHtml = `<div class="tf-card-icon">${svg}</div>`;
+        }
+
+        let cls = "tf-card";
+        if (isSpouse) cls += " spouse";
+        if (isRoot) cls += " root";
+        
+        return `
+            <div class="${cls}">
+                ${role ? `<div class="tf-role">${role}</div>` : ''}
+                ${mediaHtml}
+                <div class="tf-name">${escapeHtml(person.name)}</div>
+                <div class="tf-id">${person.id}</div>
+            </div>
+        `;
+    }
+
+    // Recursive function to build tree nodes
+    function buildNode(personId) {
+        const person = getPerson(personId);
+        if (!person) return "";
+        
+        const children = getChildrenIds(personId);
+        const hasChildren = children && children.length > 0;
+        
+        let nodeHtml = `<li>`;
+        
+        let rel = findRelationship(id, personId);
+        const isRoot = (personId === id);
+        if (isRoot) rel = "ME";
+        
+        nodeHtml += `<div class="tf-node-content">`;
+        nodeHtml += `<div class="tf-card-row">`;
+        
+        // Main Person
+        nodeHtml += renderCard(personId, rel, false, isRoot);
+        
+        // Spouses
+        if (person.pids && person.pids.length > 0) {
+            person.pids.forEach(pid => {
+                nodeHtml += `<div class="tf-connector">❤️</div>`;
+                nodeHtml += renderCard(pid, "Spouse", true, false);
+            });
+        }
+        
+        nodeHtml += `</div></div>`; // End row / content
+
+        if (hasChildren) {
+            nodeHtml += `<ul>`;
+            children.forEach(cid => {
+                nodeHtml += buildNode(cid);
+            });
+            nodeHtml += `</ul>`;
+        }
+        
+        nodeHtml += `</li>`;
+        return nodeHtml;
+    }
+
+    // Hide lines for the root node
+    html += `<style>.tf-tree > ul > li:first-child::before, .tf-tree > ul > li:first-child::after { display: none; }</style>`;
+    
+    html += buildNode(id);
+
+    html += `</ul></div>`;
+    html += `</div>`;
+    return html;
+}
+
+function generateFullDescendantsReport(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', sans-serif;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 10px;"><img src="logo.png" style="width: 80px; height: auto; border: none;"></div>`;
+    html += `<h2 style="color: #4A90E2; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;">Full Descendants Report</h2>`;
+    html += `<p style="color: #666; text-align: center;">All descendants (including spouses) of: <strong>${escapeHtml(p.name)}</strong> (${p.id})</p>`;
+
+    let currentGenIds = getChildrenIds(id);
+    let genIndex = 1;
+
+    while (currentGenIds.length > 0) {
+        let genTitle = "";
+        if (genIndex === 1) genTitle = "Generation 1 (Children)";
+        else if (genIndex === 2) genTitle = "Generation 2 (Grandchildren)";
+        else genTitle = `Generation ${genIndex}`;
+
+        html += `<h3 style="background: #f9f9f9; padding: 8px; border-left: 4px solid #4A90E2; margin-top: 20px; font-size: 16px; color: #333;">${genTitle}</h3>`;
+        html += `<ul style="list-style-type: none; padding-left: 10px; margin-top: 5px;">`;
+
+        let nextGenIds = [];
+        
+        currentGenIds.forEach(descId => {
+            const desc = getPerson(descId);
+            if (desc) {
+                let displayRole = findRelationship(id, descId);
+
+                html += `<li style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+                    <div style="font-size: 15px;">
+                        <strong>${escapeHtml(desc.name)}</strong> 
+                        <span style="color:#E91E63; font-size:13px;"> — ${displayRole}</span>
+                    </div>`;
+                
+                if (desc.pids && desc.pids.length > 0) {
+                    html += `<div style="margin-left: 20px; margin-top: 4px; font-size: 14px; color: #555;">`;
+                    desc.pids.forEach(pid => {
+                        const spouse = getPerson(pid);
+                        if (spouse) {
+                            let spRel = findRelationship(id, pid);
+                            html += `<div style="margin-bottom: 2px;">+ Spouse: <strong>${escapeHtml(spouse.name)}</strong> <span style="font-size:12px; color:#888;">(${spRel})</span></div>`;
+                        }
+                    });
+                    html += `</div>`;
+                }
+
+                html += `</li>`;
+
+                const kids = getChildrenIds(descId);
+                if (kids) nextGenIds.push(...kids);
+            }
+        });
+
+        html += `</ul>`;
+        currentGenIds = nextGenIds;
+        genIndex++;
+        
+        if (genIndex > 20) break;
+    }
+
+    if (genIndex === 1) {
+        html += `<p style="text-align:center; margin-top:20px; color:#666;">No descendants recorded for this person.</p>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+function generateFullDescendantsDiagram(id) {
+    const p = getPerson(id);
+    if (!p) return "<p style='text-align:center; padding:20px; color:red;'>Person not found.</p>";
+
+    let html = `<div style="padding: 10px; width: 100%; font-family: 'Segoe UI', sans-serif; overflow-x: auto;">`;
+    
+    html += `<div style="text-align: center; margin-bottom: 10px;">
+                <h3 style="color: #4A90E2; margin: 0 0 5px; font-size: 18px;">Full Descendants Diagram</h3>
+                <p style="color: #666; margin: 0; font-size: 13px;">Tree view for: <strong>${escapeHtml(p.name)}</strong> (${p.id})</p>
+             </div>`;
+
+    html += `<style>
+        /* Horizontal Tree CSS */
+        .tf-tree { display: table; margin: 0 auto; }
+        .tf-tree ul {
+            padding-top: 20px; position: relative;
+            display: flex; justify-content: center;
+        }
+        .tf-tree li {
+            text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px;
+        }
+        /* Connectors */
+        .tf-tree li::before, .tf-tree li::after {
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-top: 2px solid #ccc; width: 50%; height: 20px;
+        }
+        .tf-tree li::after { right: auto; left: 50%; border-left: 2px solid #ccc; }
+        .tf-tree li:only-child::after, .tf-tree li:only-child::before { display: none; }
+        .tf-tree li:only-child { padding-top: 0; }
+        .tf-tree li:first-child::before, .tf-tree li:last-child::after { border: 0 none; }
+        .tf-tree li:last-child::before { border-right: 2px solid #ccc; border-radius: 0 5px 0 0; }
+        .tf-tree li:first-child::after { border-radius: 5px 0 0 0; }
+        /* Downward line from parent */
+        .tf-tree ul ul::before {
+            content: ''; position: absolute; top: 0; left: 50%;
+            border-left: 2px solid #ccc; width: 0; height: 20px; transform: translateX(-50%);
+        }
+        
+        .tf-node-content { display: inline-block; position: relative; z-index: 10; background: #fff; }
+        .tf-card-row { display: flex; gap: 10px; justify-content: center; align-items: center; border: 1px solid #eee; padding: 8px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        .tf-node { display: flex; flex-direction: column; align-items: center; text-align: center; width: 120px; position: relative; }
+        .tf-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ccc; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; }
+        .tf-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .tf-avatar.male { border-color: #4A90E2; }
+        .tf-avatar.female { border-color: #E91E63; }
+        .tf-name { font-weight: 600; font-size: 12px; color: #333; line-height: 1.2; margin-bottom: 2px; word-wrap: break-word; width: 100%; }
+        .tf-rel { font-size: 10px; color: #E91E63; }
+        .tf-id { font-size: 9px; color: #999; }
+        .tf-connector { font-size: 16px; color: #E91E63; margin-top: -20px; }
+        .tf-spouse-node .tf-avatar { border-style: dashed; }
+    </style>`;
+
+    html += `<div class="tf-tree"><ul>`;
+    
+    function renderNodeHtml(pid, relLabel, isSpouse) {
+        const person = getPerson(pid);
+        if (!person) return "";
+        const g = getGender(pid);
+        const genderClass = (g === 'M') ? 'male' : (g === 'F' ? 'female' : '');
+        const spouseClass = isSpouse ? 'tf-spouse-node' : '';
+        let mediaHtml = '';
+        if (person.image_url) {
+            mediaHtml = `<img src="${person.image_url}">`;
+        } else {
+            const MALE_ICON = '<svg width="40" height="40" viewBox="0 0 24 24" fill="#4A90E2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            const FEMALE_ICON = '<svg width="40" height="40" viewBox="0 0 24 24" fill="#E91E63"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+            mediaHtml = (g === 'F') ? FEMALE_ICON : MALE_ICON;
+        }
+        return `<div class="tf-node ${spouseClass}"><div class="tf-avatar ${genderClass}">${mediaHtml}</div><div class="tf-name">${escapeHtml(person.name)}</div>${relLabel ? `<div class="tf-rel">${relLabel}</div>` : ''}<div class="tf-id">${person.id}</div></div>`;
+    }
+
+    function buildTree(personId) {
+        const person = getPerson(personId);
+        if (!person) return "";
+        const children = getChildrenIds(personId);
+        const hasChildren = children && children.length > 0;
+        let item = `<li>`;
+        item += `<div class="tf-node-content"><div class="tf-card-row">`;
+        let rel = (personId === id) ? "ME" : findRelationship(id, personId);
+        item += renderNodeHtml(personId, rel, false);
+        if (person.pids && person.pids.length > 0) {
+            person.pids.forEach(pid => {
+                item += `<div class="tf-connector">❤️</div>`;
+                let spouseRel = findRelationship(id, pid);
+                item += renderNodeHtml(pid, spouseRel, true);
+            });
+        }
+        item += `</div></div>`;
+        if (hasChildren) {
+            item += `<ul>`;
+            children.forEach(cid => { item += buildTree(cid); });
+            item += `</ul>`;
+        }
+        item += `</li>`;
+        return item;
+    }
+
+    html += buildTree(id);
+    html += `</ul></div></div>`;
+    return html;
+}
+
 // =================================================================================
 // DIAGRAM GENERATION
 // =================================================================================

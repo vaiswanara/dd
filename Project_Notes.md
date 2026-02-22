@@ -28,6 +28,10 @@ Displayd following
 - Tara bhala
 - chandra bhala 
 
+v-6.0.7
+- Two New decendant reports added (5 & 6)
+
+
 Supported Rashi Names
 (The code checks the first word only, so "Mesha Rashi" is valid because "Mesha" matches)
 

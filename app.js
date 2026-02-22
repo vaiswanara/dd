@@ -1944,6 +1944,14 @@ document.addEventListener('DOMContentLoaded', () => {
             showAncestorsReport(reportSelectedPersonId);
         } else if (reportType === 'descendants') {
             showDescendantsReport(reportSelectedPersonId);
+        } else if (reportType === 'full-descendants') {
+            showFullDescendantsReport(reportSelectedPersonId);
+        } else if (reportType === 'full-descendants-diagram') {
+            showFullDescendantsDiagram(reportSelectedPersonId);
+        } else if (reportType === 'full-descendants') {
+            showFullDescendantsReport(reportSelectedPersonId);
+        } else if (reportType === 'full-descendants-diagram') {
+            showFullDescendantsDiagram(reportSelectedPersonId);
         }
     };
 
@@ -2016,6 +2024,98 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetId && peopleMap.has(targetId)) {
                 const p = peopleMap.get(targetId);
                 document.title = `${p.name.toUpperCase()} DESCENDANTS REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
+        }
+    };
+
+    window.showFullDescendantsReport = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateFullDescendantsReport !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateFullDescendantsReport(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} FULL DESCENDANTS REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
+        }
+    };
+
+    window.showFullDescendantsDiagram = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateFullDescendantsDiagram !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateFullDescendantsDiagram(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} DESCENDANTS DIAGRAM`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
+        }
+    };
+
+    window.showFullDescendantsReport = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateFullDescendantsReport !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateFullDescendantsReport(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} FULL DESCENDANTS REPORT`;
+            }
+        } catch (e) {
+            console.error("Report Generation Error:", e);
+            alert("An error occurred while generating the report.");
+        }
+    };
+
+    window.showFullDescendantsDiagram = function(targetId) {
+        const page = document.getElementById('relationship-report-page');
+        const content = document.getElementById('report-content');
+        if (!page || !content) return;
+
+        if (typeof generateFullDescendantsDiagram !== 'function') {
+            alert("Error: relationship.js is not updated.");
+            return;
+        }
+
+        try {
+            content.innerHTML = generateFullDescendantsDiagram(targetId);
+            page.style.display = 'flex';
+            if (targetId && peopleMap.has(targetId)) {
+                const p = peopleMap.get(targetId);
+                document.title = `${p.name.toUpperCase()} DESCENDANTS DIAGRAM`;
             }
         } catch (e) {
             console.error("Report Generation Error:", e);
