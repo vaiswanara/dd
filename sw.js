@@ -15,7 +15,7 @@
  * =====================================================================================
  */
 
-const APP_VERSION = 'v1.0.0';
+const APP_VERSION = 'v1.0.1';
 // Generate a unique cache name based on the service worker's path (folder name)
 // This allows multiple instances of the app to run on the same domain without cache conflicts.
 const PATH_KEY = self.location.pathname.replace(/[^a-zA-Z0-9]/g, '-');
