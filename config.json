@@ -1,6 +1,6 @@
 {
-  "welcome_msg_url": "json_data/welcome.json",
-  "updates_url": "json_data/updates.json",
+  "welcome": "json_data/welcome.json",
+  "updates": "json_data/updates.json",
   "data_files": {
     "persons": "json_data/persons.json",
     "families": "json_data/families.json",
