@@ -17,3 +17,8 @@ V-10.0.1
 - Birthday, welcome, updates display rectified
 - ISO date logic implimented.
 
+v1.0.0 -dfwa-htdocs
+- new implimentation
+- downlad jsons from dfwa api and store in github json directory
+- tested. worked.
+

@@ -1,0 +1,29 @@
+{
+    "welcome_msg_url": "api\/index.php?dataset=welcome",
+    "updates_url": "api\/index.php?dataset=updates",
+    "data_files": {
+        "persons": "api\/index.php?dataset=persons",
+        "families": "api\/index.php?dataset=families",
+        "places": "api\/index.php?dataset=places",
+        "contacts": "api\/index.php?dataset=contacts",
+        "manifest": "manifest.json",
+        "photos": "api\/index.php?dataset=photos",
+        "updates": "api\/index.php?dataset=updates",
+        "relationshipDictionary": "json_data\/relationshipDictionary.json",
+        "transit": "json_data\/transit.json",
+        "transit_moon": "json_data\/transit_moon.json"
+    },
+    "features": {
+        "dashboard": true,
+        "tree": true,
+        "birthdays": true,
+        "updates": false,
+        "reports": true,
+        "jyotisha": false,
+        "install": true,
+        "help": true,
+        "about": false,
+        "feedback": false,
+        "update_data": false
+    }
+}

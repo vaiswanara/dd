@@ -15,18 +15,22 @@
  * =====================================================================================
  */
 
-const CACHE_NAME = 'family-tree-cache-v10.0.1';
+const APP_VERSION = 'v1.0.0';
+// Generate a unique cache name based on the service worker's path (folder name)
+// This allows multiple instances of the app to run on the same domain without cache conflicts.
+const PATH_KEY = self.location.pathname.replace(/[^a-zA-Z0-9]/g, '-');
+const CACHE_NAME = `ftree-${PATH_KEY}-${APP_VERSION}`;
 
 // All the files and assets the app needs to function offline.
 const URLS_TO_CACHE = [
     './',
     './index.html',
-    './ADM/admin.html',
+    './admin/index.html',
     './app.js',
     './config.json',
-    './icon-192.png',
-    './icon-512.png',
-    './ftree.jpg',
+    './app_icons/icon-192.png',
+    './app_icons/icon-512.png',
+    './app_icons/ftree.jpg',
     './logo.png',
     './dateUtils.js',
     './relationship.js'

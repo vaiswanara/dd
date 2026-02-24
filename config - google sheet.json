@@ -1,0 +1,28 @@
+{
+  "welcome_msg_url": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=welcome",
+  "updates_url": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=updates",
+  "data_files": {
+    "persons": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec",
+    "families": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=families",
+    "places": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=places",
+    "contacts": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?=type=contacts",
+    "manifest": "manifest.json",
+    "photos": "https://script.google.com/macros/s/AKfycbx3rp7r34Gb-Xny-WBS50yEUIG7h9cihZC66JF2taCD3joqHmKIzkRC3-b_9sc5JyCC-A/exec?type=photos",
+    "updates": "",
+    "relationshipDictionary": "json_data/relationshipDictionary.json",
+    "transit": "json_data/transit.json",
+    "transit_moon": "json_data/transit_moon.json"
+  },
+  "features": {
+    "dashboard": true,
+    "tree": true,
+    "birthdays": true,
+    "updates": true,
+    "reports": true,
+    "install": true,
+    "help": true,
+    "about": true,
+    "feedback": true,
+    "update_data": true
+  }
+}

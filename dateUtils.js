@@ -21,9 +21,10 @@
             const s = String(dateStr).trim().toUpperCase();
             if (!s) return null;
 
-            // 1. ISO Format: YYYY-MM-DD
-            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-                const [y, m, d] = s.split('-').map(Number);
+            // 1. ISO Format: YYYY-MM-DD (Flexible: allows 1980-1-1 or 1980-01-01)
+            const isoMatch = s.match(/^(\d{4})[\-\/\.](\d{1,2})[\-\/\.](\d{1,2})$/);
+            if (isoMatch) {
+                const [_, y, m, d] = isoMatch.map(Number);
                 return new Date(y, m - 1, d);
             }
 

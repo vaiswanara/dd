@@ -1591,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     if (itemDate && message) {
-                        validUpdates.push({ dateObj: itemDate, dateStr: dateStr, message: message });
+                        validUpdates.push({ dateObj: itemDate, dateStr: dateStr, message: message, url: item.url });
                     }
                 });
 
@@ -1607,6 +1607,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="update-details">
                                 <div class="update-date">📅 ${item.dateStr}</div>
                                 <div class="update-text">${escapeHtml(item.message)}</div>
+                                ${item.url ? `<div style="margin-top:5px;"><a href="${escapeHtml(item.url)}" target="_blank" style="color:#039BE5; text-decoration:none; font-weight:500;">🔗 Open Link</a></div>` : ''}
                             </div>
                         </div>
                     `).join('');
