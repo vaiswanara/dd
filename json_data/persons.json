@@ -1289,7 +1289,7 @@
     "custom": {},
     "birth_place_id": "P0002",
     "birth_place_name": "",
-    "active_spouse_id": "",
+    "active_spouse_id": "I0113",
     "divorces": [],
     "jyotisha": {
       "gothra": "",
@@ -8395,7 +8395,7 @@
     "custom": {},
     "birth_place_id": "",
     "birth_place_name": "",
-    "active_spouse_id": "",
+    "active_spouse_id": "I0400",
     "divorces": [],
     "jyotisha": {
       "gothra": "",
@@ -15445,7 +15445,7 @@
   },
   {
     "person_id": "I0723",
-    "given_name": "",
+    "given_name": "BHUJANGA RAO",
     "surname": "SUSWARAM",
     "sex": "M",
     "birth_date": "",
@@ -15457,7 +15457,7 @@
     "custom": {},
     "birth_place_id": "",
     "birth_place_name": "",
-    "active_spouse_id": "",
+    "active_spouse_id": "I0724",
     "divorces": [],
     "jyotisha": {
       "gothra": "",
